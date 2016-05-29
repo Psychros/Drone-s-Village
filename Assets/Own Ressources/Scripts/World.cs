@@ -2,9 +2,10 @@
 using System.Collections;
 using System.Diagnostics;
 using System.Collections.Generic;
+using System.Linq;
 
 public class World : MonoBehaviour {
-    public GameObject grass, sand, water, stone;
+    public GameObject grass, sand, water, stone, mesh;
     public int width = 5, 
                height = 5;
 
@@ -63,34 +64,5 @@ public class World : MonoBehaviour {
                 g.transform.parent = transform;
             }
         }
-
-        //Optimize the mesh
-        List<MeshFilter> meshFilters = new List<MeshFilter>();
-        foreach (MeshFilter filter in GetComponentsInChildren<MeshFilter>())
-            meshFilters.Add(filter);
-        combineSubMeshes(grass, meshFilters);
-    }
-
-
-
-
-    private void combineSubMeshes(GameObject g, MeshFilter[] meshFilters)
-    {
-        var meshes = from f in meshFilters
-                     where f.gameObject.Equals(g)
-                     select f;
-
-        CombineInstance[] combine = new CombineInstance[meshFilters.Length];
-        int i = 0;
-        while (i < meshFilters.Length)
-        {
-            combine[i].mesh = meshFilters[i].sharedMesh;
-            combine[i].transform = meshFilters[i].transform.localToWorldMatrix;
-            meshFilters[i].gameObject.SetActive(false);
-            i++;
-        }
-        transform.GetComponent<MeshFilter>().mesh = new Mesh();
-        transform.GetComponent<MeshFilter>().mesh.CombineMeshes(combine);
-        transform.gameObject.SetActive(true);
     }
 }

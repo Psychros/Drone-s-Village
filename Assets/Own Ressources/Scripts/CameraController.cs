@@ -23,15 +23,15 @@ public class CameraController : MonoBehaviour {
         else if(Input.GetAxis("Mouse ScrollWheel") < 0)  //Zoom out
             zoom(false);
 
+
         //Move the camera
-        float moveX = Input.GetAxis("Mouse X");
-        float moveZ = Input.GetAxis("Mouse Y");
-        Camera.main.transform.position += new Vector3(moveX * currentMoveSpeed, 0, moveZ * currentMoveSpeed);
+        if (Input.GetMouseButton(0))
+            moveCamera();
     }
 
 
 
-    public void zoom(bool zoomIn)
+    private void zoom(bool zoomIn)
     {
         if (zoomIn)
         {
@@ -55,5 +55,21 @@ public class CameraController : MonoBehaviour {
     private void calculateCurrentMoveSpeed()
     {
         currentMoveSpeed = moveSpeed / maxZoom * Camera.main.fieldOfView;
+    }
+
+    private void moveCamera()
+    {
+        float moveX = 0;
+        float moveZ = 0;
+        if (Input.mousePosition.x < 300)
+            moveX = -1;
+        else if (Input.mousePosition.x > 1200)
+            moveX = 1;
+
+        if (Input.mousePosition.y < 100)
+            moveZ = -1;
+        else if (Input.mousePosition.y > 600)
+            moveZ = 1;
+        Camera.main.transform.position += new Vector3(moveX * currentMoveSpeed, 0, moveZ * currentMoveSpeed);
     }
 }

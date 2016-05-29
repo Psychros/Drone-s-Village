@@ -5,9 +5,9 @@ using System.Collections.Generic;
 using System.Linq;
 
 public class World : MonoBehaviour {
-    public GameObject grass, sand, water, stone, mesh;
-    public int width = 5, 
-               height = 5;
+    public GameObject plain, forest, desert, ocean, mountain;
+    public int width = 50, 
+               height = 50;
 
     // Use this for initialization
     void Start () {
@@ -50,16 +50,16 @@ public class World : MonoBehaviour {
                     v = new Vector3(i * 1.73206f + 0.86603f, 0, j * 1.5f);
 
                 //Select the correct terrain
-                float biom = Mathf.PerlinNoise(offsetX + i / width * 20, offsetZ + j / height * 20);   
+                float biom = Mathf.PerlinNoise(offsetX + i / width * 5, offsetZ + j / height * 5);
 
                 if (biom > .75f)
-                    g = Instantiate(stone);
+                    g = Instantiate(mountain);
                 else if (biom > .52f)
-                    g = Instantiate(grass);
+                    g = Random.value > .5 ? g = Instantiate(plain) : g = Instantiate(forest);
                 else if (biom > .47f)
-                    g = Instantiate(sand);
+                    g = Instantiate(desert);
                 else
-                    g = Instantiate(water);
+                    g = Instantiate(ocean);
                 g.transform.position = v;
                 g.transform.parent = transform;
             }

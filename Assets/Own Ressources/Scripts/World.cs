@@ -4,27 +4,30 @@ using System.Diagnostics;
 using System.Collections.Generic;
 using System.Linq;
 
-public class World : MonoBehaviour {
+public class World : MonoBehaviour
+{
     public GameObject plain, forest, desert, ocean, mountain;
-    public int width = 50, 
+    public int width = 50,
                height = 50;
 
     // Use this for initialization
-    void Start () {
+    void Start()
+    {
         Stopwatch watch = new Stopwatch();
         watch.Start();
 
         //Generate the world
         generate();
-        
+
         watch.Stop();
         print(watch.ElapsedMilliseconds);
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+
+    }
 
 
 

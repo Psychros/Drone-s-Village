@@ -6,7 +6,7 @@ using System.Linq;
 
 public class World : MonoBehaviour
 {
-    public GameObject plain, forest, desert, ocean, oceanMountain, mountain, stonePlain;
+    public GameObject plain, forest, desert, ocean, oceanMountain, mountain, highMountain, stonePlain;
     public int width = 50,
                height = 50;
 
@@ -56,6 +56,8 @@ public class World : MonoBehaviour
                 float biom = Mathf.PerlinNoise(offsetX + i / width * 5, offsetZ + j / height * 5);
 
                 if (biom > .85f)
+                    g = Instantiate(highMountain);
+                else if(biom > .8f)
                     g = Instantiate(mountain);
                 else if (biom > .75f)
                 {

@@ -9,11 +9,13 @@ public class CameraController : MonoBehaviour {
                  maxZoom = 60f;
     public float moveSpeed = 1f,
                  currentMoveSpeed;
+    public float startZoom = 10;
 
 
     void Start()
     {
         calculateCurrentMoveSpeed();
+        Camera.main.fieldOfView = startZoom;
     }
 
     void Update () {

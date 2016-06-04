@@ -6,9 +6,11 @@ using System.Linq;
 
 public class World : MonoBehaviour
 {
+    [HideInInspector]
     public static World instance;
 
     public GameObject[] models = new GameObject[System.Enum.GetNames(typeof(Bioms)).Length];
+    public GameObject drone;
     public int width = 50,
                height = 50;
     private int[,] world;
@@ -27,7 +29,7 @@ public class World : MonoBehaviour
         showWorld();
 
         watch.Stop();
-        print(watch.ElapsedMilliseconds);
+        //print(watch.ElapsedMilliseconds);
     }
 
     // Update is called once per frame
@@ -83,9 +85,21 @@ public class World : MonoBehaviour
             int x = (int)(Random.value * width), z = (int)(Random.value * height);
             if (world[x, z] == (int)Bioms.Plain)
             {
+                Vector3 shipPos;
+                if (z % 2 == 0)
+                    shipPos = new Vector3(x * 1.73206f, 0, z * 1.5f);
+                else
+                    shipPos = new Vector3(x * 1.73206f + 0.86603f, 0, z * 1.5f);
+
+                //Place the ship
                 world[x, z] = (int)Bioms.SpaceShip;
-                Camera.main.transform.position = new Vector3(x * 1.73206f, Camera.main.transform.position.y, z * 1.5f - 8f);
-                print(x + ", " + z);
+
+                //Place the first drone over the ship
+                GameObject g = Instantiate(drone);
+                g.transform.position = shipPos + drone.transform.position;
+
+                //Focus the camera
+                Camera.main.transform.position = shipPos + new Vector3(0, Camera.main.transform.position.y, -8f);
                 break;
             }
         }

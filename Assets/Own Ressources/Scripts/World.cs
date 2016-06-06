@@ -82,14 +82,11 @@ public class World : MonoBehaviour
         //Place the spaceship and focus the camera on it
         while (true)
         {
-            int x = (int)(Random.value * width), z = (int)(Random.value * height);
+            int x = (int)(Random.value * width), 
+                z = (int)(Random.value * height);
             if (world[x, z] == (int)Bioms.Plain)
             {
-                Vector3 shipPos;
-                if (z % 2 == 0)
-                    shipPos = new Vector3(x * 1.73206f, 0, z * 1.5f);
-                else
-                    shipPos = new Vector3(x * 1.73206f + 0.86603f, 0, z * 1.5f);
+                Vector3 shipPos = Hexagon.getWorldPosition(x, z);
 
                 //Place the ship
                 world[x, z] = (int)Bioms.SpaceShip;
@@ -117,13 +114,7 @@ public class World : MonoBehaviour
             {
                 g = Instantiate<GameObject>(models[world[i, j]]);
 
-                Vector3 v;
-                if (j % 2 == 0)
-                    v = new Vector3(i * 1.73206f, 0, j * 1.5f);
-                else
-                    v = new Vector3(i * 1.73206f + 0.86603f, 0, j * 1.5f);
-
-                g.transform.position = v;
+                g.transform.position = Hexagon.getWorldPosition(i, j);
                 g.transform.parent = transform;
             }
         }

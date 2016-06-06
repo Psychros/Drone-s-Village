@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 public class RoundManager : MonoBehaviour {
     [HideInInspector]
@@ -7,6 +8,7 @@ public class RoundManager : MonoBehaviour {
 
     [HideInInspector]
     public int round = 0;
+    public Text text;
 
     // Use this for initialization
     void Start () {
@@ -21,5 +23,6 @@ public class RoundManager : MonoBehaviour {
     public void nextRound()
     {
         round++;
+        text.text = "Round: " + round;
     }
 }

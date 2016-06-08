@@ -63,15 +63,30 @@ public class CameraController : MonoBehaviour {
     {
         float moveX = 0;
         float moveZ = 0;
-        if (Input.mousePosition.x < 300)
-            moveX = -1;
-        else if (Input.mousePosition.x > 1200)
-            moveX = 1;
 
+        //Move in x-direction
+        if (Input.mousePosition.x < 300)
+        {   //The parentheses must be there
+            if (Camera.main.transform.position.x > 0)
+                moveX = -1;
+        }
+        else if (Input.mousePosition.x > 1000)
+            if (Camera.main.transform.position.x < World.instance.width * Hexagon.factorX + Hexagon.deltaX)
+                moveX = 1;
+
+
+        //Move in z-direction
         if (Input.mousePosition.y < 100)
-            moveZ = -1;
+        {   //The parentheses must be there
+            if (Camera.main.transform.position.z > -8)
+                moveZ = -1;
+        }
         else if (Input.mousePosition.y > 600)
-            moveZ = 1;
+            if (Camera.main.transform.position.z < World.instance.height * Hexagon.factorZ - 8)
+                moveZ = 1;
+
+
+        //Move the camera
         Camera.main.transform.position += new Vector3(moveX * currentMoveSpeed, 0, moveZ * currentMoveSpeed);
     }
 }

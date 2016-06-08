@@ -17,9 +17,9 @@ public class Hexagon : MonoBehaviour {
 
     public static Vector3 getHexPosition(Vector3 worldPos)
     {
-        if (worldPos.z % 2 == 0)
+        if ((int)((worldPos.z / factorZ) % 2) == 0)
             return new Vector3(worldPos.x / factorX, 0, worldPos.z / factorZ);
         else
-            return new Vector3(worldPos.x / factorX - deltaX, 0, worldPos.z / factorZ);
+            return new Vector3(worldPos.x / factorX - deltaX + .4f, 0, worldPos.z / factorZ);
     }
 }

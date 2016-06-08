@@ -32,12 +32,6 @@ public class World : MonoBehaviour
         //print(watch.ElapsedMilliseconds);
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
 
 
 

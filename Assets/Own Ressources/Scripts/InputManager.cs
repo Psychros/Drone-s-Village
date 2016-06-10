@@ -8,6 +8,6 @@ public class InputManager : MonoBehaviour {
     void Update()
     {
         if (Input.GetKeyDown(leftClick))
-            print(RayCastManager.getCoordsRaycast());
+            World.instance.drone.Destination = RayCastManager.getWorldCoordsRaycast();
     }
 }

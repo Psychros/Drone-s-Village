@@ -65,23 +65,23 @@ public class CameraController : MonoBehaviour {
         float moveZ = 0;
 
         //Move in x-direction
-        if (Input.mousePosition.x < 300)
+        if (Input.mousePosition.x < Screen.width/5)
         {   //The parentheses must be there
             if (Camera.main.transform.position.x > 0)
                 moveX = -1;
         }
-        else if (Input.mousePosition.x > 1000)
+        else if (Input.mousePosition.x > Screen.width - Screen.width/5)
             if (Camera.main.transform.position.x < World.instance.width * Hexagon.factorX + Hexagon.deltaX)
                 moveX = 1;
 
 
         //Move in z-direction
-        if (Input.mousePosition.y < 100)
+        if (Input.mousePosition.y < Screen.height/5)
         {   //The parentheses must be there
             if (Camera.main.transform.position.z > -8)
                 moveZ = -1;
         }
-        else if (Input.mousePosition.y > 600)
+        else if (Input.mousePosition.y > Screen.height - Screen.height/5)
             if (Camera.main.transform.position.z < World.instance.height * Hexagon.factorZ - 8)
                 moveZ = 1;
 

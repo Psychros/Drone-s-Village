@@ -16,10 +16,15 @@ public class RayCastManager : MonoBehaviour {
         return hit;
     }
 
-    public static Vector3 getCoordsRaycast()
+    public static Vector3 getHexCoordsRaycast()
     {
         RaycastHit hit = startRayCast();
-        print(hit.collider.gameObject.transform.position);
         return Hexagon.getHexPosition(hit.collider.gameObject.transform.position);
+    }
+
+    public static Vector3 getWorldCoordsRaycast()
+    {
+        RaycastHit hit = startRayCast();
+        return hit.collider.gameObject.transform.position;
     }
 }

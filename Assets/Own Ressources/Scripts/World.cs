@@ -10,10 +10,17 @@ public class World : MonoBehaviour
     public static World instance;
 
     public GameObject[] models = new GameObject[System.Enum.GetNames(typeof(Bioms)).Length];
-    public GameObject drone;
+    public GameObject droneModel;
+    [HideInInspector]
+    public NPC drone;
+
+    [HideInInspector]
+    public Pathfinder pathfinder;
     public int width = 50,
-               height = 50;
+              height = 50;
     private int[,] world;
+
+
 
     // Use this for initialization
     void Start()
@@ -21,15 +28,13 @@ public class World : MonoBehaviour
         instance = this;
         world = new int[width, height];
 
-        Stopwatch watch = new Stopwatch();
-        watch.Start();
-
         //Generate the world
         generate();
         showWorld();
 
-        watch.Stop();
-        //print(watch.ElapsedMilliseconds);
+        //Generate the Pathfinder
+        pathfinder = gameObject.AddComponent<Pathfinder>();
+        pathfinder.generateNodes(width, height);
     }
 
 
@@ -86,8 +91,9 @@ public class World : MonoBehaviour
                 world[x, z] = (int)Bioms.SpaceShip;
 
                 //Place the first drone over the ship
-                GameObject g = Instantiate(drone);
-                g.transform.position = shipPos + drone.transform.position;
+                GameObject g = Instantiate(droneModel);
+                drone = g.AddComponent<NPC>();
+                g.transform.position = shipPos + droneModel.transform.position;
 
                 //Focus the camera
                 Camera.main.transform.position = shipPos + new Vector3(0, Camera.main.transform.position.y, -8f);

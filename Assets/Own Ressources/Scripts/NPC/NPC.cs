@@ -18,6 +18,7 @@ public class NPC : MonoBehaviour {
     void Start()
     {
         transform.forward = Vector3.Cross(transform.forward, transform.up);
+        print(transform.forward);
     }
 
 

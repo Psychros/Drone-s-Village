@@ -48,26 +48,26 @@ public class NPC : MonoBehaviour {
 	}
 
 
-    //Cuts a tree
-    public void cutTree()
+    //The drone changes the biom of a hexagon
+    public void changeBiom(Bioms oldBiom, Bioms newBiom)
     {
-        Vector3 posHex = Hexagon.getHexPosition(destination);
-        int x = (int)Mathf.Round(posHex.x);
-        int z = (int)Mathf.Round(posHex.z);
-        if ((posHex.x % 1 >= .5f) && (x > posHex.x))
-            x--;
-        if ((posHex.z % 1 >= .5f) && (z > posHex.z))
-            z--;
-        if (z >= posHex.z)
-            z--;
-
-        print("HexX:" + posHex.x + " HexZ:" + posHex.z
-            + " XRound:" + x + " ZRound:" + z);
+        //Get the position of the hexagon
+        Vector2Int posHex = Hexagon.getHexPositionInt(destination);
 
         //Remove the old GameObject and create a new one
-        Destroy(World.instance.world[x, z]);
-        GameObject g = Instantiate(World.instance.models[(int)Bioms.Plain]);
-        g.transform.position = destination;
-        World.instance.world[x, z] = g;
+        if (World.instance.worldBiomes[posHex.x, posHex.z] == (int)oldBiom)
+        {
+            Destroy(World.instance.world[posHex.x, posHex.z]);
+            GameObject g = Instantiate(World.instance.models[(int)newBiom]);
+            g.transform.position = destination;
+            g.transform.parent = World.instance.transform;
+            World.instance.world[posHex.x, posHex.z] = g;
+        }
+    }
+
+
+    public void cutTree()
+    {
+        changeBiom(Bioms.Forest, Bioms.Plain);
     }
 }

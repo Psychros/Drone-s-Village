@@ -19,7 +19,7 @@ public class World : MonoBehaviour
     public int width = 50,
               height = 50;
     [HideInInspector]
-    private int[,] worldBiomes;
+    public int[,] worldBiomes;
     [HideInInspector]
     public GameObject[,] world;
 

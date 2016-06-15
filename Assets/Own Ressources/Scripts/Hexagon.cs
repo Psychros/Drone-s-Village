@@ -17,9 +17,22 @@ public class Hexagon : MonoBehaviour {
 
     public static Vector3 getHexPosition(Vector3 worldPos)
     {
+        Vector3 v;
+
         if ((int)((worldPos.z / factorZ) % 2) == 0)
-            return new Vector3(worldPos.x / factorX, 0, worldPos.z / factorZ);
+        {
+            v = new Vector3(worldPos.x / factorX, 0, worldPos.z / factorZ); 
+            v.z++;
+
+            return v;
+        }
         else
-            return new Vector3(worldPos.x / factorX - deltaX + .4f, 0, worldPos.z / factorZ);
+        {
+            v = new Vector3((worldPos.x / factorX) - deltaX + .4f, 0, worldPos.z / factorZ);
+            v.x++;
+            v.z++;
+
+            return v;
+        }
     }
 }

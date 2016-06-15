@@ -18,7 +18,10 @@ public class World : MonoBehaviour
     public Pathfinder pathfinder;
     public int width = 50,
               height = 50;
-    private int[,] world;
+    [HideInInspector]
+    private int[,] worldBiomes;
+    [HideInInspector]
+    public GameObject[,] world;
 
 
 
@@ -26,7 +29,8 @@ public class World : MonoBehaviour
     void Start()
     {
         instance = this;
-        world = new int[width, height];
+        worldBiomes = new int[width, height];
+        world = new GameObject[width, height];
 
         //Generate the world
         generate();
@@ -56,24 +60,24 @@ public class World : MonoBehaviour
                 float biom = Mathf.PerlinNoise(offsetX + (float)i / width * 5f, offsetZ + (float)j / height * 5f);
 
                 if (biom > .85f)
-                    world[i, j] = (int)Bioms.HighMountain;
+                    worldBiomes[i, j] = (int)Bioms.HighMountain;
                 else if(biom > .8f)
-                    world[i, j] = (int)Bioms.Mountain;
+                    worldBiomes[i, j] = (int)Bioms.Mountain;
                 else if (biom > .75f)
                 {
                     if (Random.value > .3)
-                        world[i, j] = (int)Bioms.Mountain;
+                        worldBiomes[i, j] = (int)Bioms.Mountain;
                     else
-                        world[i, j] = (int)Bioms.StonePlain;
+                        worldBiomes[i, j] = (int)Bioms.StonePlain;
                 }
                 else if (biom > .52f)
-                    world[i, j] = Random.value > .5 ? (int)Bioms.Plain : (int)Bioms.Forest;
+                    worldBiomes[i, j] = Random.value > .5 ? (int)Bioms.Plain : (int)Bioms.Forest;
                 else if (biom > .49f)
-                    world[i, j] = (int)Bioms.Desert;
+                    worldBiomes[i, j] = (int)Bioms.Desert;
                 else if (biom > .4f)
-                    world[i, j] = Random.value > .05 ? (int)Bioms.Ocean : (int)Bioms.OceanMountain;
+                    worldBiomes[i, j] = Random.value > .05 ? (int)Bioms.Ocean : (int)Bioms.OceanMountain;
                 else
-                    world[i, j] = (int)Bioms.Ocean; ;
+                    worldBiomes[i, j] = (int)Bioms.Ocean; ;
             }
         }
 
@@ -83,12 +87,12 @@ public class World : MonoBehaviour
         {
             int x = (int)(Random.value * width), 
                 z = (int)(Random.value * height);
-            if (world[x, z] == (int)Bioms.Plain)
+            if (worldBiomes[x, z] == (int)Bioms.Plain)
             {
                 Vector3 shipPos = Hexagon.getWorldPosition(x, z);
 
                 //Place the ship
-                world[x, z] = (int)Bioms.SpaceShip;
+                worldBiomes[x, z] = (int)Bioms.SpaceShip;
 
                 //Place the first drone over the ship
                 GameObject g = Instantiate(droneModel);
@@ -112,10 +116,11 @@ public class World : MonoBehaviour
         {
             for (int j = 0; j < height; j++)
             {
-                g = Instantiate<GameObject>(models[world[i, j]]);
+                g = Instantiate<GameObject>(models[worldBiomes[i, j]]);
 
                 g.transform.position = Hexagon.getWorldPosition(i, j);
                 g.transform.parent = transform;
+                world[i, j] = g;
             }
         }
     }

@@ -50,6 +50,9 @@ public class NPC : MonoBehaviour {
         {
             GameObject g = World.instance.world[pos.x, pos.z].transform.GetChild(0).gameObject;
             g.AddComponent<CutTree>();
+
+            //Activate the ParticleSystem
+            World.instance.world[pos.x, pos.z].transform.GetChild(1).gameObject.SetActive(true);
         }
     }
 }

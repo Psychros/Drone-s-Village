@@ -13,6 +13,7 @@ public class CutTree : MonoBehaviour {
         else
         {
             World.instance.changeBiom(Bioms.Forest, Bioms.Plain, transform.parent.position);
+            Destroy(this);
         }
 	}
 }

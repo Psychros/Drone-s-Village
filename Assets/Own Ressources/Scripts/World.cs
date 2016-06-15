@@ -128,7 +128,7 @@ public class World : MonoBehaviour
 
 
     //The changes the biom of a hexagon
-    public void changeBiom(Bioms oldBiom, Bioms newBiom, Vector3 v)
+    public GameObject changeBiom(Bioms oldBiom, Bioms newBiom, Vector3 v)
     {
         //Get the position of the hexagon
         Vector2Int posHex = Hexagon.getHexPositionInt(v);
@@ -137,10 +137,16 @@ public class World : MonoBehaviour
         if (worldBiomes[posHex.x, posHex.z] == (int)oldBiom)
         {
             Destroy(world[posHex.x, posHex.z]);
+
             GameObject g = Instantiate(models[(int)newBiom]);
             g.transform.position = v;
             g.transform.parent = transform;
             world[posHex.x, posHex.z] = g;
+            worldBiomes[posHex.x, posHex.z] = (int)newBiom;
+
+            return g;
         }
+
+        return null;
     }
 }

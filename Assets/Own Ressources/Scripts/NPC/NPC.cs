@@ -34,10 +34,14 @@ public class NPC : MonoBehaviour {
 
             //Position
             transform.position = Vector3.MoveTowards(transform.position, transform.position + transform.forward, Time.deltaTime * speed);
-            if (Vector3.Distance(new Vector3(transform.position.x, 0, transform.position.z), destination) < 0.4f)
+            if (Vector3.Distance(new Vector3(transform.position.x, 0, transform.position.z), destination) < 0.2f)
             {
                 isMoving = false;
-                cutTree();
+
+                if (InputManager.instance.cutTreeOrBuild)
+                    buildBuilding();
+                else
+                    cutTree();
             }
         }
 	}
@@ -54,5 +58,11 @@ public class NPC : MonoBehaviour {
             //Activate the ParticleSystem
             World.instance.world[pos.x, pos.z].transform.GetChild(1).gameObject.SetActive(true);
         }
+    }
+
+    public void buildBuilding()
+    {
+        GameObject g = World.instance.changeBiom(Bioms.Plain, Bioms.StoreHouse, destination).transform.GetChild(0).gameObject;
+        g.AddComponent<BuildBuilding>();
     }
 }

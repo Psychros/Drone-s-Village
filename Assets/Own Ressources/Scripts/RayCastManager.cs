@@ -16,15 +16,25 @@ public class RayCastManager : MonoBehaviour {
         return hit;
     }
 
+
+    //Returns Vector3.down if there is no Hexagon
     public static Vector3 getHexCoordsRaycast()
     {
         RaycastHit hit = startRayCast();
-        return Hexagon.getHexPosition(hit.collider.gameObject.transform.position);
+        if (hit.collider != null)
+            return Hexagon.getHexPosition(hit.collider.gameObject.transform.position);
+        else
+            return Vector3.down;
     }
 
+
+    //Returns Vector3.down if there is no Hexagon
     public static Vector3 getWorldCoordsRaycast()
     {
         RaycastHit hit = startRayCast();
-        return hit.collider.gameObject.transform.position;
+        if (hit.collider != null)
+            return hit.collider.gameObject.transform.position;
+        else
+            return Vector3.down;
     }
 }

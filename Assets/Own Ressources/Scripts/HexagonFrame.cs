@@ -23,6 +23,7 @@ public class HexagonFrame : MonoBehaviour {
         if (timerHexagonFrame >= timeHexagonFrame)
         {
             timerHexagonFrame = 0;
+            //If the player selects no hexagon the position is Vector3.down
             hexagonFrame.transform.position = RayCastManager.getWorldCoordsRaycast();
         }
     }

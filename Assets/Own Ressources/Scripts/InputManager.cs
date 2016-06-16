@@ -4,7 +4,7 @@ using System.Collections;
 public class InputManager : MonoBehaviour {
     public static InputManager instance;
 
-    public KeyCode leftClick = KeyCode.Mouse1;
+    public KeyCode rightClick = KeyCode.Mouse1;
     public KeyCode switchFunction = KeyCode.E;
 
     //False = cut, True = build
@@ -17,8 +17,8 @@ public class InputManager : MonoBehaviour {
 
     void Update()
     {
-        if (Input.GetKeyDown(leftClick))
-            World.instance.drone.Destination = RayCastManager.getWorldCoordsRaycast();
+        if (Input.GetKeyDown(rightClick))
+            World.instance.drone.Destination = HexagonFrame.instance.selectedPosition;
 
         if (Input.GetKeyDown(switchFunction))
             cutTreeOrBuild = !cutTreeOrBuild;

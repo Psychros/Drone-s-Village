@@ -10,6 +10,7 @@ public class CameraController : MonoBehaviour {
     public float moveSpeed = 1f,
                  currentMoveSpeed;
     public float startZoom = 10;
+    public bool isMoving = false;
 
 
     void Start()
@@ -28,7 +29,15 @@ public class CameraController : MonoBehaviour {
 
         //Move the camera
         if (Input.GetMouseButton(0))
+        {
             moveCamera();
+            isMoving = true;
+        }
+        else
+        {
+            isMoving = false;
+        }
+
     }
 
 

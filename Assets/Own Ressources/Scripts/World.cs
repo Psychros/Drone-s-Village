@@ -11,17 +11,11 @@ public class World : MonoBehaviour
 
     public GameObject[] models = new GameObject[System.Enum.GetNames(typeof(Bioms)).Length];
     public GameObject droneModel;
-    [HideInInspector]
-    public NPC drone;
-
-    [HideInInspector]
-    public Pathfinder pathfinder;
-    public int width = 50,
-              height = 50;
-    [HideInInspector]
-    public int[,] worldBiomes;
-    [HideInInspector]
-    public GameObject[,] world;
+    [HideInInspector] public NPC drone;
+    [HideInInspector] public int[,] worldBiomes;
+    [HideInInspector] public GameObject[,] world;
+    public int width = 50, 
+               height = 50;
 
 
 
@@ -35,12 +29,7 @@ public class World : MonoBehaviour
         //Generate the world
         generate();
         showWorld();
-
-        //Generate the Pathfinder
-        pathfinder = gameObject.AddComponent<Pathfinder>();
-        pathfinder.generateNodes(width, height);
     }
-
 
 
 

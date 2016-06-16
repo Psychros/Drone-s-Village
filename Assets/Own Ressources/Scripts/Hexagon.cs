@@ -70,7 +70,6 @@ public class Hexagon : MonoBehaviour {
         ints.x = x;
         ints.z = z;
 
-        print("HexX:" + v.x + " HexZ:" + v.z + " x:" + x + " z:" + z + " xDelta:" + (v.x - x));
         return ints;
     }
 }

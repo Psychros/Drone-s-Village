@@ -11,6 +11,7 @@ public class CameraController : MonoBehaviour {
                  currentMoveSpeed;
     public float startZoom = 10;
     public bool isMoving = false;
+    [HideInInspector] public static float factor = 20;      //How far away from the Screenedge must the camera be?(Not in pixels)
 
 
     void Start()
@@ -28,16 +29,7 @@ public class CameraController : MonoBehaviour {
 
 
         //Move the camera
-        if (Input.GetMouseButton(0))
-        {
-            moveCamera();
-            isMoving = true;
-        }
-        else
-        {
-            isMoving = false;
-        }
-
+        moveCamera();
     }
 
 
@@ -70,29 +62,44 @@ public class CameraController : MonoBehaviour {
 
     private void moveCamera()
     {
+        //Reset isMoving
+        isMoving = false;
+
         float moveX = 0;
         float moveZ = 0;
 
         //Move in x-direction
-        if (Input.mousePosition.x < Screen.width/5)
+        if (Input.mousePosition.x <= Screen.width / factor)
         {   //The parentheses must be there
             if (Camera.main.transform.position.x > 0)
+            {
                 moveX = -1;
+                isMoving = true;
+            }
         }
-        else if (Input.mousePosition.x > Screen.width - Screen.width/5)
+        else if (Input.mousePosition.x >= Screen.width - Screen.width / factor)
             if (Camera.main.transform.position.x < World.instance.width * Hexagon.factorX + Hexagon.deltaX)
+            {
                 moveX = 1;
+                isMoving = true;
+            }
 
 
         //Move in z-direction
-        if (Input.mousePosition.y < Screen.height/5)
+        if (Input.mousePosition.y <= Screen.height / factor)
         {   //The parentheses must be there
             if (Camera.main.transform.position.z > -8)
+            {
                 moveZ = -1;
+                isMoving = true;
+            }
         }
-        else if (Input.mousePosition.y > Screen.height - Screen.height/5)
+        else if (Input.mousePosition.y >= Screen.height - Screen.height / factor)
             if (Camera.main.transform.position.z < World.instance.height * Hexagon.factorZ - 8)
+            {
                 moveZ = 1;
+                isMoving = true;
+            }
 
 
         //Move the camera

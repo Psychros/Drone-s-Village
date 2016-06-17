@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Vector2Int : MonoBehaviour {
+public class Vector2Int {
     public int x, z;
 }

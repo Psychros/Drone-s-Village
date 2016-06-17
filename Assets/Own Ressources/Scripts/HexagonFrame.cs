@@ -5,10 +5,9 @@ public class HexagonFrame : MonoBehaviour {
     public static HexagonFrame instance;
 
     public Vector3 selectedPosition;
-    private float timerHexagonFrame = 0;
-    private float timeHexagonFrame = .1f;
     public GameObject hexagonFrameModel;
     [HideInInspector] public GameObject hexagonFrame;
+    [HideInInspector] public Vector3 mousePosition;
 
 
     void Start()
@@ -24,13 +23,13 @@ public class HexagonFrame : MonoBehaviour {
     void Update()
     {
         //Set the position of the hexagonFrame to the selected Hexagon
-        timerHexagonFrame += Time.deltaTime;
-        if (timerHexagonFrame >= timeHexagonFrame)
+        if ((CameraController.instance.isMoving) || (mousePosition.x != Input.mousePosition.x) || (mousePosition.y != Input.mousePosition.y))
         {
-            timerHexagonFrame = 0;
             //If the player selects no hexagon the position is Vector3.down
             hexagonFrame.transform.position = RayCastManager.getWorldCoordsRaycast();
             selectedPosition = hexagonFrame.transform.position;
         }
+
+        mousePosition = Input.mousePosition;
     }
 }

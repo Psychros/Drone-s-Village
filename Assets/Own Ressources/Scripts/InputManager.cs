@@ -4,7 +4,8 @@ using System.Collections;
 public class InputManager : MonoBehaviour {
     public static InputManager instance;
 
-    public KeyCode rightClick = KeyCode.Mouse1;
+    public KeyCode rightClick     = KeyCode.Mouse1;
+    public KeyCode leftClick      = KeyCode.Mouse0;
     public KeyCode switchFunction = KeyCode.E;
 
     //False = cut, True = build

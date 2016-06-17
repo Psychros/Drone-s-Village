@@ -2,6 +2,7 @@
 using System.Collections;
 
 public class CameraController : MonoBehaviour {
+    public static CameraController instance;
 
     //Camera
     public float zoomSpeed = 1f;
@@ -16,6 +17,8 @@ public class CameraController : MonoBehaviour {
 
     void Start()
     {
+        instance = this;
+
         calculateCurrentMoveSpeed();
         Camera.main.fieldOfView = startZoom;
     }

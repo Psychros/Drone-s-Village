@@ -50,7 +50,7 @@ public class World : MonoBehaviour
 
                 if (biom > .85f)
                     worldBiomes[i, j] = (int)Bioms.HighMountain;
-                else if(biom > .8f)
+                else if (biom > .8f)
                     worldBiomes[i, j] = (int)Bioms.Mountain;
                 else if (biom > .75f)
                 {
@@ -66,9 +66,10 @@ public class World : MonoBehaviour
                 else if (biom > .4f)
                     worldBiomes[i, j] = Random.value > .05 ? (int)Bioms.Ocean : (int)Bioms.OceanMountain;
                 else
-                    worldBiomes[i, j] = (int)Bioms.Ocean; ;
+                    worldBiomes[i, j] = (int)Bioms.Ocean;
             }
         }
+
 
 
         //Place the spaceship and focus the camera on it

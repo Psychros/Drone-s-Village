@@ -9,11 +9,15 @@ public class World : MonoBehaviour
     [HideInInspector]
     public static World instance;
 
-    public GameObject[] models = new GameObject[System.Enum.GetNames(typeof(Bioms)).Length];
+    public GameObject[] biomModels = new GameObject[4];
+    public GameObject[] structureModels = new GameObject[5];
+    public BiomData[] biomsData = new BiomData[System.Enum.GetNames(typeof(Bioms)).Length];
     public GameObject droneModel;
     [HideInInspector] public NPC drone;
     [HideInInspector] public int[,] worldBiomes;
-    [HideInInspector] public GameObject[,] world;
+    [HideInInspector] public GameObject[,] world;       
+    [HideInInspector] public GameObject[,] structures;  //Includes all structures on the hexagons
+    [HideInInspector] public GameObject[] hexagons;     //Includes all different hexagons
     public int width = 50, 
                height = 50;
 
@@ -25,6 +29,8 @@ public class World : MonoBehaviour
         instance = this;
         worldBiomes = new int[width, height];
         world = new GameObject[width, height];
+        structures = new GameObject[width, height];
+        hexagons = new GameObject[biomModels.Length];
 
         //Generate the world
         generate();
@@ -106,11 +112,22 @@ public class World : MonoBehaviour
         {
             for (int j = 0; j < height; j++)
             {
-                g = Instantiate<GameObject>(models[worldBiomes[i, j]]);
+                BiomData biomData = biomsData[worldBiomes[i, j]];
 
+                //Generate the ground
+                g = Instantiate<GameObject>(biomModels[biomData.biomModel]);
                 g.transform.position = Hexagon.getWorldPosition(i, j);
                 g.transform.parent = transform;
                 world[i, j] = g;
+
+                //Generate the structure
+                if (biomData.structure >= 0)
+                {
+                    structures[i, j] = Instantiate<GameObject>(structureModels[biomData.structure]);
+                    structures[i, j].transform.position = Hexagon.getWorldPosition(i, j);
+                }
+                else
+                    structures[i, j] = null;
             }
         }
     }
@@ -128,7 +145,7 @@ public class World : MonoBehaviour
         {
             Destroy(world[posHex.x, posHex.z]);
 
-            GameObject g = Instantiate(models[(int)newBiom]);
+            GameObject g = Instantiate(biomModels[(int)newBiom]);
             g.transform.position = v;
             g.transform.parent = transform;
             world[posHex.x, posHex.z] = g;

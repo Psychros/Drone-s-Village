@@ -2,7 +2,7 @@
 using System.Collections;
 
 public enum Bioms{
-    Plain, Forest, Desert, Ocean, OceanMountain, Mountain, HighMountain, StonePlain,
+    Plain = 0, Forest = 1, Desert = 2, Ocean = 3, OceanMountain = 4, Mountain = 5, HighMountain = 6, StonePlain = 7,
 
-    SpaceShip, StoreHouse
+    SpaceShip = 8, StoreHouse = 9
 }

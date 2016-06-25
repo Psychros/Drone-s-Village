@@ -8,12 +8,14 @@ public class CutTree : MonoBehaviour {
 	void Update () {
 	    if(transform.position.y > -2)
         {
+            print(transform.position.y);
             transform.position = Vector3.MoveTowards(transform.position, transform.position + new Vector3(0, -1, 0), Time.deltaTime * speed);
         }
         else
         {
-            World.instance.changeBiom(Bioms.Forest, Bioms.Plain, transform.parent.position);
-            Destroy(this);
+            World.instance.changeBiom(Bioms.Plain, transform.position);
+            World.instance.changeStructure(transform.position, Structures.None);
+            Destroy(gameObject);
         }
 	}
 }

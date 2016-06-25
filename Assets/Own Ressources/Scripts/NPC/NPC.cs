@@ -52,17 +52,14 @@ public class NPC : MonoBehaviour {
         Vector2Int pos = Hexagon.getHexPositionInt(destination);
         if (World.instance.worldBiomes[pos.x, pos.z] == (int)Bioms.Forest)
         {
-            GameObject g = World.instance.world[pos.x, pos.z].transform.GetChild(0).gameObject;
+            GameObject g = World.instance.structures[pos.x, pos.z];
             g.AddComponent<CutTree>();
-
-            //Activate the ParticleSystem
-            World.instance.world[pos.x, pos.z].transform.GetChild(1).gameObject.SetActive(true);
         }
     }
 
     public void buildBuilding()
     {
-        GameObject g = World.instance.changeBiom(Bioms.Plain, Bioms.StoreHouse, destination).transform.GetChild(0).gameObject;
+        GameObject g = World.instance.changeStructure(destination, Structures.StoreHouse, -1.014f);
         g.AddComponent<BuildBuilding>();
     }
 }

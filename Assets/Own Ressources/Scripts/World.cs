@@ -121,7 +121,7 @@ public class World : MonoBehaviour
                 world[i, j] = g;
 
                 //Generate the structure
-                if (biomData.structure >= 0)
+                if (biomData.structure != (int)Structures.None)
                 {
                     structures[i, j] = Instantiate<GameObject>(structureModels[biomData.structure]);
                     structures[i, j].transform.position = Hexagon.getWorldPosition(i, j);
@@ -134,26 +134,40 @@ public class World : MonoBehaviour
 
 
 
-    //The changes the biom of a hexagon
-    public GameObject changeBiom(Bioms oldBiom, Bioms newBiom, Vector3 v)
+    //changes the biom of a hexagon
+    public void changeBiom(Bioms newBiom, Vector3 v)
     {
         //Get the position of the hexagon
         Vector2Int posHex = Hexagon.getHexPositionInt(v);
 
-        //Remove the old GameObject and create a new one
-        if (worldBiomes[posHex.x, posHex.z] == (int)oldBiom)
+        worldBiomes[posHex.x, posHex.z] = (int)newBiom;
+    }
+
+    //Changes a structure with the hexCoords
+    public GameObject changeStructure(int x, int z, Structures newStructure, float newHeight = 0)
+    {
+        //Remove the old structure
+        if (structures[x, z] != null)
         {
-            Destroy(world[posHex.x, posHex.z]);
-
-            GameObject g = Instantiate(biomModels[(int)newBiom]);
-            g.transform.position = v;
-            g.transform.parent = transform;
-            world[posHex.x, posHex.z] = g;
-            worldBiomes[posHex.x, posHex.z] = (int)newBiom;
-
-            return g;
+            Destroy(structures[x, z]);
         }
 
-        return null;
+        //Place the new structure
+        if(newStructure != Structures.None)
+        {
+            Vector3 pos = Hexagon.getWorldPosition(x, z);
+            structures[x, z] = Instantiate(structureModels[(int)newStructure]);
+            structures[x, z].transform.position = pos + new Vector3(0, newHeight, 0);
+        }
+        else
+            structures[x, z] = null;
+
+        return structures[x, z];
+    }
+
+    public GameObject changeStructure(Vector3 pos, Structures newStructure, float newHeight = 0)
+    {
+        Vector2Int v = Hexagon.getHexPositionInt(pos);
+        return changeStructure(v.x, v.z, newStructure, newHeight);
     }
 }

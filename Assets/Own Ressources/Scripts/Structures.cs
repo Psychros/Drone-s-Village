@@ -2,5 +2,5 @@
 using System.Collections;
 
 public enum Structures{
-    None = -1, HighMountain = 0, Mountain = 1, Tree = 2, Spaceship = 3, StoreHouse = 4
+    None = -1, HighMountain = 0, Mountain = 1, StoneOcean = 2, Tree = 3, Spaceship = 4, StoreHouse = 5
 }

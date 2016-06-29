@@ -9,15 +9,18 @@ public class CameraController : MonoBehaviour {
     public float minZoom = 10f,
                  maxZoom = 60f;
     public float moveSpeed = 1f,
-                 currentMoveSpeed;
+                 currentMoveSpeed,
+                 currentMouseMoveSpeed; //The moveSpeed for the movement with the mouse
     public float startZoom = 10;
     public bool isMoving = false;
     [HideInInspector] public static float factor = 20;      //How far away from the Screenedge must the camera be?(Not in pixels)
+    private Vector3 oldMousePosition;
 
 
     void Start()
     {
         instance = this;
+        oldMousePosition = Input.mousePosition;
 
         calculateCurrentMoveSpeed();
         Camera.main.fieldOfView = startZoom;
@@ -33,6 +36,17 @@ public class CameraController : MonoBehaviour {
 
         //Move the camera
         moveCamera();
+        if ((!isMoving) && (Input.GetKey(KeyCode.Mouse0)) && (oldMousePosition != Input.mousePosition)) //!isMoving removes a doubled movement
+        {
+            float moveX = oldMousePosition.x - Input.mousePosition.x;
+            float moveZ = oldMousePosition.y - Input.mousePosition.y;
+
+            Camera.main.transform.position += new Vector3(moveX * currentMouseMoveSpeed, 0, moveZ * currentMouseMoveSpeed);
+        }
+
+        //Actualize the oldMousePosition
+        if (oldMousePosition != Input.mousePosition)
+            oldMousePosition = Input.mousePosition;
     }
 
 
@@ -61,6 +75,7 @@ public class CameraController : MonoBehaviour {
     private void calculateCurrentMoveSpeed()
     {
         currentMoveSpeed = moveSpeed / maxZoom * Camera.main.fieldOfView;
+        currentMouseMoveSpeed = currentMoveSpeed / 3f;
     }
 
     private void moveCamera()

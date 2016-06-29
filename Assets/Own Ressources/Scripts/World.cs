@@ -10,7 +10,7 @@ public class World : MonoBehaviour
     public static World instance;
 
     public GameObject[] biomModels = new GameObject[4];
-    public GameObject[] structureModels = new GameObject[5];
+    public GameObject[] structureModels = new GameObject[6];
     public BiomData[] biomsData = new BiomData[System.Enum.GetNames(typeof(Bioms)).Length];
     public GameObject droneModel;
     [HideInInspector] public NPC drone;
@@ -40,7 +40,7 @@ public class World : MonoBehaviour
         //Generate the world
         generate();
         showWorld();
-        createHexagonMeshs();
+        //createHexagonMeshs();
     }
 
 

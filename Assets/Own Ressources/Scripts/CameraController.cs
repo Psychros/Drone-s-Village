@@ -22,8 +22,8 @@ public class CameraController : MonoBehaviour {
         instance = this;
         oldMousePosition = Input.mousePosition;
 
-        calculateCurrentMoveSpeed();
         Camera.main.fieldOfView = startZoom;
+        calculateCurrentMoveSpeed();
     }
 
     void Update () {

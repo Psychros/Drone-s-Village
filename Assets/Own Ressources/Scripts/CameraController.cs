@@ -35,14 +35,8 @@ public class CameraController : MonoBehaviour {
 
 
         //Move the camera
-        moveCamera();
-        if ((!isMoving) && (Input.GetKey(KeyCode.Mouse0)) && (oldMousePosition != Input.mousePosition)) //!isMoving removes a doubled movement
-        {
-            float moveX = oldMousePosition.x - Input.mousePosition.x;
-            float moveZ = oldMousePosition.y - Input.mousePosition.y;
-
-            Camera.main.transform.position += new Vector3(moveX * currentMouseMoveSpeed, 0, moveZ * currentMouseMoveSpeed);
-        }
+        moveCameraAtTheScreenEdge();
+        moveCameraWithLeftMouse();
 
         //Actualize the oldMousePosition
         if (oldMousePosition != Input.mousePosition)
@@ -78,7 +72,7 @@ public class CameraController : MonoBehaviour {
         currentMouseMoveSpeed = currentMoveSpeed / 3f;
     }
 
-    private void moveCamera()
+    private void moveCameraAtTheScreenEdge()
     {
         //Reset isMoving
         isMoving = false;
@@ -88,39 +82,62 @@ public class CameraController : MonoBehaviour {
 
         //Move in x-direction
         if (Input.mousePosition.x <= Screen.width / factor)
-        {   //The parentheses must be there
-            if (Camera.main.transform.position.x > 0)
-            {
-                moveX = -1;
-                isMoving = true;
-            }
+        {   
+            moveX = -1;
+            isMoving = true;
         }
-        else if (Input.mousePosition.x >= Screen.width - Screen.width / factor)
-            if (Camera.main.transform.position.x < World.instance.width * Hexagon.factorX + Hexagon.deltaX)
-            {
-                moveX = 1;
-                isMoving = true;
-            }
+        else if (Input.mousePosition.x >= Screen.width - Screen.width / factor)       
+        {
+            moveX = 1;
+            isMoving = true;
+        }
 
 
         //Move in z-direction
         if (Input.mousePosition.y <= Screen.height / factor)
-        {   //The parentheses must be there
-            if (Camera.main.transform.position.z > -8)
-            {
-                moveZ = -1;
-                isMoving = true;
-            }
+        {   
+            moveZ = -1;
+            isMoving = true;
         }
         else if (Input.mousePosition.y >= Screen.height - Screen.height / factor)
-            if (Camera.main.transform.position.z < World.instance.height * Hexagon.factorZ - 8)
-            {
-                moveZ = 1;
-                isMoving = true;
-            }
+        { 
+            moveZ = 1;
+            isMoving = true;
+         }
 
+
+        moveCamera(moveX, moveZ);
+    }
+
+
+    public void moveCameraWithLeftMouse()
+    {
+        if ((!isMoving) && (Input.GetKey(KeyCode.Mouse0)) && (oldMousePosition != Input.mousePosition)) //!isMoving removes a doubled movement
+        {
+            float moveX = oldMousePosition.x - Input.mousePosition.x;
+            float moveZ = oldMousePosition.y - Input.mousePosition.y;
+
+            moveCamera(moveX, moveZ);
+        }
+    }
+
+
+
+    public void moveCamera(float moveX, float moveZ)
+    {
+        float moveX2 = 0, moveZ2 = 0;
+
+        if (moveX < 0 && Camera.main.transform.position.x > 0)
+            moveX2 = moveX;
+        else if ((moveX > 0 && Camera.main.transform.position.x < World.instance.width * Hexagon.factorX + Hexagon.deltaX))
+            moveX2 = moveX;
+
+        if (moveZ < 0 && Camera.main.transform.position.z > -8)
+            moveZ2 = moveZ;
+        else if (moveZ > 0 && Camera.main.transform.position.z < World.instance.height * Hexagon.factorZ - 8)
+            moveZ2 = moveZ;
 
         //Move the camera
-        Camera.main.transform.position += new Vector3(moveX * currentMoveSpeed, 0, moveZ * currentMoveSpeed);
+        Camera.main.transform.position += new Vector3(moveX2 * currentMoveSpeed, 0, moveZ2 * currentMoveSpeed);
     }
 }

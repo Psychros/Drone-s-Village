@@ -3,7 +3,7 @@ using System.Collections;
 
 public class NPC : MonoBehaviour {
 
-    public bool isMoving;
+    [HideInInspector]public bool isMoving;
     public float speed = 2f, turnSpeed = 150f;
     private Vector3 destination;
     public Vector3 Destination

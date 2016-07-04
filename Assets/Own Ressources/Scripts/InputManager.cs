@@ -4,6 +4,8 @@ using System.Collections;
 public class InputManager : MonoBehaviour {
     public static InputManager instance;
 
+    public Texture2D mouseIcon; 
+
     public KeyCode rightClick     = KeyCode.Mouse1;
     public KeyCode leftClick      = KeyCode.Mouse0;
     public KeyCode switchFunction = KeyCode.E;
@@ -14,6 +16,8 @@ public class InputManager : MonoBehaviour {
     void Start()
     {
         instance = this;
+        Cursor.SetCursor(mouseIcon, Vector2.zero, CursorMode.ForceSoftware);
+
     }
 
     void Update()

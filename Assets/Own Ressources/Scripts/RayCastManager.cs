@@ -5,6 +5,7 @@
  *  This class can be used for Raycasts
  */
 public class RayCastManager : MonoBehaviour {
+    public static Vector3 noResult = new Vector3(-100, 0, -100);
 
     //Start a Raycast from the mouseposition
     public static RaycastHit startRayCast()
@@ -35,6 +36,15 @@ public class RayCastManager : MonoBehaviour {
         if (hit.collider != null)
             return hit.collider.gameObject.transform.position;
         else
-            return Vector3.down;
+            return noResult;
+    }
+
+    public static Vector3 getWorldCoordsRaycast(string tag)
+    {
+        RaycastHit hit = startRayCast();
+        if (hit.collider != null && hit.transform.tag.Equals(tag))
+            return hit.collider.gameObject.transform.position;
+        else
+            return noResult;
     }
 }

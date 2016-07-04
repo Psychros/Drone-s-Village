@@ -106,7 +106,7 @@ public class CameraController : MonoBehaviour {
          }
 
 
-        moveCamera(moveX, moveZ);
+        moveCamera(moveX * currentMoveSpeed, moveZ * currentMoveSpeed);
     }
 
 
@@ -117,7 +117,7 @@ public class CameraController : MonoBehaviour {
             float moveX = oldMousePosition.x - Input.mousePosition.x;
             float moveZ = oldMousePosition.y - Input.mousePosition.y;
 
-            moveCamera(moveX, moveZ);
+            moveCamera(moveX * currentMouseMoveSpeed, moveZ * currentMouseMoveSpeed);
         }
     }
 
@@ -138,6 +138,6 @@ public class CameraController : MonoBehaviour {
             moveZ2 = moveZ;
 
         //Move the camera
-        Camera.main.transform.position += new Vector3(moveX2 * currentMoveSpeed, 0, moveZ2 * currentMoveSpeed);
+        Camera.main.transform.position += new Vector3(moveX2, 0, moveZ2);
     }
 }

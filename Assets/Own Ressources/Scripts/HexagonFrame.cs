@@ -16,7 +16,7 @@ public class HexagonFrame : MonoBehaviour {
 
         //Place the hexagonFrame
         hexagonFrame = Instantiate(hexagonFrameModel);
-        hexagonFrame.transform.position = new Vector3(0, -1, 0);
+        hexagonFrame.transform.position = RayCastManager.noResult;
     }
 
 
@@ -26,8 +26,8 @@ public class HexagonFrame : MonoBehaviour {
         if ((CameraController.instance.isMoving) || (mousePosition.x != Input.mousePosition.x) || (mousePosition.y != Input.mousePosition.y))
         {
             //If the player selects no hexagon the position is Vector3.down
-            hexagonFrame.transform.position = RayCastManager.getWorldCoordsRaycast();
-            selectedPosition = hexagonFrame.transform.position;
+            hexagonFrame.transform.position = RayCastManager.getWorldCoordsRaycast("Hexagon");
+            selectedPosition = RayCastManager.noResult;
         }
 
         mousePosition = Input.mousePosition;

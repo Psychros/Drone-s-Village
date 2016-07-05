@@ -15,10 +15,8 @@ public class World : MonoBehaviour
     public GameObject droneModel;
     [HideInInspector] public NPC drone;
     [HideInInspector] public int[,] worldBiomes;
-    [HideInInspector] public GameObject[,] hexagonCollider;        
+    [HideInInspector] public GameObject[,] hexagons;
     [HideInInspector] public GameObject[,] structures;              //Includes all structures on the hexagons
-    [HideInInspector] private List<GameObject>[] hexagonTypeLists;  //Contains all hexagons of every material
-    [HideInInspector] public GameObject[] hexagons;                 //Includes all different hexagons
     public int width = 50, 
                height = 50;
 
@@ -29,18 +27,13 @@ public class World : MonoBehaviour
     {
         instance = this;
         worldBiomes = new int[width, height];
-        hexagonCollider = new GameObject[width, height];
+        hexagons = new GameObject[width, height];
         structures = new GameObject[width, height];
-        hexagons = new GameObject[biomModels.Length];
-        hexagonTypeLists = new List<GameObject>[biomModels.Length];
-
-        for (int i = 0; i < hexagonTypeLists.Length; i++)
-            hexagonTypeLists[i] = new List<GameObject>();
 
         //Generate the world
         generate();
         showWorld();
-        //createHexagonMeshs();
+        //smoothHexagonTextureTransition();
     }
 
 
@@ -72,7 +65,7 @@ public class World : MonoBehaviour
                         worldBiomes[i, j] = (int)Bioms.StonePlain;
                 }
                 else if (biom > .52f)
-                    worldBiomes[i, j] = Random.value > .5 ? (int)Bioms.Plain : (int)Bioms.Forest;
+                    worldBiomes[i, j] = Random.value > .5 ? (Random.value > .2 ? (int)Bioms.Plain : (int)Bioms.PlainDandelion) : (int)Bioms.Forest;
                 else if (biom > .49f)
                     worldBiomes[i, j] = (int)Bioms.Desert;
                 else if (biom > .4f)
@@ -124,8 +117,7 @@ public class World : MonoBehaviour
                 g = Instantiate<GameObject>(biomModels[biomData.biomModel]);
                 g.transform.position = Hexagon.getWorldPosition(i, j);
                 g.transform.parent = transform;
-                hexagonTypeLists[biomData.biomModel].Add(g);
-                hexagonCollider[i, j] = g;
+                hexagons[i, j] = g;
 
                 //Generate the structure
                 if (biomData.structure != (int)Structures.None)
@@ -141,59 +133,39 @@ public class World : MonoBehaviour
     }
 
 
-    //Creates the visible hexagonmeshs
-    public void createHexagonMeshs()
+    //Smoothes the texturetransitions
+    public void smoothHexagonTextureTransition()
     {
-        //Get the materials of the hexagons
-        Material[] materials = new Material[biomModels.Length];
-        for (int i = 0; i < materials.Length; i++)
-        {
-            materials[i] = biomModels[i].GetComponent<MeshRenderer>().sharedMaterial;
-        }
+        string s = "";
 
-        //Create the new GameObjects
-        MeshRenderer[] renderer = new MeshRenderer[biomModels.Length];
-        MeshFilter[] filter = new MeshFilter[biomModels.Length];
-        for (int i = 0; i < hexagons.Length; i++)
+        for (int i = 1; i < width; i++)
         {
-            hexagons[i] = new GameObject();
-            renderer[i] = hexagons[i].AddComponent<MeshRenderer>();
-            renderer[i].material = materials[i];
-            filter[i] = hexagons[i].AddComponent<MeshFilter>();
-            hexagons[i].transform.position = Vector3.zero;
-            //hexagons[i].transform.parent = this.transform;
-        }
-
-        //Get the MeshFilters
-        MeshFilter[][] meshFilter = new MeshFilter[hexagonTypeLists.Length][];
-        for (int i = 0; i < meshFilter.Length; i++)
-        {
-            meshFilter[i] = new MeshFilter[hexagonTypeLists[i].Count];
-            for (int j = 0; j < meshFilter[i].Length; j++)
+            for (int j = 1; j < height; j++)
             {
-                meshFilter[i][j] = hexagonTypeLists[i].ElementAt(j).GetComponent<MeshFilter>();
+                MeshRenderer renderer = hexagons[i, j].GetComponent<MeshRenderer>();
+                Texture2D texture = renderer.material.mainTexture as Texture2D;
+                
+                MeshRenderer rendererLeft = hexagons[i-1, j].GetComponent<MeshRenderer>();
+                Texture2D textureLeft = rendererLeft.material.mainTexture as Texture2D;
+
+                Color[] cs = texture.GetPixels(0, 0, 20, 512);
+                Color[] cs2 = textureLeft.GetPixels(0, 0, 20, 512);
+                for (int x = 0; x < 20; x++)
+                {
+                    for (int y = 0; y < 512; y++)
+                    {
+                        Color c  = cs[y + x * 512];
+                        Color c2 = cs2[y + x * 512];
+                        s = ((c.r + c2.r) / 2).ToString();
+                        texture.SetPixel(x, y, new Color((c.r+c2.r)/2, (c.g + c2.g) / 2, (c.b + c2.b) / 2, c.a));
+                    }
+                }
+                texture.Apply();
             }
         }
-
-        //Create the CombineInstances
-        CombineInstance[][] combines = new CombineInstance[hexagonTypeLists.Length][];
-        for (int i = 0; i < combines.Length; i++)
-        {
-            combines[i] = new CombineInstance[meshFilter[i].Length];
-            for (int j = 0; j < combines[i].Length; j++)
-            {
-                combines[i][j].mesh = meshFilter[i][j].sharedMesh;
-                combines[i][j].transform = meshFilter[i][j].transform.localToWorldMatrix;
-                Destroy(meshFilter[i][j].GetComponent<MeshRenderer>()); //Destroy the old MeshRenderer
-            }
-        }
-
-        //Combine the Meshes
-        for (int i = 0; i < hexagons.Length; i++)
-        {
-            filter[i].mesh.CombineMeshes(combines[i]);
-        }
+        print(s);
     }
+
 
     //changes the biom of a hexagon
     public void changeBiom(Bioms newBiom, Vector3 v)

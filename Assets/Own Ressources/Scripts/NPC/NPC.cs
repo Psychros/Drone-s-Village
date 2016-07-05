@@ -59,7 +59,11 @@ public class NPC : MonoBehaviour {
 
     public void buildBuilding()
     {
-        GameObject g = World.instance.changeStructure(destination, Structures.StoreHouse, -1.014f);
-        g.AddComponent<BuildBuilding>();
+        Vector2Int pos = Hexagon.getHexPositionInt(destination);
+        if (World.instance.worldBiomes[pos.x, pos.z] == (int)Bioms.Plain)
+        {
+            GameObject g = World.instance.changeStructure(destination, Structures.StoreHouse, -1.014f);
+            g.AddComponent<BuildBuilding>();
+        }
     }
 }

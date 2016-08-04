@@ -15,7 +15,11 @@ public class HexagonFrame : MonoBehaviour {
         instance = this;
 
         //Place the hexagonFrame
-        hexagonFrame = Instantiate(hexagonFrameModel);
+        if (hexagonFrameModel == null)
+            hexagonFrame = gameObject;
+        else
+            hexagonFrame = Instantiate(hexagonFrameModel);
+
         hexagonFrame.transform.position = RayCastManager.noResult;
     }
 

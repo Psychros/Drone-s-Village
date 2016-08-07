@@ -9,8 +9,8 @@ public class World : MonoBehaviour
     [HideInInspector]
     public static World instance;
 
-    public GameObject[] biomModels = new GameObject[4];
-    public GameObject[] structureModels = new GameObject[6];
+    public GameObject[] biomModels = new GameObject[6];
+    public GameObject[] structureModels = new GameObject[System.Enum.GetNames(typeof(BiomModels)).Length-1];
     public BiomData[] biomsData = new BiomData[System.Enum.GetNames(typeof(Bioms)).Length];
     public GameObject droneModel;
     [HideInInspector] public NPC drone;
@@ -19,7 +19,6 @@ public class World : MonoBehaviour
     [HideInInspector] public GameObject[,] structures;              //Includes all structures on the hexagons
     public int width = 50, 
                height = 50;
-
 
 
     // Use this for initialization
@@ -67,7 +66,7 @@ public class World : MonoBehaviour
                 else if (biom > .52f)
                     worldBiomes[i, j] = Random.value > .5 ? (Random.value > .2 ? (int)Bioms.Plain : (int)Bioms.PlainDandelion) : (int)Bioms.Forest;
                 else if (biom > .49f)
-                    worldBiomes[i, j] = (int)Bioms.Desert;
+                    worldBiomes[i, j] = Random.value > .2 ? (int)Bioms.Desert : (int)Bioms.DesertShell;
                 else if (biom > .4f)
                     worldBiomes[i, j] = Random.value > .05 ? (int)Bioms.Ocean : (int)Bioms.OceanMountain;
                 else
@@ -114,15 +113,15 @@ public class World : MonoBehaviour
                 BiomData biomData = biomsData[worldBiomes[i, j]];
 
                 //Generate the ground
-                g = Instantiate<GameObject>(biomModels[biomData.biomModel]);
+                g = Instantiate(biomModels[(int)biomData.biomModel]);
                 g.transform.position = Hexagon.getWorldPosition(i, j);
                 g.transform.parent = transform;
                 hexagons[i, j] = g;
 
                 //Generate the structure
-                if (biomData.structure != (int)Structures.None)
+                if ((int)biomData.structure != (int)Structures.None)
                 {
-                    structures[i, j] = Instantiate<GameObject>(structureModels[biomData.structure]);
+                    structures[i, j] = Instantiate<GameObject>(structureModels[(int)biomData.structure]);
                     structures[i, j].transform.position = Hexagon.getWorldPosition(i, j);
                     structures[i, j].transform.parent = this.transform;
                 }
@@ -134,6 +133,7 @@ public class World : MonoBehaviour
 
 
     //Smoothes the texturetransitions
+    //There is anywhere a bug
     public void smoothHexagonTextureTransition()
     {
         string s = "";

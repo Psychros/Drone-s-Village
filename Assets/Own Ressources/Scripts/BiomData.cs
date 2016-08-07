@@ -3,6 +3,6 @@ using System.Collections;
 
 [System.Serializable]
 public class BiomData {
-    public int biomModel;
-    public int structure = -1;
+    public BiomModels biomModel;
+    public Structures structure = Structures.None;
 }

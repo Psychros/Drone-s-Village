@@ -28,6 +28,21 @@ public class WorldEditor : Editor {
         showBioms = EditorGUILayout.Toggle("Bioms: ", showBioms);
         if (showBioms)
         {
+            //Change the size of the array
+            BiomData[] arrayNew = new BiomData[EditorGUILayout.DelayedIntField("     Size:", world.biomsData.Length)];
+            if (arrayNew.Length != world.biomsData.Length && arrayNew.Length > 0)
+            {
+                //Copy the values of array
+                if (arrayNew.Length > world.biomsData.Length)
+                    for (int i = 0; i < world.biomsData.Length; i++)
+                        arrayNew[i] = world.biomsData[i];
+                else
+                    for (int i = 0; i < arrayNew.Length; i++)
+                        arrayNew[i] = world.biomsData[i];
+
+                world.biomsData = arrayNew;
+            }
+
             for (int i = 0; i < world.biomsData.Length; i++)
             {
                 EditorGUILayout.LabelField("     " + System.Enum.GetName(typeof(Bioms), i));
@@ -44,6 +59,22 @@ public class WorldEditor : Editor {
         toggle = EditorGUILayout.Toggle(name, toggle);
         if (toggle)
         {
+            //Change the size of the array
+            GameObject[] arrayNew = new GameObject[EditorGUILayout.DelayedIntField("     Size:", array.Length)];
+            if(arrayNew.Length != array.Length && arrayNew.Length > 0)
+            {
+                //Copy the values of array
+                if(arrayNew.Length > array.Length)
+                    for (int i = 0; i < array.Length; i++)
+                        arrayNew[i] = array[i];
+                else
+                    for (int i = 0; i < arrayNew.Length; i++)
+                        arrayNew[i] = array[i];
+
+                array = arrayNew;
+            }
+
+            //Shows the array
             for (int i = 0; i < array.Length; i++)
             {
                 array[i] = (GameObject)EditorGUILayout.ObjectField("     " + System.Enum.GetName(enuM, i) + ":", array[i], typeof(GameObject));

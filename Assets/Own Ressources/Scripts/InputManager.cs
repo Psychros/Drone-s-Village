@@ -9,6 +9,7 @@ public class InputManager : MonoBehaviour {
     public KeyCode rightClick     = KeyCode.Mouse1;
     public KeyCode leftClick      = KeyCode.Mouse0;
     public KeyCode switchFunction = KeyCode.E;
+    public KeyCode testKey = KeyCode.F;
 
     //False = cut, True = build
     public bool cutTreeOrBuild = false;
@@ -27,5 +28,8 @@ public class InputManager : MonoBehaviour {
 
         if (Input.GetKeyDown(switchFunction))
             cutTreeOrBuild = !cutTreeOrBuild;
+
+        if (Input.GetKeyDown(testKey))
+            World.instance.GetComponent<Inventory>().addRessources(Ressources.Concrete, 1000);
     }
 }

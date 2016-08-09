@@ -17,7 +17,7 @@ public class Inventory : MonoBehaviour {
         {
             for (int i = 0; i < ressourcesTextFields.Length; i++)
             {
-                ressourcesTextFields[i].text = formatNumber(ressources[i]);
+                addRessources((Ressources)i, 0);
             }
             firstUpdate = false;
         }
@@ -26,13 +26,14 @@ public class Inventory : MonoBehaviour {
     /*
      * Add ressources to the inventory.
      * If the the final value is out of the bounds of the inventory, the difference is given back
+     * The bounds are not important for money
      */
     public int addRessources(Ressources ressource, int number)
     {
         int currentNumber = ressources[(int)ressource];
         ressources[(int)ressource] += number;
 
-        if(ressources[(int)ressource] > capacity)
+        if(ressource != Ressources.Money && ressources[(int)ressource] > capacity)
         {
             ressources[(int)ressource] = capacity;
             return ressources[(int)ressource] + number - capacity;

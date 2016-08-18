@@ -1,6 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+
+//Lets a tree fall down.
+//!!!! This is not for a drone !!!!
 public class CutTree : MonoBehaviour {
     public float speed = 1;
 
@@ -15,6 +18,9 @@ public class CutTree : MonoBehaviour {
             World.instance.changeBiom(Bioms.Plain, transform.position);
             World.instance.changeStructure(transform.position, Structures.None);
             Destroy(gameObject);
+
+            //Adds a wood
+            World.instance.GetComponent<Inventory>().addRessources(Ressources.Wood, 1);
         }
 	}
 }

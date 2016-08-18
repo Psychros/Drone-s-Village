@@ -8,6 +8,7 @@ public class Inventory : MonoBehaviour {
     public int[] ressources = new int[System.Enum.GetNames(typeof(Ressources)).Length];
     public static int numberRessourceTextFields = 3;
     public Text[] ressourcesTextFields = new Text[System.Enum.GetNames(typeof(Ressources)).Length];
+    public Text[] storeTextFields = new Text[1];
     bool firstUpdate = true;
 
 
@@ -15,6 +16,10 @@ public class Inventory : MonoBehaviour {
     {
         if (firstUpdate)
         {
+            //Show the capacity
+            addCapacity(0);
+
+            //Show all startressources
             for (int i = 0; i < ressourcesTextFields.Length; i++)
             {
                 addRessources((Ressources)i, 0);
@@ -51,6 +56,20 @@ public class Inventory : MonoBehaviour {
         }
 
         return 0;
+    }
+
+
+    //Change the capacity
+    public void addCapacity(int number)
+    {
+        capacity += number;
+        if (capacity < 0)
+            capacity = 0;
+
+        for (int i = 0; i < storeTextFields.Length; i++)
+        {
+            storeTextFields[i].text = formatNumber(capacity);
+        }
     }
 
 

@@ -9,6 +9,7 @@ public class InventoryEditor :  Editor{
     Inventory inventory;
     bool showRessources = true;
     bool showTextFields = true;
+    bool showStore      = false;
 
 	public override void OnInspectorGUI()
     {
@@ -16,6 +17,9 @@ public class InventoryEditor :  Editor{
 
         //Change the capacity
         inventory.capacity = EditorGUILayout.DelayedIntField("Capacity:", inventory.capacity);
+
+        //StoreTextFields
+        getTextFieldsForArray("TextFieldsForStore:", ref showStore, ref inventory.storeTextFields, null);
 
         //Ressources
         getObjectsForArray("Ressources:", ref showRessources, ref inventory.ressources, typeof(Ressources));
@@ -25,7 +29,7 @@ public class InventoryEditor :  Editor{
         
     }
 
-    public void getObjectsForArray(string name, ref bool toggle, ref int[] array, System.Type enuM)
+    public void getObjectsForArray(string name, ref bool toggle, ref int[] array, System.Type enuM = null)
     {
         toggle = EditorGUILayout.Toggle(name, toggle);
         if (toggle)
@@ -48,7 +52,10 @@ public class InventoryEditor :  Editor{
             //Shows the array
             for (int i = 0; i < array.Length; i++)
             {
-                array[i] = EditorGUILayout.DelayedIntField("     " + System.Enum.GetName(enuM, i) + ":", array[i]);
+                if(enuM != null)
+                    array[i] = EditorGUILayout.DelayedIntField("     " + System.Enum.GetName(enuM, i) + ":", array[i]);
+                else
+                    array[i] = EditorGUILayout.DelayedIntField("     " + i + ":", array[i]);
             }
         }
     }
@@ -86,12 +93,10 @@ public class InventoryEditor :  Editor{
             for (int i = 0; i < array.GetLength(0); i++)
             {
                 EditorGUILayout.LabelField("");
-                EditorGUILayout.LabelField("     " + System.Enum.GetName(enuM, i) + ":");
+                if(enuM != null)
+                    EditorGUILayout.LabelField("     " + System.Enum.GetName(enuM, i) + ":");
 
-                //for (int j = 0; j < Inventory.numberRessourceTextFields; j++)
-                {
-                    array[i] = (Text)EditorGUILayout.ObjectField("          Text:", array[i], typeof(Text));
-                }
+                array[i] = (Text)EditorGUILayout.ObjectField("     Text:", array[i], typeof(Text));
             }
         }
     }

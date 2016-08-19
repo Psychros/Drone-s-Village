@@ -9,10 +9,11 @@ public class InputManager : MonoBehaviour {
     public KeyCode rightClick     = KeyCode.Mouse1;
     public KeyCode leftClick      = KeyCode.Mouse0;
     public KeyCode switchFunction = KeyCode.E;
-    public KeyCode testKey = KeyCode.F;
-    public KeyCode pausemenuKey = KeyCode.Escape;
+    public KeyCode buildmenuKey      = KeyCode.F;
+    public KeyCode pausemenuKey   = KeyCode.Escape;
 
     public GameObject pausemenu;
+    public GameObject buildmenu;
 
     //False = cut, True = build
     public bool cutTreeOrBuild = false;
@@ -32,14 +33,17 @@ public class InputManager : MonoBehaviour {
         if (Input.GetKeyDown(switchFunction))
             cutTreeOrBuild = !cutTreeOrBuild;
 
-        if (Input.GetKeyDown(testKey))
-            World.instance.GetComponent<Inventory>().addRessources(Ressources.Concrete, 1000);
+        if (Input.GetKeyDown(buildmenuKey))
+            if (!buildmenu.active)
+                activateMenu(buildmenu);
+            else
+                deactivateMenu(buildmenu);
 
         if (Input.GetKeyDown(pausemenuKey))
             if (!pausemenu.active)
-                pausemenu.SetActive(true);
+                activateMenu(pausemenu);
             else
-                pausemenu.SetActive(false);
+                deactivateMenu(pausemenu);
     }
 
     public void activateMenu(GameObject menu)

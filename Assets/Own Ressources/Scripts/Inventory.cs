@@ -95,7 +95,6 @@ public class Inventory : MonoBehaviour {
         }
 
         //Format the number
-        print(number2);
         if (!ending.Equals(""))
         {
             if (number2 >= 10f)

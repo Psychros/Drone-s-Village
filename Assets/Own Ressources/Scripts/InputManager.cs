@@ -41,4 +41,14 @@ public class InputManager : MonoBehaviour {
             else
                 pausemenu.SetActive(false);
     }
+
+    public void activateMenu(GameObject menu)
+    {
+        menu.SetActive(true);
+    }
+
+    public void deactivateMenu(GameObject menu)
+    {
+        menu.SetActive(false);
+    }
 }

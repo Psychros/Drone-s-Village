@@ -7,4 +7,19 @@ public class Pausemenu : MonoBehaviour {
     {
         Application.Quit();
     }
+
+    public void options()
+    {
+
+    }
+
+    public void save()
+    {
+
+    }
+
+    public void continueGame()
+    {
+        InputManager.instance.deactivateMenu(InputManager.instance.pausemenu);
+    }
 }

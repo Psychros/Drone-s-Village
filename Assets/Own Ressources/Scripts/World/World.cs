@@ -15,10 +15,12 @@ public class World : MonoBehaviour
     public GameObject droneModel;
     [HideInInspector] public NPC drone;
     [HideInInspector] public int[,] worldBiomes;
+    [HideInInspector] public Chunk[,] chunks;
     [HideInInspector] public GameObject[,] hexagons;
     [HideInInspector] public GameObject[,] structures;              //Includes all structures on the hexagons
     public int width = 50, 
                height = 50;
+    [HideInInspector] public float offsetX, offsetZ;
 
 
     // Use this for initialization
@@ -28,11 +30,11 @@ public class World : MonoBehaviour
         worldBiomes = new int[width, height];
         hexagons = new GameObject[width, height];
         structures = new GameObject[width, height];
+        chunks = new Chunk[width, height];
 
         //Generate the world
         generate();
         showWorld();
-        //smoothHexagonTextureTransition();
     }
 
 
@@ -41,8 +43,8 @@ public class World : MonoBehaviour
     {
         //Initialize the Random
         Random.seed = Random.Range(int.MinValue, int.MaxValue);
-        float offsetX = Random.value * 10000,
-              offsetZ = Random.value * 10000;
+        offsetX = Random.value * 10000;
+        offsetZ = Random.value * 10000;
 
         //Create the Cards
         for (int i = 0; i < width; i++)
@@ -104,8 +106,6 @@ public class World : MonoBehaviour
     //Make the calculated world visible
     public void showWorld()
     {
-        GameObject g;
-
         for (int i = 0; i < width; i++)
         {
             for (int j = 0; j < height; j++)
@@ -113,7 +113,7 @@ public class World : MonoBehaviour
                 BiomData biomData = biomsData[worldBiomes[i, j]];
 
                 //Generate the ground
-                g = Instantiate(biomModels[(int)biomData.biomModel]);
+                GameObject g = Instantiate(biomModels[(int)biomData.biomModel]);
                 g.transform.position = Hexagon.getWorldPosition(i, j);
                 g.transform.parent = transform;
                 hexagons[i, j] = g;
@@ -129,41 +129,6 @@ public class World : MonoBehaviour
                     structures[i, j] = null;
             }
         }
-    }
-
-
-    //Smoothes the texturetransitions
-    //There is anywhere a bug
-    public void smoothHexagonTextureTransition()
-    {
-        string s = "";
-
-        for (int i = 1; i < width; i++)
-        {
-            for (int j = 1; j < height; j++)
-            {
-                MeshRenderer renderer = hexagons[i, j].GetComponent<MeshRenderer>();
-                Texture2D texture = renderer.material.mainTexture as Texture2D;
-                
-                MeshRenderer rendererLeft = hexagons[i-1, j].GetComponent<MeshRenderer>();
-                Texture2D textureLeft = rendererLeft.material.mainTexture as Texture2D;
-
-                Color[] cs = texture.GetPixels(0, 0, 20, 512);
-                Color[] cs2 = textureLeft.GetPixels(0, 0, 20, 512);
-                for (int x = 0; x < 20; x++)
-                {
-                    for (int y = 0; y < 512; y++)
-                    {
-                        Color c  = cs[y + x * 512];
-                        Color c2 = cs2[y + x * 512];
-                        s = ((c.r + c2.r) / 2).ToString();
-                        texture.SetPixel(x, y, new Color((c.r+c2.r)/2, (c.g + c2.g) / 2, (c.b + c2.b) / 2, c.a));
-                    }
-                }
-                texture.Apply();
-            }
-        }
-        print(s);
     }
 
 

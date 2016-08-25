@@ -6,7 +6,9 @@ public class Hexagon : MonoBehaviour {
                         factorZ = 1.5f, 
                         deltaX = 0.86603f;
 
-    //Convert the HexCoords to WorldCoords
+    /*
+     * Converts the HexCoords to WorldCoords
+     */
     public static Vector3 getWorldPosition(int x, int z)
     {
         if (z % 2 == 0)
@@ -15,6 +17,9 @@ public class Hexagon : MonoBehaviour {
             return new Vector3(x * factorX + deltaX, 0, z * factorZ);
     }
 
+    /*
+     * Converts the WorldCoords to HexCoords
+     */
     public static Vector3 getHexPosition(Vector3 worldPos)
     {
         Vector3 v;
@@ -37,6 +42,9 @@ public class Hexagon : MonoBehaviour {
     }
 
 
+    /*
+     * Converts the WorldCoords to HexCoords and get the value as an integer
+     */
     public static Vector2Int getHexPositionInt(Vector3 worldPos)
     {
         Vector3 v;

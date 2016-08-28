@@ -129,12 +129,12 @@ public class CameraController : MonoBehaviour {
 
         if (moveX < 0 && Camera.main.transform.position.x > 0)
             moveX2 = moveX;
-        else if ((moveX > 0 && Camera.main.transform.position.x < World.instance.width * Hexagon.factorX + Hexagon.deltaX))
+        else if ((moveX > 0 && Camera.main.transform.position.x < World.instance.width * Chunk.chunkSize * Hexagon.factorX + Hexagon.deltaX))
             moveX2 = moveX;
 
         if (moveZ < 0 && Camera.main.transform.position.z > -8)
             moveZ2 = moveZ;
-        else if (moveZ > 0 && Camera.main.transform.position.z < World.instance.height * Hexagon.factorZ - 8)
+        else if (moveZ > 0 && Camera.main.transform.position.z < World.instance.height * Chunk.chunkSize * Hexagon.factorZ - 8)
             moveZ2 = moveZ;
 
         //Move the camera

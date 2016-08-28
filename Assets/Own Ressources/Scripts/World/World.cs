@@ -14,12 +14,9 @@ public class World : MonoBehaviour
     public BiomData[] biomsData = new BiomData[System.Enum.GetNames(typeof(Bioms)).Length];
     public GameObject droneModel;
     [HideInInspector] public NPC drone;
-    [HideInInspector] public int[,] worldBiomes;
     [HideInInspector] public Chunk[,] chunks;
-    [HideInInspector] public GameObject[,] hexagons;
-    [HideInInspector] public GameObject[,] structures;              //Includes all structures on the hexagons
-    public int width = 50, 
-               height = 50;
+    public int width = 8, 
+               height = 8;
     [HideInInspector] public float offsetX, offsetZ;
 
 
@@ -27,10 +24,12 @@ public class World : MonoBehaviour
     void Start()
     {
         instance = this;
-        worldBiomes = new int[width, height];
-        hexagons = new GameObject[width, height];
-        structures = new GameObject[width, height];
         chunks = new Chunk[width, height];
+
+        //Initialize the Random offset
+        Random.seed = Random.Range(int.MinValue, int.MaxValue);
+        offsetX = Random.value * 10000;
+        offsetZ = Random.value * 10000;
 
         //Generate the world
         generate();
@@ -41,54 +40,35 @@ public class World : MonoBehaviour
 
     public void generate()
     {
-        //Initialize the Random
-        Random.seed = Random.Range(int.MinValue, int.MaxValue);
-        offsetX = Random.value * 10000;
-        offsetZ = Random.value * 10000;
-
-        //Create the Cards
-        for (int i = 0; i < width; i++)
+        //Create the chunks
+        for (int x = 0; x < width; x++)
         {
-            for (int j = 0; j < height; j++)
+            for (int z = 0; z < height; z++)
             {
-                //Select the correct terrain
-                float biom = Mathf.PerlinNoise(offsetX + (float)i / width * 5f, offsetZ + (float)j / height * 5f);
-
-                if (biom > .85f)
-                    worldBiomes[i, j] = (int)Bioms.HighMountain;
-                else if (biom > .8f)
-                    worldBiomes[i, j] = (int)Bioms.Mountain;
-                else if (biom > .75f)
-                {
-                    if (Random.value > .3)
-                        worldBiomes[i, j] = (int)Bioms.Mountain;
-                    else
-                        worldBiomes[i, j] = (int)Bioms.StonePlain;
-                }
-                else if (biom > .52f)
-                    worldBiomes[i, j] = Random.value > .5 ? (Random.value > .2 ? (int)Bioms.Plain : (int)Bioms.PlainDandelion) : (int)Bioms.Forest;
-                else if (biom > .49f)
-                    worldBiomes[i, j] = Random.value > .2 ? (int)Bioms.Desert : (int)Bioms.DesertShell;
-                else if (biom > .4f)
-                    worldBiomes[i, j] = Random.value > .05 ? (int)Bioms.Ocean : (int)Bioms.OceanMountain;
-                else
-                    worldBiomes[i, j] = (int)Bioms.Ocean;
+                GameObject g = new GameObject();
+                g.name = "Chunk(" + x + ", " + z + ")";
+                chunks[x, z] = g.AddComponent<Chunk>() as Chunk;
+                chunks[x, z].setPosition(x, z);
+                chunks[x, z].transform.SetParent(gameObject.transform);
             }
         }
 
 
-
         //Place the spaceship and focus the camera on it
-        while (true)
+        //Place a drone over the spaceship
+        /*while (true)
         {
-            int x = (int)(Random.value * width), 
-                z = (int)(Random.value * height);
-            if (worldBiomes[x, z] == (int)Bioms.Plain)
+            int x = (int)(Random.value * width * Chunk.chunkSize), 
+                z = (int)(Random.value * height * Chunk.chunkSize);
+            print(x + "   " + z);
+
+            Chunk c = getChunkAt(x, z);
+            if (c.getBiomWorldCoords(x, z) == Bioms.Plain)
             {
                 Vector3 shipPos = Hexagon.getWorldPosition(x, z);
 
                 //Place the ship
-                worldBiomes[x, z] = (int)Bioms.SpaceShip;
+                changeStructure(x, z, Structures.Spaceship);
 
                 //Place the first drone over the ship
                 GameObject g = Instantiate(droneModel);
@@ -99,73 +79,76 @@ public class World : MonoBehaviour
                 Camera.main.transform.position = shipPos + new Vector3(0, Camera.main.transform.position.y, -8f);
                 break;
             }
-        }
+        }*/
     }
 
 
     //Make the calculated world visible
     public void showWorld()
     {
-        for (int i = 0; i < width; i++)
+        for (int x = 0; x < width; x++)
         {
-            for (int j = 0; j < height; j++)
+            for (int z = 0; z < height; z++)
             {
-                BiomData biomData = biomsData[worldBiomes[i, j]];
-
-                //Generate the ground
-                GameObject g = Instantiate(biomModels[(int)biomData.biomModel]);
-                g.transform.position = Hexagon.getWorldPosition(i, j);
-                g.transform.parent = transform;
-                hexagons[i, j] = g;
-
-                //Generate the structure
-                if ((int)biomData.structure != (int)Structures.None)
-                {
-                    structures[i, j] = Instantiate<GameObject>(structureModels[(int)biomData.structure]);
-                    structures[i, j].transform.position = Hexagon.getWorldPosition(i, j);
-                    structures[i, j].transform.parent = this.transform;
-                }
-                else
-                    structures[i, j] = null;
+                chunks[x, z].generate();
             }
         }
     }
 
 
-    //changes the biom of a hexagon
-    public void changeBiom(Bioms newBiom, Vector3 v)
+    //Gets the chunk at the hexagonposition x, z
+    public Chunk getChunkAt(int x, int z)
     {
-        //Get the position of the hexagon
-        Vector2Int posHex = Hexagon.getHexPositionInt(v);
+        int posX = x / Chunk.chunkSize;
+        int posZ = z / Chunk.chunkSize;
 
-        worldBiomes[posHex.x, posHex.z] = (int)newBiom;
+        return chunks[posX, posZ];
+    }
+
+    //Params are worldcoords
+    public Vector2Int getPositionInChunk(int x, int z)
+    {
+        int posX = x % Chunk.chunkSize;
+        int posZ = z % Chunk.chunkSize;
+
+        return new Vector2Int(posX, posZ);
+    }
+
+
+    //Gets the biom at the hexagonposition x, z
+    public Bioms getBiom(int x, int z)
+    {
+        Chunk c = getChunkAt(x, z);
+        return c.getBiomWorldCoords(x, z);
+    }
+
+
+    //changes the biom of a hexagon
+    public void changeBiom(int x, int z, Bioms newBiom)
+    {
+        Chunk c = getChunkAt(x, z);
+        c.changeBiomGlobalCoords(x, z, newBiom);
+    }
+
+
+    //Gets the structure at the hexagonposition x, z
+    public Structures getStructure(int x, int z)
+    {
+        Chunk c = getChunkAt(x, z);
+        return c.getStructureGlobalCoords(x, z);
+    }
+
+    //Gets the structure at the hexagonposition x, z
+    public GameObject getStructureGameObject(int x, int z)
+    {
+        Chunk c = getChunkAt(x, z);
+        return c.getStructureGameObjectGlobalCoords(x, z);
     }
 
     //Changes a structure with the hexCoords
-    public GameObject changeStructure(int x, int z, Structures newStructure, float newHeight = 0)
+    public void changeStructure(int x, int z, Structures newStructure)
     {
-        //Remove the old structure
-        if (structures[x, z] != null)
-        {
-            Destroy(structures[x, z]);
-        }
-
-        //Place the new structure
-        if(newStructure != Structures.None)
-        {
-            Vector3 pos = Hexagon.getWorldPosition(x, z);
-            structures[x, z] = Instantiate(structureModels[(int)newStructure]);
-            structures[x, z].transform.position = pos + new Vector3(0, newHeight, 0);
-        }
-        else
-            structures[x, z] = null;
-
-        return structures[x, z];
-    }
-
-    public GameObject changeStructure(Vector3 pos, Structures newStructure, float newHeight = 0)
-    {
-        Vector2Int v = Hexagon.getHexPositionInt(pos);
-        return changeStructure(v.x, v.z, newStructure, newHeight);
+        Chunk c = getChunkAt(x, z);
+        c.changeStructureGlobalCoords(x, z, newStructure);
     }
 }

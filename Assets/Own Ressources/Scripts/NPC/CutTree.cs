@@ -15,8 +15,9 @@ public class CutTree : MonoBehaviour {
         }
         else
         {
-            World.instance.changeBiom(Bioms.Plain, transform.position);
-            World.instance.changeStructure(transform.position, Structures.None);
+            Vector2Int pos = Hexagon.getHexPositionInt(transform.position);
+            World.instance.changeBiom(pos.x, pos.z, Bioms.Plain);
+            World.instance.changeStructure(pos.x, pos.z, Structures.None);
             Destroy(gameObject);
 
             //Adds a wood

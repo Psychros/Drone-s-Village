@@ -26,6 +26,8 @@ public class World : MonoBehaviour
         instance = this;
         chunks = new Chunk[width, height];
 
+        print(Hexagon.getWorldPosition(80, 80));
+
         //Initialize the Random offset
         Random.seed = Random.Range(int.MinValue, int.MaxValue);
         offsetX = Random.value * 10000;

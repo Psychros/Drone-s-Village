@@ -2,7 +2,7 @@
 using System.Collections;
 
 public class Chunk : MonoBehaviour{
-    [HideInInspector] public int[,] chunkBiomes;
+    [HideInInspector] public int[,] chunkBiomes           = new int[chunkSize, chunkSize];
     [HideInInspector] public GameObject[,] hexagons       = new GameObject[chunkSize, chunkSize];
     [HideInInspector] public Structures[,] structuresData = new Structures[chunkSize, chunkSize];
     [HideInInspector] public GameObject[,] structures     = new GameObject[chunkSize, chunkSize];
@@ -24,22 +24,10 @@ public class Chunk : MonoBehaviour{
 
 
     /*
-     * Must be called for generating the chunk
-     */
-    public void generate()
-    {
-        generateBioms();
-        generateModel();
-    }
-
-
-    /*
      * Generates the biomes
      */
     public void generateBioms()
     {
-        chunkBiomes = new int[chunkSize, chunkSize];
-
         for (int i = 0; i < chunkSize; i++)
         {
             for (int j = 0; j < chunkSize; j++)
@@ -77,7 +65,6 @@ public class Chunk : MonoBehaviour{
 
     public void generateModel()
     {
-        print(transform.position);
         for (int i = 0; i < chunkSize; i++)
         {
             for (int j = 0; j < chunkSize; j++)
@@ -113,13 +100,8 @@ public class Chunk : MonoBehaviour{
     public Bioms getBiomWorldCoords(int x, int z)
     {
         Vector2Int pos = getPositionInChunk(x, z);
-        try {
-            return (Bioms)chunkBiomes[pos.x, pos.z];
-        } catch (System.Exception e)
-        {
-            //print(chunkBiomes);
-        }
-        return Bioms.Desert;
+        print("Worldcoords: " + x + ", " + z + "    " + "Chunkcoords: " + pos.x + ", " + pos.z + "    " + "Biom: " + (Bioms)chunkBiomes[pos.x, pos.z]);
+        return (Bioms)chunkBiomes[pos.x, pos.z];
     }
 
     public void changeBiomChunkCoords(int x, int z, Bioms newBiom)
@@ -163,7 +145,7 @@ public class Chunk : MonoBehaviour{
 
         structures[x, z] = Instantiate(World.instance.structureModels[(int)newStructure]);
         structures[x, z].transform.SetParent(gameObject.transform);
-        structures[x, z].transform.position = Hexagon.getWorldPosition(x, z);
+        structures[x, z].transform.position = Hexagon.getWorldPosition(x + posX, z + posZ);
 
         structuresData[x, z] = newStructure;
     }
@@ -171,7 +153,7 @@ public class Chunk : MonoBehaviour{
     public void changeStructureGlobalCoords(int x, int z, Structures newStructure)
     {
         Vector2Int pos = getPositionInChunk(x, z);
-        changeStructureChunkCoords(x, z, newStructure);
+        changeStructureChunkCoords(pos.x, pos.z, newStructure);
     }
 
     //Params are worldcoords

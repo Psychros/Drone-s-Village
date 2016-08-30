@@ -26,8 +26,6 @@ public class World : MonoBehaviour
         instance = this;
         chunks = new Chunk[width, height];
 
-        print(Hexagon.getWorldPosition(80, 80));
-
         //Initialize the Random offset
         Random.seed = Random.Range(int.MinValue, int.MaxValue);
         offsetX = Random.value * 10000;
@@ -52,25 +50,28 @@ public class World : MonoBehaviour
                 chunks[x, z] = g.AddComponent<Chunk>() as Chunk;
                 chunks[x, z].setPosition(x, z);
                 chunks[x, z].transform.SetParent(gameObject.transform);
+                chunks[x, z].generateBioms();
             }
         }
 
 
         //Place the spaceship and focus the camera on it
         //Place a drone over the spaceship
-        /*while (true)
+
+        while (true)
         {
             int x = (int)(Random.value * width * Chunk.chunkSize), 
                 z = (int)(Random.value * height * Chunk.chunkSize);
-            print(x + "   " + z);
 
             Chunk c = getChunkAt(x, z);
-            if (c.getBiomWorldCoords(x, z) == Bioms.Plain)
+            print(c.posX + ", " + c.posZ + "    " + getBiom(x, z));
+            if (getBiom(x, z) != Bioms.Ocean && getBiom(x, z) != Bioms.OceanMountain)
             {
                 Vector3 shipPos = Hexagon.getWorldPosition(x, z);
 
                 //Place the ship
                 changeStructure(x, z, Structures.Spaceship);
+                changeBiom(x, z, Bioms.SpaceShip);
 
                 //Place the first drone over the ship
                 GameObject g = Instantiate(droneModel);
@@ -81,7 +82,9 @@ public class World : MonoBehaviour
                 Camera.main.transform.position = shipPos + new Vector3(0, Camera.main.transform.position.y, -8f);
                 break;
             }
-        }*/
+        }
+
+        
     }
 
 
@@ -92,7 +95,7 @@ public class World : MonoBehaviour
         {
             for (int z = 0; z < height; z++)
             {
-                chunks[x, z].generate();
+                chunks[x, z].generateModel();
             }
         }
     }
@@ -121,6 +124,7 @@ public class World : MonoBehaviour
     public Bioms getBiom(int x, int z)
     {
         Chunk c = getChunkAt(x, z);
+        print(c.posX + ", " + c.posZ);
         return c.getBiomWorldCoords(x, z);
     }
 
@@ -152,5 +156,18 @@ public class World : MonoBehaviour
     {
         Chunk c = getChunkAt(x, z);
         c.changeStructureGlobalCoords(x, z, newStructure);
+    }
+
+    public void printFirstChunk()
+    {
+        for (int x = 0; x < Chunk.chunkSize; x++)
+        {
+            string s = "";
+            for (int z = 0; z < Chunk.chunkSize; z++)
+            {
+                s += chunks[0, 0].getBiomChunkCoords(x, z) + ", ";
+            }
+            print(s);
+        }
     }
 }

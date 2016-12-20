@@ -4,7 +4,8 @@ using System.Collections;
 public class Hexagon : MonoBehaviour {
     public static float factorX = 1.73206f, 
                         factorZ = 1.5f, 
-                        deltaX = 0.86603f;
+                        deltaX = 0.86603f;  //Needed for every second row
+    public static float maxDelta = 0.001f;  //The maximal delta for correct rounding to int
 
     /*
      * Converts the HexCoords to WorldCoords
@@ -52,31 +53,18 @@ public class Hexagon : MonoBehaviour {
         if ((int)((worldPos.z / factorZ) % 2) == 0)
         {
             v = new Vector3(worldPos.x / factorX, 0, worldPos.z / factorZ);
-            v.z++;
         }
         else
         {
             v = new Vector3((worldPos.x / factorX) - deltaX + .4f, 0, worldPos.z / factorZ);
-            v.x++;
-            v.z++;
         }
+
+        print(worldPos + ", " + v);
 
         //Convert the Vector to integers
         Vector2Int ints = new Vector2Int();
-        int x = (int)Mathf.Round(v.x);
-        int z = (int)Mathf.Round(v.z);
-        //Correct the rounding errors
-        if ((v.x % 1 >= .5f) && (x > v.x))
-            x--;
-        if (v.x - x >= 0.99999f)
-            x++;
-        if ((v.z % 1 >= .5f) && (z > v.z))
-            z--;
-        if (z >= v.z)
-            z--;
-
-        ints.x = x;
-        ints.z = z;
+        ints.x = (int)Mathf.Round(v.x);
+        ints.z = (int)Mathf.Round(v.z);
 
         return ints;
     }

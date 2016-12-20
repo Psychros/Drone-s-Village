@@ -124,7 +124,6 @@ public class World : MonoBehaviour
     public Bioms getBiom(int x, int z)
     {
         Chunk c = getChunkAt(x, z);
-        print(c.posX + ", " + c.posZ);
         return c.getBiomWorldCoords(x, z);
     }
 

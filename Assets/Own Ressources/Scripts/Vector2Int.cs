@@ -14,4 +14,9 @@ public class Vector2Int {
         this.x = x;
         this.z = z;
     }
+
+    public override System.String ToString()
+    {
+        return "(" + x + ", " + z + ")";
+    }
 }

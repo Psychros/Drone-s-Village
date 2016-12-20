@@ -65,6 +65,7 @@ public class Chunk : MonoBehaviour{
 
     public void generateModel()
     {
+        print("Generate chunkmodel");
         for (int i = 0; i < chunkSize; i++)
         {
             for (int j = 0; j < chunkSize; j++)
@@ -80,7 +81,7 @@ public class Chunk : MonoBehaviour{
                 //Generate the structure
                 if ((int)biomData.structure != (int)Structures.None)
                 {
-                    structures[i, j] = Instantiate<GameObject>(World.instance.structureModels[(int)biomData.structure]);
+                    structures[i, j] = Instantiate(World.instance.structureModels[(int)biomData.structure]);
                     structures[i, j].transform.position = transform.position + Hexagon.getWorldPosition(i, j);
                     structures[i, j].transform.parent = transform;
                 }
@@ -107,7 +108,7 @@ public class Chunk : MonoBehaviour{
     public void changeBiomChunkCoords(int x, int z, Bioms newBiom)
     {
         chunkBiomes[x, z] = (int)newBiom;
-        generateModel();
+        //generateModel();
     }
 
     public void changeBiomGlobalCoords(int x, int z, Bioms newBiom)
@@ -124,7 +125,7 @@ public class Chunk : MonoBehaviour{
     public GameObject getStructureGameObjectGlobalCoords(int x, int z)
     {
         Vector2Int pos = getPositionInChunk(x, z);
-        return structures[x, z];
+        return structures[pos.x, pos.z];
     }
 
     public Structures getStructureChunkCoords(int x, int z)
@@ -143,9 +144,12 @@ public class Chunk : MonoBehaviour{
         if(structures[x, z] != null)
             Destroy(structures[x, z]);
 
-        structures[x, z] = Instantiate(World.instance.structureModels[(int)newStructure]);
-        structures[x, z].transform.SetParent(gameObject.transform);
-        structures[x, z].transform.position = Hexagon.getWorldPosition(x + posX, z + posZ);
+        if (newStructure != Structures.None)
+        {
+            structures[x, z] = Instantiate(World.instance.structureModels[(int)newStructure]);
+            structures[x, z].transform.SetParent(gameObject.transform);
+            structures[x, z].transform.position = Hexagon.getWorldPosition(x + posX, z + posZ);
+        }
 
         structuresData[x, z] = newStructure;
     }

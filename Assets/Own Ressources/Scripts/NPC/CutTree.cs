@@ -18,10 +18,12 @@ public class CutTree : MonoBehaviour {
             Vector2Int pos = Hexagon.getHexPositionInt(transform.position);
             World.instance.changeBiom(pos.x, pos.z, Bioms.Plain);
             World.instance.changeStructure(pos.x, pos.z, Structures.None);
-            Destroy(gameObject);
 
             //Adds a wood
             World.instance.GetComponent<Inventory>().addRessources(Ressources.Wood, 1);
+
+            Destroy(gameObject);
+            Destroy(this);
         }
 	}
 }

@@ -53,17 +53,17 @@ public class NPC : MonoBehaviour {
 
         if (World.instance.getBiom(pos.x, pos.z) == Bioms.Forest)
         {
-            GameObject g = World.instance.getStructureGameObject(pos.x, pos.z);
-            g.AddComponent<CutTree>();
+            World.instance.getStructureGameObject(pos.x, pos.z).AddComponent<CutTree>();
         }
     }
 
     public void buildBuilding()
     {
-        Vector2Int pos = Hexagon.getHexPositionInt(destination);
-        if (World.instance.getBiom(pos.x, pos.z) == Bioms.Plain)
+        Vector2Int des = Hexagon.getHexPositionInt(destination);
+        Vector2Int pos2 = Hexagon.getHexPositionInt(transform.position);
+        print("OwnPosition:" + pos2 + ", " + transform.position + " Destination: " + destination + "  realDestination: " + des);
+        if (World.instance.getBiom(pos2.x, pos2.z) == Bioms.Plain)
         {
-            Vector2Int des = Hexagon.getHexPositionInt(destination);
             World.instance.changeStructure(des.x, des.z, Structures.StoreHouse);
             GameObject g = World.instance.getStructureGameObject(des.x, des.z);
             g.transform.position = new Vector3(g.transform.position.x, - 1.014f, g.transform.position.z);

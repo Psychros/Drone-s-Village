@@ -59,13 +59,19 @@ public class Hexagon : MonoBehaviour {
             v = new Vector3((worldPos.x / factorX) - deltaX + .4f, 0, worldPos.z / factorZ);
         }
 
-        print(worldPos + ", " + v);
-
         //Convert the Vector to integers
         Vector2Int ints = new Vector2Int();
-        ints.x = (int)Mathf.Round(v.x);
-        ints.z = (int)Mathf.Round(v.z);
+        ints.x = round(v.x);
+        ints.z = round(v.z);
 
         return ints;
+    }
+
+    public static int round(float f)
+    {
+        if (f % (int)f >= .5f - maxDelta)
+            return (int)f + 1;
+        else
+            return (int)f;
     }
 }

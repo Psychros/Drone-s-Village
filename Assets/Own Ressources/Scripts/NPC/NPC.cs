@@ -60,9 +60,8 @@ public class NPC : MonoBehaviour {
     public void buildBuilding()
     {
         Vector2Int des = Hexagon.getHexPositionInt(destination);
-        Vector2Int pos2 = Hexagon.getHexPositionInt(transform.position);
-        print("OwnPosition:" + pos2 + ", " + transform.position + " Destination: " + destination + "  realDestination: " + des);
-        if (World.instance.getBiom(pos2.x, pos2.z) == Bioms.Plain)
+        //print("OwnPosition:" + pos2 + ", " + transform.position + " Destination: " + destination + "  realDestination: " + des);
+        if (World.instance.getBiom(des.x, des.z) == Bioms.Plain)
         {
             World.instance.changeStructure(des.x, des.z, Structures.StoreHouse);
             GameObject g = World.instance.getStructureGameObject(des.x, des.z);

@@ -24,9 +24,11 @@ public class InventoryEditor :  Editor{
         //Ressources
         getObjectsForArray("Ressources:", ref showRessources, ref inventory.ressources, typeof(Ressources));
 
-        //RessourceTextFields
-        getTextFieldsForArray("TextFieldsForRessources:", ref showTextFields, ref inventory.ressourcesTextFields, typeof(Ressources));
-        
+        //RessourceTextFields1
+        getTextFieldsForArray("TextFieldsForRessources1:", ref showTextFields, ref inventory.ressourcesTextFields1, typeof(Ressources));
+
+        //RessourceTextFields2
+        getTextFieldsForArray("TextFieldsForRessources:", ref showTextFields, ref inventory.ressourcesTextFields2, typeof(Ressources));
     }
 
     public void getObjectsForArray(string name, ref bool toggle, ref int[] array, System.Type enuM = null)

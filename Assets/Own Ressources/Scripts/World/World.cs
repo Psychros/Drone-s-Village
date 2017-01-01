@@ -9,8 +9,9 @@ public class World : MonoBehaviour
     [HideInInspector]
     public static World instance;
 
-    public GameObject[] biomModels = new GameObject[6];
-    public GameObject[] structureModels = new GameObject[System.Enum.GetNames(typeof(BiomModels)).Length-1];
+    public GameObject[] biomModels      = new GameObject[System.Enum.GetNames(typeof(BiomModels)).Length];
+    public GameObject[] hexagonBorderModels    = new GameObject[System.Enum.GetNames(typeof(HexagonBorders)).Length];
+    public GameObject[] structureModels = new GameObject[System.Enum.GetNames(typeof(Structures)).Length-1];
     public BiomData[] biomsData = new BiomData[System.Enum.GetNames(typeof(Bioms)).Length];
     public GameObject droneModel;
     [HideInInspector] public NPC drone;

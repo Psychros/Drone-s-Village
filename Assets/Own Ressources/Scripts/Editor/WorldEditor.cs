@@ -6,6 +6,7 @@ using UnityEditor;
 public class WorldEditor : Editor {
 
     static bool showBiomModels = false;
+    static bool showHexagonBorders = false;
     static bool showStructureModels = false;
     static bool showBioms = false;
 
@@ -20,6 +21,9 @@ public class WorldEditor : Editor {
 
         //BiomModels
         getObjectsForArray("BiomModels: ", ref showBiomModels, ref world.biomModels, typeof(BiomModels));
+
+        //HexagonBorders
+        getObjectsForArray("HexagonBorders: ", ref showHexagonBorders, ref world.hexagonBorderModels, typeof(HexagonBorders));
 
         //StructureModels
         getObjectsForArray("StructureModels: ", ref showStructureModels, ref world.structureModels, typeof(Structures));

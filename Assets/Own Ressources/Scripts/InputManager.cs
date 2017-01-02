@@ -34,7 +34,8 @@ public class InputManager : MonoBehaviour {
             World.instance.drone.Destination = HexagonFrame.instance.selectedPosition;
         if (Input.GetMouseButtonDown(0))
         {
-            generateHexagonBorder();
+            if(World.instance.isNPCAtPosition(HexagonFrame.instance.selectedPosition))
+                generateHexagonBorder();
         }
 
         if (Input.GetKeyDown(switchFunction))

@@ -6,6 +6,7 @@ public class Chunk : MonoBehaviour{
     [HideInInspector] public GameObject[,] hexagons       = new GameObject[chunkSize, chunkSize];
     [HideInInspector] public Structures[,] structuresData = new Structures[chunkSize, chunkSize];
     [HideInInspector] public GameObject[,] structures     = new GameObject[chunkSize, chunkSize];
+    [HideInInspector] public NPC[,] npcs                  = new NPC[chunkSize, chunkSize];
     [HideInInspector] public int posX, posZ;        //Position of the chunk in HexCoords
     public static int chunkSize = 8;
     public static int worldConstant = 80;
@@ -166,5 +167,25 @@ public class Chunk : MonoBehaviour{
         int posZ = z % Chunk.chunkSize;
 
         return new Vector2Int(posX, posZ);
+    }
+
+    public bool isNPCAtGlobalCoords(int x, int z)
+    {
+        return npcs[x % Chunk.chunkSize, z % Chunk.chunkSize] != null;
+    }
+
+    public bool isNPCAtChunkCoords(int x, int z)
+    {
+        return npcs[x, z] != null;
+    }
+
+    public void setNPCAtChunkCoords(NPC npc, int x, int z)
+    {
+        npcs[x, z] = npc;
+    }
+
+    public void setNPCAtGlobalCoords(NPC npc, int x, int z)
+    {
+        npcs[x % Chunk.chunkSize, z % Chunk.chunkSize] = npc;
     }
 }

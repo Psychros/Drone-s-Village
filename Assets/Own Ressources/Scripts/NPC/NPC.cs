@@ -10,6 +10,7 @@ public class NPC : MonoBehaviour {
     {
         get {return destination;}
         set {
+            World.instance.setNPCAtPosition(null, destination); //Resets the hexagonNPC at the old position
             destination = value;
             isMoving = true;
         }
@@ -34,6 +35,7 @@ public class NPC : MonoBehaviour {
 
             //Position
             transform.position = Vector3.MoveTowards(transform.position, transform.position + transform.forward, Time.deltaTime * speed);
+            //The NPC is at the goal
             if (Vector3.Distance(new Vector3(transform.position.x, 0, transform.position.z), destination) < 0.2f)
             {
                 isMoving = false;
@@ -42,6 +44,9 @@ public class NPC : MonoBehaviour {
                     buildBuilding();
                 else
                     cutTree();
+
+                //save that there is a NPC at this positioon
+                World.instance.setNPCAtPosition(this, destination);
             }
         }
 	}

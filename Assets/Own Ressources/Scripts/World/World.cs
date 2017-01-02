@@ -170,4 +170,18 @@ public class World : MonoBehaviour
             print(s);
         }
     }
+
+    public bool isNPCAtPosition(Vector3 position)
+    {
+        Vector2Int p = Hexagon.getHexPositionInt(position);
+        Chunk c = getChunkAt(p.x, p.z);
+        return c.isNPCAtGlobalCoords(p.x, p.z);
+    }
+
+    public void setNPCAtPosition(NPC npc, Vector3 position)
+    {
+        Vector2Int p = Hexagon.getHexPositionInt(position);
+        Chunk c = getChunkAt(p.x, p.z);
+        c.setNPCAtGlobalCoords(npc, p.x, p.z);
+    }
 }

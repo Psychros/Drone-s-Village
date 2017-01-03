@@ -18,14 +18,13 @@ public class InputManager : MonoBehaviour {
     //False = cut, True = build
     public bool cutTreeOrBuild = false;
 
-    public GameObject[] currentHexagonBorder;
+    [HideInInspector] public GameObject[] currentHexagonBorder;
+    [HideInInspector] public NPC selectedNPC = null;
 
     void Start()
     {
         instance = this;
         Cursor.SetCursor(mouseIcon, Vector2.zero, CursorMode.ForceSoftware);
-
-        currentHexagonBorder = new GameObject[7];
     }
 
     void Update()
@@ -33,10 +32,7 @@ public class InputManager : MonoBehaviour {
         if (Input.GetKeyDown(rightClick))
             World.instance.drone.Destination = HexagonFrame.instance.selectedPosition;
         if (Input.GetMouseButtonDown(0))
-        {
-            if(World.instance.isNPCAtPosition(HexagonFrame.instance.selectedPosition))
-                generateHexagonBorder();
-        }
+            selectNPC();
 
         if (Input.GetKeyDown(switchFunction))
             cutTreeOrBuild = !cutTreeOrBuild;
@@ -64,72 +60,17 @@ public class InputManager : MonoBehaviour {
         menu.SetActive(false);
     }
 
-    public void generateHexagonBorder()
+    public void selectNPC()
     {
-        //Generate 7 HexagonBorders
-        for (int i = 0; i < 7; i++)
+        if (World.instance.isNPCAtPosition(HexagonFrame.instance.selectedPosition))
         {
-            Destroy(currentHexagonBorder[i]);
-        }
-
-        Vector2Int intPos = Hexagon.getHexPositionInt(HexagonFrame.instance.selectedPosition);
-        Vector3 pos = HexagonFrame.instance.selectedPosition + new Vector3(0, .01f, 0);
-        currentHexagonBorder[0] = Instantiate(World.instance.hexagonBorderModels[(int)HexagonBorders.BorderBlue]);
-        currentHexagonBorder[0].transform.position = pos;
-
-        if (intPos.z % 2 == 0)
-        {
-            Vector3 pos1 = Hexagon.getWorldPosition(intPos.x, intPos.z + 1) + new Vector3(0, .01f, 0);
-            currentHexagonBorder[1] = Instantiate(World.instance.hexagonBorderModels[(int)HexagonBorders.BorderYellow]);
-            currentHexagonBorder[1].transform.position = pos1;
-
-            Vector3 pos2 = Hexagon.getWorldPosition(intPos.x, intPos.z - 1) + new Vector3(0, .01f, 0);
-            currentHexagonBorder[2] = Instantiate(World.instance.hexagonBorderModels[(int)HexagonBorders.BorderYellow]);
-            currentHexagonBorder[2].transform.position = pos2;
-
-            Vector3 pos3 = Hexagon.getWorldPosition(intPos.x + 1, intPos.z) + new Vector3(0, .01f, 0);
-            currentHexagonBorder[3] = Instantiate(World.instance.hexagonBorderModels[(int)HexagonBorders.BorderYellow]);
-            currentHexagonBorder[3].transform.position = pos3;
-
-            Vector3 pos4 = Hexagon.getWorldPosition(intPos.x - 1, intPos.z + 1) + new Vector3(0, .01f, 0);
-            currentHexagonBorder[4] = Instantiate(World.instance.hexagonBorderModels[(int)HexagonBorders.BorderYellow]);
-            currentHexagonBorder[4].transform.position = pos4;
-
-            Vector3 pos5 = Hexagon.getWorldPosition(intPos.x - 1, intPos.z - 1) + new Vector3(0, .01f, 0);
-            currentHexagonBorder[5] = Instantiate(World.instance.hexagonBorderModels[(int)HexagonBorders.BorderYellow]);
-            currentHexagonBorder[5].transform.position = pos5;
-
-            Vector3 pos6 = Hexagon.getWorldPosition(intPos.x - 1, intPos.z) + new Vector3(0, .01f, 0);
-            currentHexagonBorder[6] = Instantiate(World.instance.hexagonBorderModels[(int)HexagonBorders.BorderYellow]);
-            currentHexagonBorder[6].transform.position = pos6;
+            selectedNPC = World.instance.getNPCAtPosition(HexagonFrame.instance.selectedPosition);
+            selectedNPC.IsSelected = true;
         }
         else
         {
-            {
-                Vector3 pos1 = Hexagon.getWorldPosition(intPos.x, intPos.z + 1) + new Vector3(0, .01f, 0);
-                currentHexagonBorder[1] = Instantiate(World.instance.hexagonBorderModels[(int)HexagonBorders.BorderYellow]);
-                currentHexagonBorder[1].transform.position = pos1;
-
-                Vector3 pos2 = Hexagon.getWorldPosition(intPos.x, intPos.z - 1) + new Vector3(0, .01f, 0);
-                currentHexagonBorder[2] = Instantiate(World.instance.hexagonBorderModels[(int)HexagonBorders.BorderYellow]);
-                currentHexagonBorder[2].transform.position = pos2;
-
-                Vector3 pos3 = Hexagon.getWorldPosition(intPos.x - 1, intPos.z) + new Vector3(0, .01f, 0);
-                currentHexagonBorder[3] = Instantiate(World.instance.hexagonBorderModels[(int)HexagonBorders.BorderYellow]);
-                currentHexagonBorder[3].transform.position = pos3;
-
-                Vector3 pos4 = Hexagon.getWorldPosition(intPos.x + 1, intPos.z + 1) + new Vector3(0, .01f, 0);
-                currentHexagonBorder[4] = Instantiate(World.instance.hexagonBorderModels[(int)HexagonBorders.BorderYellow]);
-                currentHexagonBorder[4].transform.position = pos4;
-
-                Vector3 pos5 = Hexagon.getWorldPosition(intPos.x + 1, intPos.z - 1) + new Vector3(0, .01f, 0);
-                currentHexagonBorder[5] = Instantiate(World.instance.hexagonBorderModels[(int)HexagonBorders.BorderYellow]);
-                currentHexagonBorder[5].transform.position = pos5;
-
-                Vector3 pos6 = Hexagon.getWorldPosition(intPos.x + 1, intPos.z) + new Vector3(0, .01f, 0);
-                currentHexagonBorder[6] = Instantiate(World.instance.hexagonBorderModels[(int)HexagonBorders.BorderYellow]);
-                currentHexagonBorder[6].transform.position = pos6;
-            }
+            if (selectedNPC != null)
+                selectedNPC.IsSelected = false;
         }
     }
 }

@@ -188,4 +188,14 @@ public class Chunk : MonoBehaviour{
     {
         npcs[x % Chunk.chunkSize, z % Chunk.chunkSize] = npc;
     }
+
+    public NPC getNPCAtGlobalCoords(int x, int z)
+    {
+        return npcs[x % Chunk.chunkSize, z % Chunk.chunkSize];
+    }
+
+    public NPC getNPCAtChunkCoords(int x, int z)
+    {
+        return npcs[x, z];
+    }
 }

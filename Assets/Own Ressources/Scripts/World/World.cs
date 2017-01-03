@@ -14,11 +14,14 @@ public class World : MonoBehaviour
     public GameObject[] structureModels = new GameObject[System.Enum.GetNames(typeof(Structures)).Length-1];
     public BiomData[] biomsData = new BiomData[System.Enum.GetNames(typeof(Bioms)).Length];
     public GameObject droneModel;
+
     [HideInInspector] public NPC drone;
     [HideInInspector] public Chunk[,] chunks;
-    public int width = 8, 
-               height = 8;
     [HideInInspector] public float offsetX, offsetZ;
+    public int width = 8;
+    public int height = 8;
+
+    [HideInInspector] public GameObject[] currentHexagonBorder;
 
 
     // Use this for initialization
@@ -35,6 +38,9 @@ public class World : MonoBehaviour
         //Generate the world
         generate();
         showWorld();
+
+        //Initialize the Hexagonborder
+        currentHexagonBorder = new GameObject[7];
     }
 
 
@@ -58,7 +64,6 @@ public class World : MonoBehaviour
 
         //Place the spaceship and focus the camera on it
         //Place a drone over the spaceship
-
         while (true)
         {
             int x = (int)(Random.value * width * Chunk.chunkSize), 
@@ -78,6 +83,7 @@ public class World : MonoBehaviour
                 GameObject g = Instantiate(droneModel);
                 drone = g.AddComponent<NPC>();
                 g.transform.position = shipPos + droneModel.transform.position;
+                setNPCAtPosition(drone, g.transform.position);
 
                 //Focus the camera
                 Camera.main.transform.position = shipPos + new Vector3(0, Camera.main.transform.position.y, -8f);
@@ -158,6 +164,30 @@ public class World : MonoBehaviour
         c.changeStructureGlobalCoords(x, z, newStructure);
     }
 
+    public bool isNPCAtPosition(Vector3 position)
+    {
+        Vector2Int p = Hexagon.getHexPositionInt(position);
+        return getChunkAt(p.x, p.z).isNPCAtGlobalCoords(p.x, p.z);
+    }
+
+    public NPC getNPCAtPosition(Vector3 position)
+    {
+        Vector2Int p = Hexagon.getHexPositionInt(position);
+        return getChunkAt(p.x, p.z).getNPCAtGlobalCoords(p.x, p.z);
+    }
+
+    public NPC getNPCAtPosition(int x, int z)
+    {
+        return getChunkAt(x, z).getNPCAtGlobalCoords(x, z);
+    }
+
+    public void setNPCAtPosition(NPC npc, Vector3 position)
+    {
+        Vector2Int p = Hexagon.getHexPositionInt(position);
+        Chunk c = getChunkAt(p.x, p.z);
+        c.setNPCAtGlobalCoords(npc, p.x, p.z);
+    }
+
     public void printFirstChunk()
     {
         for (int x = 0; x < Chunk.chunkSize; x++)
@@ -171,17 +201,84 @@ public class World : MonoBehaviour
         }
     }
 
-    public bool isNPCAtPosition(Vector3 position)
+    public void generateHexagonBorder()
     {
-        Vector2Int p = Hexagon.getHexPositionInt(position);
-        Chunk c = getChunkAt(p.x, p.z);
-        return c.isNPCAtGlobalCoords(p.x, p.z);
+        //Generate a new HexagonBorder
+        Vector2Int intPos = Hexagon.getHexPositionInt(HexagonFrame.instance.selectedPosition);
+        generateHexagonBorder(intPos.x, intPos.z);
     }
 
-    public void setNPCAtPosition(NPC npc, Vector3 position)
+    public void generateHexagonBorder(int x, int z)
     {
-        Vector2Int p = Hexagon.getHexPositionInt(position);
-        Chunk c = getChunkAt(p.x, p.z);
-        c.setNPCAtGlobalCoords(npc, p.x, p.z);
+        destroyHexagonBorder();
+
+        //Generate a new HexagonBorder
+        Vector2Int intPos = new Vector2Int(x, z);
+        Vector3 pos = Hexagon.getWorldPosition(intPos.x, intPos.z) + new Vector3(0, .01f, 0);
+        currentHexagonBorder[0] = Instantiate(hexagonBorderModels[(int)HexagonBorders.BorderBlue]);
+        currentHexagonBorder[0].transform.position = pos;
+
+        if (intPos.z % 2 == 0)
+        {
+            Vector3 pos1 = Hexagon.getWorldPosition(intPos.x, intPos.z + 1) + new Vector3(0, .01f, 0);
+            currentHexagonBorder[1] = Instantiate(hexagonBorderModels[(int)HexagonBorders.BorderYellow]);
+            currentHexagonBorder[1].transform.position = pos1;
+
+            Vector3 pos2 = Hexagon.getWorldPosition(intPos.x, intPos.z - 1) + new Vector3(0, .01f, 0);
+            currentHexagonBorder[2] = Instantiate(hexagonBorderModels[(int)HexagonBorders.BorderYellow]);
+            currentHexagonBorder[2].transform.position = pos2;
+
+            Vector3 pos3 = Hexagon.getWorldPosition(intPos.x + 1, intPos.z) + new Vector3(0, .01f, 0);
+            currentHexagonBorder[3] = Instantiate(hexagonBorderModels[(int)HexagonBorders.BorderYellow]);
+            currentHexagonBorder[3].transform.position = pos3;
+
+            Vector3 pos4 = Hexagon.getWorldPosition(intPos.x - 1, intPos.z + 1) + new Vector3(0, .01f, 0);
+            currentHexagonBorder[4] = Instantiate(hexagonBorderModels[(int)HexagonBorders.BorderYellow]);
+            currentHexagonBorder[4].transform.position = pos4;
+
+            Vector3 pos5 = Hexagon.getWorldPosition(intPos.x - 1, intPos.z - 1) + new Vector3(0, .01f, 0);
+            currentHexagonBorder[5] = Instantiate(hexagonBorderModels[(int)HexagonBorders.BorderYellow]);
+            currentHexagonBorder[5].transform.position = pos5;
+
+            Vector3 pos6 = Hexagon.getWorldPosition(intPos.x - 1, intPos.z) + new Vector3(0, .01f, 0);
+            currentHexagonBorder[6] = Instantiate(hexagonBorderModels[(int)HexagonBorders.BorderYellow]);
+            currentHexagonBorder[6].transform.position = pos6;
+        }
+        else
+        {
+            {
+                Vector3 pos1 = Hexagon.getWorldPosition(intPos.x, intPos.z + 1) + new Vector3(0, .01f, 0);
+                currentHexagonBorder[1] = Instantiate(hexagonBorderModels[(int)HexagonBorders.BorderYellow]);
+                currentHexagonBorder[1].transform.position = pos1;
+
+                Vector3 pos2 = Hexagon.getWorldPosition(intPos.x, intPos.z - 1) + new Vector3(0, .01f, 0);
+                currentHexagonBorder[2] = Instantiate(hexagonBorderModels[(int)HexagonBorders.BorderYellow]);
+                currentHexagonBorder[2].transform.position = pos2;
+
+                Vector3 pos3 = Hexagon.getWorldPosition(intPos.x - 1, intPos.z) + new Vector3(0, .01f, 0);
+                currentHexagonBorder[3] = Instantiate(hexagonBorderModels[(int)HexagonBorders.BorderYellow]);
+                currentHexagonBorder[3].transform.position = pos3;
+
+                Vector3 pos4 = Hexagon.getWorldPosition(intPos.x + 1, intPos.z + 1) + new Vector3(0, .01f, 0);
+                currentHexagonBorder[4] = Instantiate(hexagonBorderModels[(int)HexagonBorders.BorderYellow]);
+                currentHexagonBorder[4].transform.position = pos4;
+
+                Vector3 pos5 = Hexagon.getWorldPosition(intPos.x + 1, intPos.z - 1) + new Vector3(0, .01f, 0);
+                currentHexagonBorder[5] = Instantiate(hexagonBorderModels[(int)HexagonBorders.BorderYellow]);
+                currentHexagonBorder[5].transform.position = pos5;
+
+                Vector3 pos6 = Hexagon.getWorldPosition(intPos.x + 1, intPos.z) + new Vector3(0, .01f, 0);
+                currentHexagonBorder[6] = Instantiate(hexagonBorderModels[(int)HexagonBorders.BorderYellow]);
+                currentHexagonBorder[6].transform.position = pos6;
+            }
+        }
+    }
+
+    public void destroyHexagonBorder()
+    {
+        for (int i = 0; i < 7; i++)
+        {
+            Destroy(currentHexagonBorder[i]);
+        }
     }
 }

@@ -13,12 +13,32 @@ public class NPC : MonoBehaviour {
             World.instance.setNPCAtPosition(null, destination); //Resets the hexagonNPC at the old position
             destination = value;
             isMoving = true;
+
+            //Removes the hexagonBorder when the NPC gets a new destination
+            World.instance.destroyHexagonBorder();
         }
     }
+    public bool isSelected = false;
+    public bool IsSelected
+    {
+        get { return isSelected; }
+        set {
+            isSelected = value;
+            if (isSelected)
+            {
+                Vector2Int posOfHexagonBorder = Hexagon.getHexPositionInt(Destination);
+                World.instance.generateHexagonBorder(posOfHexagonBorder.x, posOfHexagonBorder.z);
+            }
+            else
+                World.instance.destroyHexagonBorder();
+        }
+    }
+
 
     void Start()
     {
         transform.forward = Vector3.Cross(transform.forward, transform.up);
+        destination = transform.position;
     }
 
 
@@ -47,6 +67,12 @@ public class NPC : MonoBehaviour {
 
                 //save that there is a NPC at this positioon
                 World.instance.setNPCAtPosition(this, destination);
+
+                //Set a new HexagonBorder around the NPC if it is selected
+                if (isSelected) {
+                    Vector2Int v = Hexagon.getHexPositionInt(destination);
+                    World.instance.generateHexagonBorder(v.x, v.z);
+                }
             }
         }
 	}

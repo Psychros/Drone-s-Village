@@ -15,7 +15,6 @@ public class World : MonoBehaviour
     public BiomData[] biomsData = new BiomData[System.Enum.GetNames(typeof(Bioms)).Length];
     public GameObject droneModel;
 
-    [HideInInspector] public NPC drone;
     [HideInInspector] public Chunk[,] chunks;
     [HideInInspector] public float offsetX, offsetZ;
     public int width = 8;
@@ -81,9 +80,16 @@ public class World : MonoBehaviour
 
                 //Place the first drone over the ship
                 GameObject g = Instantiate(droneModel);
-                drone = g.AddComponent<NPC>();
+                NPC drone = g.AddComponent<NPC>();
                 g.transform.position = shipPos + droneModel.transform.position;
                 setNPCAtPosition(drone, g.transform.position);
+
+                //Place the second drone over the ship
+                GameObject g2 = Instantiate(droneModel);
+                NPC drone2 = g2.AddComponent<NPC>();
+                Vector2Int v = Hexagon.getHexPositionInt(shipPos);
+                g2.transform.position = Hexagon.getWorldPosition(v.x+1, v.z) + droneModel.transform.position;
+                setNPCAtPosition(drone2, g2.transform.position);
 
                 //Focus the camera
                 Camera.main.transform.position = shipPos + new Vector3(0, Camera.main.transform.position.y, -8f);

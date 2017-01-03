@@ -30,7 +30,7 @@ public class InputManager : MonoBehaviour {
     void Update()
     {
         if (Input.GetKeyDown(rightClick))
-            World.instance.drone.Destination = HexagonFrame.instance.selectedPosition;
+            selectedNPC.Destination = HexagonFrame.instance.selectedPosition;
         if (Input.GetMouseButtonDown(0))
             selectNPC();
 
@@ -64,13 +64,20 @@ public class InputManager : MonoBehaviour {
     {
         if (World.instance.isNPCAtPosition(HexagonFrame.instance.selectedPosition))
         {
+            //Reset the old NPC
+            if (selectedNPC != null)
+                selectedNPC.IsSelected = false;
+
             selectedNPC = World.instance.getNPCAtPosition(HexagonFrame.instance.selectedPosition);
             selectedNPC.IsSelected = true;
         }
         else
         {
             if (selectedNPC != null)
+            {
                 selectedNPC.IsSelected = false;
+                selectedNPC = null;
+            }
         }
     }
 }

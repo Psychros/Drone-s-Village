@@ -62,16 +62,18 @@ public class NPC : MonoBehaviour {
             //The NPC is at the goal
             if (Vector3.Distance(new Vector3(transform.position.x, 0, transform.position.z), nextDestination) < 0.2f)
             {
-                if(Vector3.Distance(nextDestination, Hexagon.getWorldPosition(finalDestination)) < .2f)
+                if (Vector3.Distance(nextDestination, Hexagon.getWorldPosition(finalDestination)) < .2f)
+                {
+                    //Select the command
+                    if (InputManager.instance.cutTreeOrBuild)
+                        buildBuilding();
+                    else
+                        cutTree();
+
                     isMoving = false;
-
-                if (InputManager.instance.cutTreeOrBuild)
-                    buildBuilding();
-                else
-                    cutTree();
-
+                }
                 //save that there is a NPC at this positioon
-                World.instance.setNPCAtPosition(this, finalDestination);
+                World.instance.setNPCAtPosition(this, nextDestination);
 
                 //Set a new HexagonBorder around the NPC if it is selected
                 if (isSelected) {

@@ -82,4 +82,9 @@ public class Hexagon : MonoBehaviour {
         else
             return (int)f;
     }
+
+    public Vector2Int getCoordsTopLeft(Vector2Int pos)
+    {
+        return null;
+    }
 }

@@ -4,7 +4,7 @@ using System.Collections;
 public class NPC : MonoBehaviour {
 
     [HideInInspector]public bool isMoving;
-    public float speed = 2f, turnSpeed = 150f;
+    public float speed = 2f, turnSpeed = 200f;
     private Vector3 destination;
     public Vector3 Destination
     {

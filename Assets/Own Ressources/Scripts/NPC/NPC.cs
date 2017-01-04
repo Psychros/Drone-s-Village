@@ -4,7 +4,7 @@ using System.Collections;
 public class NPC : MonoBehaviour {
 
     [HideInInspector]public bool isMoving;
-    public float speed = 2f, turnSpeed = 200f;
+    public float speed = 2f, turnSpeed = 500f;
     private Vector3 nextDestination;
     private Vector2Int finalDestination;
     public Vector2Int Destination
@@ -43,6 +43,7 @@ public class NPC : MonoBehaviour {
         transform.forward = Vector3.Cross(transform.forward, transform.up);
         Destination = Hexagon.getHexPositionInt(transform.position);
         nextDestination = Hexagon.getWorldPosition(finalDestination.x, finalDestination.z);
+        isMoving = false;
     }
 
 
@@ -62,7 +63,7 @@ public class NPC : MonoBehaviour {
             //The NPC is at the goal
             if (Vector3.Distance(new Vector3(transform.position.x, 0, transform.position.z), nextDestination) < 0.2f)
             {
-                if (Vector3.Distance(nextDestination, Hexagon.getWorldPosition(finalDestination)) < .2f)
+                if (Vector3.Distance(nextDestination, Hexagon.getWorldPosition(finalDestination)) < .1f)
                 {
                     //Select the command
                     if (InputManager.instance.cutTreeOrBuild)
@@ -91,21 +92,50 @@ public class NPC : MonoBehaviour {
     {
         Vector2Int pos = Hexagon.getHexPositionInt(nextDestination);
 
+        //Calculate the directionvector
         int x = 0, z = 0;
         if (finalDestination.x - pos.x > 0)
             x = 1;
         else if (finalDestination.x - pos.x < 0)
             x = -1;
 
-        if (x == 0)
+        if (finalDestination.z - pos.z > 0)
+            z = 1;
+        else if (finalDestination.z - pos.z < 0)
+            z = -1;
+
+        //Get the next hexagon
+        Vector2Int v = null;
+        if (x == 1 && z == 1)
+            v = Hexagon.getHexagonTopRight(pos);
+        if (x == 1 && z == -1)
+            v = Hexagon.getHexagonTopLeft(pos);
+        if (x == 1 && z == 0)
+            v = Hexagon.getHexagonRight(pos);
+        if (x == -1 && z == 0)
+            v = Hexagon.getHexagonLeft(pos);
+        if (x == 1 && z == -1)
+            v = Hexagon.getHexagonDownRight(pos);
+        if (x == -1 && z == -1)
+            v = Hexagon.getHexagonDownLeft(pos);
+        if (x == 0 && z == -1)
         {
-            if (finalDestination.z - pos.z > 0)
-                z = 1;
-            else if (finalDestination.z - pos.z < 0)
-                z = -1;
+            if(pos.z % 2 == 0)
+                v = Hexagon.getHexagonDownRight(pos);
+            else
+                v = Hexagon.getHexagonDownLeft(pos);
+        }
+        if (x == 0 && z == 1)
+        {
+            if (pos.z % 2 == 0)
+                v = Hexagon.getHexagonTopRight(pos);
+            else
+                v = Hexagon.getHexagonTopLeft(pos);
         }
 
-        nextDestination = Hexagon.getWorldPosition(pos.x + x, pos.z + z);
+
+        if (v != null)
+            nextDestination = Hexagon.getWorldPosition(v);
     }
 
 

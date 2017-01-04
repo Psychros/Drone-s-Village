@@ -83,8 +83,55 @@ public class Hexagon : MonoBehaviour {
             return (int)f;
     }
 
-    public Vector2Int getCoordsTopLeft(Vector2Int pos)
+    public static Vector2Int getHexagonTopLeft(Vector2Int pos)
     {
-        return null;
+        Vector2Int v;
+        if (pos.z % 2 == 0)
+            v = new Vector2Int(pos.x - 1, pos.z + 1);
+        else
+            v = new Vector2Int(pos.x, pos.z + 1);
+        return v;
     }
+
+    public static Vector2Int getHexagonTopRight(Vector2Int pos)
+    {
+        Vector2Int v;
+        if (pos.z % 2 == 0)
+            v = new Vector2Int(pos.x, pos.z + 1);
+        else
+            v = new Vector2Int(pos.x + 1, pos.z + 1);
+        return v;
+    }
+
+    public static Vector2Int getHexagonLeft(Vector2Int pos)
+    {
+        Vector2Int v = new Vector2Int(pos.x - 1, pos.z);
+        return v;
+    }
+
+    public static Vector2Int getHexagonRight(Vector2Int pos)
+    {
+        Vector2Int v = new Vector2Int(pos.x + 1, pos.z);
+        return v;
+    }
+    public static Vector2Int getHexagonDownLeft(Vector2Int pos)
+    {
+        Vector2Int v;
+        if (pos.z % 2 == 0)
+            v = new Vector2Int(pos.x - 1, pos.z - 1);
+        else
+            v = new Vector2Int(pos.x, pos.z - 1);
+        return v;
+    }
+
+    public static Vector2Int getHexagonDownRight(Vector2Int pos)
+    {
+        Vector2Int v;
+        if (pos.z % 2 == 0)
+            v = new Vector2Int(pos.x, pos.z - 1);
+        else
+            v = new Vector2Int(pos.x + 1, pos.z - 1);
+        return v;
+    }
+
 }

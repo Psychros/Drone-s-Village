@@ -18,6 +18,14 @@ public class Hexagon : MonoBehaviour {
             return new Vector3(x * factorX + deltaX, 0, z * factorZ);
     }
 
+    public static Vector3 getWorldPosition(Vector2Int v)
+    {
+        if (v.z % 2 == 0)
+            return new Vector3(v.x * factorX, 0, v.z * factorZ);
+        else
+            return new Vector3(v.x * factorX + deltaX, 0, v.z * factorZ);
+    }
+
     /*
      * Converts the WorldCoords to HexCoords
      */

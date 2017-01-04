@@ -30,7 +30,7 @@ public class InputManager : MonoBehaviour {
     void Update()
     {
         if (Input.GetKeyDown(rightClick))
-            selectedNPC.Destination = HexagonFrame.instance.selectedPosition;
+            selectedNPC.Destination = Hexagon.getHexPositionInt(HexagonFrame.instance.selectedPosition);
         if (Input.GetMouseButtonDown(0))
             selectNPC();
 

@@ -194,6 +194,12 @@ public class World : MonoBehaviour
         c.setNPCAtGlobalCoords(npc, p.x, p.z);
     }
 
+    public void setNPCAtPosition(NPC npc, Vector2Int p)
+    {
+        Chunk c = getChunkAt(p.x, p.z);
+        c.setNPCAtGlobalCoords(npc, p.x, p.z);
+    }
+
     public void printFirstChunk()
     {
         for (int x = 0; x < Chunk.chunkSize; x++)
@@ -211,15 +217,14 @@ public class World : MonoBehaviour
     {
         //Generate a new HexagonBorder
         Vector2Int intPos = Hexagon.getHexPositionInt(HexagonFrame.instance.selectedPosition);
-        generateHexagonBorder(intPos.x, intPos.z);
+        generateHexagonBorder(intPos);
     }
 
-    public void generateHexagonBorder(int x, int z)
+    public void generateHexagonBorder(Vector2Int intPos)
     {
         destroyHexagonBorder();
 
         //Generate a new HexagonBorder
-        Vector2Int intPos = new Vector2Int(x, z);
         Vector3 pos = Hexagon.getWorldPosition(intPos.x, intPos.z) + new Vector3(0, .01f, 0);
         currentHexagonBorder[0] = Instantiate(hexagonBorderModels[(int)HexagonBorders.BorderBlue]);
         currentHexagonBorder[0].transform.position = pos;

@@ -5,17 +5,20 @@ public class NPC : MonoBehaviour {
 
     [HideInInspector]public bool isMoving;
     public float speed = 2f, turnSpeed = 200f;
-    private Vector3 destination;
-    public Vector3 Destination
+    private Vector3 nextDestination;
+    private Vector2Int finalDestination;
+    public Vector2Int Destination
     {
-        get {return destination;}
+        get {return finalDestination;}
         set {
-            World.instance.setNPCAtPosition(null, destination); //Resets the hexagonNPC at the old position
-            destination = value;
+            World.instance.setNPCAtPosition(null, nextDestination); //Resets the hexagonNPC at the old position
+            finalDestination = value;
             isMoving = true;
 
             //Removes the hexagonBorder when the NPC gets a new destination
             World.instance.destroyHexagonBorder();
+
+            selectNextDestination();
         }
     }
     public bool isSelected = false;
@@ -26,8 +29,8 @@ public class NPC : MonoBehaviour {
             isSelected = value;
             if (isSelected)
             {
-                Vector2Int posOfHexagonBorder = Hexagon.getHexPositionInt(Destination);
-                World.instance.generateHexagonBorder(posOfHexagonBorder.x, posOfHexagonBorder.z);
+                Vector2Int posOfHexagonBorder = Hexagon.getHexPositionInt(nextDestination);
+                World.instance.generateHexagonBorder(posOfHexagonBorder);
             }
             else
                 World.instance.destroyHexagonBorder();
@@ -38,7 +41,8 @@ public class NPC : MonoBehaviour {
     void Start()
     {
         transform.forward = Vector3.Cross(transform.forward, transform.up);
-        destination = transform.position;
+        Destination = Hexagon.getHexPositionInt(transform.position);
+        nextDestination = Hexagon.getWorldPosition(finalDestination.x, finalDestination.z);
     }
 
 
@@ -46,7 +50,7 @@ public class NPC : MonoBehaviour {
         if (isMoving)
         {
             //Rotation
-            Vector3 destinationRelative = transform.InverseTransformPoint(destination);
+            Vector3 destinationRelative = transform.InverseTransformPoint(nextDestination);
             if (destinationRelative.x > 0)
                 transform.Rotate(0, turnSpeed * Time.deltaTime, 0);
             else
@@ -56,9 +60,10 @@ public class NPC : MonoBehaviour {
             //Position
             transform.position = Vector3.MoveTowards(transform.position, transform.position + transform.forward, Time.deltaTime * speed);
             //The NPC is at the goal
-            if (Vector3.Distance(new Vector3(transform.position.x, 0, transform.position.z), destination) < 0.2f)
+            if (Vector3.Distance(new Vector3(transform.position.x, 0, transform.position.z), nextDestination) < 0.2f)
             {
-                isMoving = false;
+                if(Vector3.Distance(nextDestination, Hexagon.getWorldPosition(finalDestination)) < .2f)
+                    isMoving = false;
 
                 if (InputManager.instance.cutTreeOrBuild)
                     buildBuilding();
@@ -66,21 +71,45 @@ public class NPC : MonoBehaviour {
                     cutTree();
 
                 //save that there is a NPC at this positioon
-                World.instance.setNPCAtPosition(this, destination);
+                World.instance.setNPCAtPosition(this, finalDestination);
 
                 //Set a new HexagonBorder around the NPC if it is selected
                 if (isSelected) {
-                    Vector2Int v = Hexagon.getHexPositionInt(destination);
-                    World.instance.generateHexagonBorder(v.x, v.z);
+                    Vector2Int v = Hexagon.getHexPositionInt(nextDestination);
+                    World.instance.generateHexagonBorder(v);
                 }
+
+                selectNextDestination();
             }
         }
 	}
 
+    //Select the nextHexagon on the way to the final destination
+    public void selectNextDestination()
+    {
+        Vector2Int pos = Hexagon.getHexPositionInt(nextDestination);
+
+        int x = 0, z = 0;
+        if (finalDestination.x - pos.x > 0)
+            x = 1;
+        else if (finalDestination.x - pos.x < 0)
+            x = -1;
+
+        if (x == 0)
+        {
+            if (finalDestination.z - pos.z > 0)
+                z = 1;
+            else if (finalDestination.z - pos.z < 0)
+                z = -1;
+        }
+
+        nextDestination = Hexagon.getWorldPosition(pos.x + x, pos.z + z);
+    }
+
 
     public void cutTree()
     {
-        Vector2Int pos = Hexagon.getHexPositionInt(destination);
+        Vector2Int pos = finalDestination;
 
         if (World.instance.getBiom(pos.x, pos.z) == Bioms.Forest)
         {
@@ -90,7 +119,7 @@ public class NPC : MonoBehaviour {
 
     public void buildBuilding()
     {
-        Vector2Int des = Hexagon.getHexPositionInt(destination);
+        Vector2Int des = finalDestination;
         //print("OwnPosition:" + pos2 + ", " + transform.position + " Destination: " + destination + "  realDestination: " + des);
         if (World.instance.getBiom(des.x, des.z) == Bioms.Plain)
         {

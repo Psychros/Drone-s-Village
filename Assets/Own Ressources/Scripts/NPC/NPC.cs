@@ -4,7 +4,7 @@ using System.Collections;
 public class NPC : MonoBehaviour {
 
     [HideInInspector]public bool isMoving;
-    public float speed = 2f, turnSpeed = 500f;
+    public float speed = 2f, turnSpeed = 150f;
     private Vector3 nextDestination;
     private Vector2Int finalDestination;
     public Vector2Int Destination
@@ -50,12 +50,12 @@ public class NPC : MonoBehaviour {
     void Update () {
         if (isMoving)
         {
-            //Rotation
+            /*//Rotation
             Vector3 destinationRelative = transform.InverseTransformPoint(nextDestination);
             if (destinationRelative.x > 0)
                 transform.Rotate(0, turnSpeed * Time.deltaTime, 0);
             else
-                transform.Rotate(0, turnSpeed * Time.deltaTime * -1, 0);
+                transform.Rotate(0, turnSpeed * Time.deltaTime * -1, 0);*/
 
 
             //Position
@@ -135,7 +135,11 @@ public class NPC : MonoBehaviour {
 
 
         if (v != null)
+        {
             nextDestination = Hexagon.getWorldPosition(v);
+            transform.LookAt(nextDestination + new Vector3(0, transform.position.y, 0));
+        }
+
     }
 
 

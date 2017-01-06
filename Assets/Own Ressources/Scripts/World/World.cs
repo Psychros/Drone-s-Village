@@ -9,19 +9,22 @@ public class World : MonoBehaviour
     [HideInInspector]
     public static World instance;
 
+    //Models
     public GameObject[] biomModels      = new GameObject[System.Enum.GetNames(typeof(BiomModels)).Length];
     public GameObject[] hexagonBorderModels    = new GameObject[System.Enum.GetNames(typeof(HexagonBorders)).Length];
     public GameObject[] structureModels = new GameObject[System.Enum.GetNames(typeof(Structures)).Length-1];
     public BiomData[] biomsData = new BiomData[System.Enum.GetNames(typeof(Bioms)).Length];
     public GameObject droneModel;
 
+    //Chunks
     [HideInInspector] public Chunk[,] chunks;
     [HideInInspector] public float offsetX, offsetZ;
     public int width = 8;
     public int height = 8;
 
+    //Other stuff
     [HideInInspector] public GameObject[] currentHexagonBorder;
-
+    [HideInInspector] public List<NPC> npcs = new List<NPC>();
 
     // Use this for initialization
     void Start()
@@ -223,9 +226,12 @@ public class World : MonoBehaviour
     {
         destroyHexagonBorder();
 
-        //Generate the blue border
+        //Generate the border at the startPosition
         Vector3 pos = Hexagon.getWorldPosition(intPos.x, intPos.z) + new Vector3(0, .01f, 0);
-        currentHexagonBorder[0] = Instantiate(hexagonBorderModels[(int)HexagonBorders.BorderBlue]);
+        if(size > 0)
+            currentHexagonBorder[0] = Instantiate(hexagonBorderModels[(int)HexagonBorders.BorderBlue]);
+        else
+            currentHexagonBorder[0] = Instantiate(hexagonBorderModels[(int)HexagonBorders.BorderRed]);
         currentHexagonBorder[0].transform.position = pos;
 
         List<Vector2Int> neighbours   = new List<Vector2Int>();
@@ -273,5 +279,17 @@ public class World : MonoBehaviour
         {
             Destroy(currentHexagonBorder[i]);
         }
+    }
+
+    public void nextRound()
+    {
+        //Reset the movepower of the NPCs
+        foreach(NPC npc in npcs)
+        {
+            npc.resetMovePower();
+        }
+
+        //Rebuild the hexagonBorder 
+        generateHexagonBorder(Hexagon.getHexPositionInt(InputManager.instance.selectedNPC.NextDestination), InputManager.instance.selectedNPC.movePower);
     }
 }

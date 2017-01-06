@@ -10,6 +10,7 @@ public class InputManager : MonoBehaviour {
     public KeyCode leftClick      = KeyCode.Mouse0;
     public KeyCode switchFunction = KeyCode.E;
     public KeyCode buildmenuKey   = KeyCode.F;
+    public KeyCode nextRoundKey   = KeyCode.N;
     public KeyCode pausemenuKey   = KeyCode.Escape;
 
     public GameObject pausemenu;
@@ -49,6 +50,9 @@ public class InputManager : MonoBehaviour {
                 activateMenu(pausemenu);
             else
                 deactivateMenu(pausemenu);
+
+        if (Input.GetKeyDown(nextRoundKey))
+            World.instance.nextRound();
     }
 
     public void activateMenu(GameObject menu)

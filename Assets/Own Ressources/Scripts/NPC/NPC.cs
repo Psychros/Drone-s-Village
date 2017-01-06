@@ -5,7 +5,15 @@ public class NPC : MonoBehaviour {
 
     [HideInInspector]public bool isMoving;
     public float speed = 2f, turnSpeed = 150f;
+    public const int MOVE_POWER = 5;   //The maximal movePower of the NPC
+    public int movePower;          //The current movePower of the NPC
+
     private Vector3 nextDestination;
+    public Vector3 NextDestination
+    {
+        get { return nextDestination; }
+    }
+
     private Vector2Int finalDestination;
     public Vector2Int Destination
     {
@@ -22,6 +30,7 @@ public class NPC : MonoBehaviour {
             transform.LookAt(nextDestination + new Vector3(0, transform.position.y, 0));
         }
     }
+
     public bool isSelected = false;
     public bool IsSelected
     {
@@ -38,8 +47,6 @@ public class NPC : MonoBehaviour {
         }
     }
 
-    public int movePower = 5;   //The movePower of the NPC
-
 
     void Start()
     {
@@ -47,19 +54,24 @@ public class NPC : MonoBehaviour {
         Destination = Hexagon.getHexPositionInt(transform.position);
         nextDestination = Hexagon.getWorldPosition(finalDestination.x, finalDestination.z);
         isMoving = false;
+
+        movePower = MOVE_POWER;
+
+        //Add the npc to the worldlist
+        World.instance.npcs.Add(this);
     }
 
 
     void Update () {
-        if (isMoving)
+        if (isMoving && movePower >= 0)
         {
             //Rotation
-            Vector3 destinationRelative = transform.InverseTransformPoint(nextDestination);
+            /*Vector3 destinationRelative = transform.InverseTransformPoint(nextDestination);
             if (destinationRelative.x > 0)
                 transform.Rotate(0, turnSpeed * Time.deltaTime, 0);
             else
                 transform.Rotate(0, turnSpeed * Time.deltaTime * -1, 0);
-
+            */
 
             //Position
             transform.position = Vector3.MoveTowards(transform.position, transform.position + transform.forward, Time.deltaTime * speed);
@@ -143,8 +155,10 @@ public class NPC : MonoBehaviour {
         {
             nextDestination = Hexagon.getWorldPosition(v);
             transform.LookAt(nextDestination + new Vector3(0, transform.position.y, 0));
-        }
 
+            //Reduce the movePower
+            movePower--;
+        }
     }
 
 
@@ -169,5 +183,10 @@ public class NPC : MonoBehaviour {
             g.transform.position = new Vector3(g.transform.position.x, - 1.014f, g.transform.position.z);
             g.AddComponent<BuildBuilding>();
         }
+    }
+
+    public void resetMovePower()
+    {
+        movePower = MOVE_POWER;
     }
 }

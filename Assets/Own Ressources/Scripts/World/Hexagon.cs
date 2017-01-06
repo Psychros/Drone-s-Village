@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using System.Collections;
+using System.Collections.Generic;
 
 public class Hexagon : MonoBehaviour {
     public static float factorX = 1.73206f, 
@@ -132,6 +132,19 @@ public class Hexagon : MonoBehaviour {
         else
             v = new Vector2Int(pos.x + 1, pos.z - 1);
         return v;
+    }
+
+    public static List<Vector2Int> getNeighbours(Vector2Int pos)
+    {
+        List<Vector2Int> list = new List<Vector2Int>();
+        list.Add(getHexagonTopLeft(pos));
+        list.Add(getHexagonTopRight(pos));
+        list.Add(getHexagonLeft(pos));
+        list.Add(getHexagonRight(pos));
+        list.Add(getHexagonDownLeft(pos));
+        list.Add(getHexagonDownRight(pos));
+
+        return list;
     }
 
 }

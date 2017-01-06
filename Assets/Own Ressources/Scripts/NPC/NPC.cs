@@ -19,6 +19,7 @@ public class NPC : MonoBehaviour {
             World.instance.destroyHexagonBorder();
 
             selectNextDestination();
+            transform.LookAt(nextDestination + new Vector3(0, transform.position.y, 0));
         }
     }
     public bool isSelected = false;
@@ -30,12 +31,14 @@ public class NPC : MonoBehaviour {
             if (isSelected)
             {
                 Vector2Int posOfHexagonBorder = Hexagon.getHexPositionInt(nextDestination);
-                World.instance.generateHexagonBorder(posOfHexagonBorder);
+                World.instance.generateHexagonBorder(posOfHexagonBorder, movePower);
             }
             else
                 World.instance.destroyHexagonBorder();
         }
     }
+
+    public int movePower = 5;   //The movePower of the NPC
 
 
     void Start()
@@ -50,12 +53,12 @@ public class NPC : MonoBehaviour {
     void Update () {
         if (isMoving)
         {
-            /*//Rotation
+            //Rotation
             Vector3 destinationRelative = transform.InverseTransformPoint(nextDestination);
             if (destinationRelative.x > 0)
                 transform.Rotate(0, turnSpeed * Time.deltaTime, 0);
             else
-                transform.Rotate(0, turnSpeed * Time.deltaTime * -1, 0);*/
+                transform.Rotate(0, turnSpeed * Time.deltaTime * -1, 0);
 
 
             //Position
@@ -63,7 +66,7 @@ public class NPC : MonoBehaviour {
             //The NPC is at the goal
             if (Vector3.Distance(new Vector3(transform.position.x, 0, transform.position.z), nextDestination) < 0.2f)
             {
-                if (Vector3.Distance(nextDestination, Hexagon.getWorldPosition(finalDestination)) < .1f)
+                if (Vector3.Distance(nextDestination, Hexagon.getWorldPosition(finalDestination)) < .2f)
                 {
                     //Select the command
                     if (InputManager.instance.cutTreeOrBuild)
@@ -71,15 +74,17 @@ public class NPC : MonoBehaviour {
                     else
                         cutTree();
 
-                    isMoving = false;
-                }
-                //save that there is a NPC at this positioon
-                World.instance.setNPCAtPosition(this, nextDestination);
+                    //Set a new HexagonBorder around the NPC if it is selected
+                    if (isSelected)
+                    {
+                        Vector2Int v = Hexagon.getHexPositionInt(nextDestination);
+                        World.instance.generateHexagonBorder(v, movePower);
+                    }
 
-                //Set a new HexagonBorder around the NPC if it is selected
-                if (isSelected) {
-                    Vector2Int v = Hexagon.getHexPositionInt(nextDestination);
-                    World.instance.generateHexagonBorder(v);
+                    //save that there is a NPC at this position
+                    World.instance.setNPCAtPosition(this, nextDestination);
+
+                    isMoving = false;
                 }
 
                 selectNextDestination();
@@ -108,7 +113,7 @@ public class NPC : MonoBehaviour {
         Vector2Int v = null;
         if (x == 1 && z == 1)
             v = Hexagon.getHexagonTopRight(pos);
-        if (x == 1 && z == -1)
+        if (x == -1 && z == 1)
             v = Hexagon.getHexagonTopLeft(pos);
         if (x == 1 && z == 0)
             v = Hexagon.getHexagonRight(pos);

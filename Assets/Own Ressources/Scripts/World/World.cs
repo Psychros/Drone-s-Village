@@ -39,7 +39,7 @@ public class World : MonoBehaviour
         showWorld();
 
         //Initialize the Hexagonborder
-        currentHexagonBorder = new GameObject[7];
+        currentHexagonBorder = new GameObject[150];
     }
 
 
@@ -90,6 +90,12 @@ public class World : MonoBehaviour
                 Vector2Int v = Hexagon.getHexPositionInt(shipPos);
                 g2.transform.position = Hexagon.getWorldPosition(v.x+1, v.z) + droneModel.transform.position;
                 setNPCAtPosition(drone2, g2.transform.position);
+
+                //Place the third drone over the ship
+                GameObject g3 = Instantiate(droneModel);
+                NPC drone3 = g3.AddComponent<NPC>();
+                g3.transform.position = Hexagon.getWorldPosition(v.x - 1, v.z) + droneModel.transform.position;
+                setNPCAtPosition(drone3, g3.transform.position);
 
                 //Focus the camera
                 Camera.main.transform.position = shipPos + new Vector3(0, Camera.main.transform.position.y, -8f);
@@ -213,81 +219,57 @@ public class World : MonoBehaviour
         }
     }
 
-    public void generateHexagonBorder()
-    {
-        //Generate a new HexagonBorder
-        Vector2Int intPos = Hexagon.getHexPositionInt(HexagonFrame.instance.selectedPosition);
-        generateHexagonBorder(intPos);
-    }
-
-    public void generateHexagonBorder(Vector2Int intPos)
+    public void generateHexagonBorder(Vector2Int intPos, int size)
     {
         destroyHexagonBorder();
 
-        //Generate a new HexagonBorder
+        //Generate the blue border
         Vector3 pos = Hexagon.getWorldPosition(intPos.x, intPos.z) + new Vector3(0, .01f, 0);
         currentHexagonBorder[0] = Instantiate(hexagonBorderModels[(int)HexagonBorders.BorderBlue]);
         currentHexagonBorder[0].transform.position = pos;
 
-        if (intPos.z % 2 == 0)
+        List<Vector2Int> neighbours   = new List<Vector2Int>();
+        List<Vector2Int> currentLayer = new List<Vector2Int>();
+        List<Vector2Int> nextLayer    = new List<Vector2Int>();
+
+        //Set the startPosition
+        currentLayer.Add(intPos);
+
+        //Get the neighbours of the hexagon
+        for (int i = 0; i < size; i++)
         {
-            Vector3 pos1 = Hexagon.getWorldPosition(intPos.x, intPos.z + 1) + new Vector3(0, .01f, 0);
-            currentHexagonBorder[1] = Instantiate(hexagonBorderModels[(int)HexagonBorders.BorderYellow]);
-            currentHexagonBorder[1].transform.position = pos1;
-
-            Vector3 pos2 = Hexagon.getWorldPosition(intPos.x, intPos.z - 1) + new Vector3(0, .01f, 0);
-            currentHexagonBorder[2] = Instantiate(hexagonBorderModels[(int)HexagonBorders.BorderYellow]);
-            currentHexagonBorder[2].transform.position = pos2;
-
-            Vector3 pos3 = Hexagon.getWorldPosition(intPos.x + 1, intPos.z) + new Vector3(0, .01f, 0);
-            currentHexagonBorder[3] = Instantiate(hexagonBorderModels[(int)HexagonBorders.BorderYellow]);
-            currentHexagonBorder[3].transform.position = pos3;
-
-            Vector3 pos4 = Hexagon.getWorldPosition(intPos.x - 1, intPos.z + 1) + new Vector3(0, .01f, 0);
-            currentHexagonBorder[4] = Instantiate(hexagonBorderModels[(int)HexagonBorders.BorderYellow]);
-            currentHexagonBorder[4].transform.position = pos4;
-
-            Vector3 pos5 = Hexagon.getWorldPosition(intPos.x - 1, intPos.z - 1) + new Vector3(0, .01f, 0);
-            currentHexagonBorder[5] = Instantiate(hexagonBorderModels[(int)HexagonBorders.BorderYellow]);
-            currentHexagonBorder[5].transform.position = pos5;
-
-            Vector3 pos6 = Hexagon.getWorldPosition(intPos.x - 1, intPos.z) + new Vector3(0, .01f, 0);
-            currentHexagonBorder[6] = Instantiate(hexagonBorderModels[(int)HexagonBorders.BorderYellow]);
-            currentHexagonBorder[6].transform.position = pos6;
-        }
-        else
-        {
+            //Get the neighbours for every element in currentLayer
+            foreach (Vector2Int v in currentLayer)
             {
-                Vector3 pos1 = Hexagon.getWorldPosition(intPos.x, intPos.z + 1) + new Vector3(0, .01f, 0);
-                currentHexagonBorder[1] = Instantiate(hexagonBorderModels[(int)HexagonBorders.BorderYellow]);
-                currentHexagonBorder[1].transform.position = pos1;
-
-                Vector3 pos2 = Hexagon.getWorldPosition(intPos.x, intPos.z - 1) + new Vector3(0, .01f, 0);
-                currentHexagonBorder[2] = Instantiate(hexagonBorderModels[(int)HexagonBorders.BorderYellow]);
-                currentHexagonBorder[2].transform.position = pos2;
-
-                Vector3 pos3 = Hexagon.getWorldPosition(intPos.x - 1, intPos.z) + new Vector3(0, .01f, 0);
-                currentHexagonBorder[3] = Instantiate(hexagonBorderModels[(int)HexagonBorders.BorderYellow]);
-                currentHexagonBorder[3].transform.position = pos3;
-
-                Vector3 pos4 = Hexagon.getWorldPosition(intPos.x + 1, intPos.z + 1) + new Vector3(0, .01f, 0);
-                currentHexagonBorder[4] = Instantiate(hexagonBorderModels[(int)HexagonBorders.BorderYellow]);
-                currentHexagonBorder[4].transform.position = pos4;
-
-                Vector3 pos5 = Hexagon.getWorldPosition(intPos.x + 1, intPos.z - 1) + new Vector3(0, .01f, 0);
-                currentHexagonBorder[5] = Instantiate(hexagonBorderModels[(int)HexagonBorders.BorderYellow]);
-                currentHexagonBorder[5].transform.position = pos5;
-
-                Vector3 pos6 = Hexagon.getWorldPosition(intPos.x + 1, intPos.z) + new Vector3(0, .01f, 0);
-                currentHexagonBorder[6] = Instantiate(hexagonBorderModels[(int)HexagonBorders.BorderYellow]);
-                currentHexagonBorder[6].transform.position = pos6;
+                //Put the neighbours to the lists
+                List<Vector2Int> list = Hexagon.getNeighbours(v);
+                foreach (Vector2Int v2 in list)
+                {
+                    if(!v2.Equals(intPos) && !neighbours.Contains(v2))
+                    {
+                        neighbours.Add(v2);
+                        nextLayer.Add(v2);
+                    }
+                }
             }
+
+            currentLayer = nextLayer;
+            nextLayer = new List<Vector2Int>();
+        }
+
+        //Generate the yellow border
+        Vector2Int[] allNeighbours = neighbours.ToArray();
+        for (int i = 0; i < allNeighbours.Length; i++)
+        {
+            Vector3 posBorder = Hexagon.getWorldPosition(allNeighbours[i]) + new Vector3(0, .01f, 0);
+            currentHexagonBorder[i + 1] = Instantiate(hexagonBorderModels[(int)HexagonBorders.BorderYellow]);
+            currentHexagonBorder[i + 1].transform.position = posBorder;
         }
     }
 
     public void destroyHexagonBorder()
     {
-        for (int i = 0; i < 7; i++)
+        for (int i = 0; i < currentHexagonBorder.Length; i++)
         {
             Destroy(currentHexagonBorder[i]);
         }

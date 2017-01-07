@@ -14,6 +14,8 @@ public class BuildBuilding : MonoBehaviour {
         }
         else
         {
+            Building building = GetComponent<Building>();
+            building.buildBuilding();
             Destroy(this);
         }
     }

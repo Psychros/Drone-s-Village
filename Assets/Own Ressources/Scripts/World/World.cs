@@ -25,6 +25,7 @@ public class World : MonoBehaviour
     //Other stuff
     [HideInInspector] public GameObject[] currentHexagonBorder;
     [HideInInspector] public List<NPC> npcs = new List<NPC>();
+    [HideInInspector] public Inventory inventory;
 
     // Use this for initialization
     void Start()
@@ -43,6 +44,9 @@ public class World : MonoBehaviour
 
         //Initialize the Hexagonborder
         currentHexagonBorder = new GameObject[150];
+
+        //Get the inventory
+        inventory = GetComponent<Inventory>();
     }
 
 

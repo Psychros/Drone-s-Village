@@ -180,13 +180,24 @@ public class NPC : MonoBehaviour {
         {
             World.instance.changeStructure(des.x, des.z, Structures.StoreHouse);
             GameObject g = World.instance.getStructureGameObject(des.x, des.z);
-            g.transform.position = new Vector3(g.transform.position.x, - 1.014f, g.transform.position.z);
-            g.AddComponent<BuildBuilding>();
+
+            //The building can only be build if there are enough ressources
+            if (World.instance.inventory.hasRessources(g.GetComponent<Building>().costs))
+            {
+                World.instance.inventory.removeRessources(g.GetComponent<Building>().costs);
+                g.transform.position = new Vector3(g.transform.position.x, -1.014f, g.transform.position.z);
+                g.AddComponent<BuildBuilding>();
+            }
+            else
+            {
+                //Reset the structure
+                World.instance.changeStructure(des.x, des.z, Structures.None);
+            }
         }
     }
 
     public void resetMovePower()
     {
-        movePower = MOVE_POWER;
+        movePower += MOVE_POWER;
     }
 }

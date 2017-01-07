@@ -20,7 +20,7 @@ public class CutTree : MonoBehaviour {
             World.instance.changeStructure(pos.x, pos.z, Structures.None);
 
             //Adds a wood
-            World.instance.GetComponent<Inventory>().addRessources(Ressources.Wood, 1);
+            World.instance.GetComponent<Inventory>().addRessource(Ressources.Wood, 1);
 
             Destroy(gameObject);
             Destroy(this);

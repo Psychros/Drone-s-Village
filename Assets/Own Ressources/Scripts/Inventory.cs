@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using System.Collections;
+using System.Collections.Generic;
 
 public class Inventory : MonoBehaviour {
     public int capacity = 20;
@@ -23,7 +23,7 @@ public class Inventory : MonoBehaviour {
             //Show all startressources
             for (int i = 0; i < ressourcesTextFields1.Length; i++)
             {
-                addRessources((Ressources)i, 0);
+                addRessource((Ressources)i, 0);
             }
             firstUpdate = false;
         }
@@ -34,7 +34,7 @@ public class Inventory : MonoBehaviour {
      * If the the final value is out of the bounds of the inventory, the difference is given back
      * The bounds are not important for money
      */
-    public int addRessources(Ressources ressource, int number)
+    public int addRessource(Ressources ressource, int number)
     {
         int currentNumber = ressources[(int)ressource];
         ressources[(int)ressource] += number;
@@ -62,6 +62,14 @@ public class Inventory : MonoBehaviour {
         return 0;
     }
 
+    public void removeRessources(List<Cost> costs)
+    {
+        foreach (Cost c in costs)
+        {
+            addRessource(c.ressource, -c.number);
+        }
+    }
+
 
     //Change the capacity
     public void addCapacity(int number)
@@ -74,6 +82,26 @@ public class Inventory : MonoBehaviour {
         {
             storeTextFields[i].text = formatNumber(capacity);
         }
+    }
+
+    public bool hasRessource(Ressources ressource, int number)
+    {
+        return ressources[(int)ressource] >= number;
+    }
+
+    public bool hasRessources(List<Cost> costs)
+    {
+        foreach (Cost c in costs)
+        {
+            if (!hasRessource(c.ressource, c.number))
+                return false;
+        }
+        return true;
+    }
+
+    public int getNumber(Ressources ressource)
+    {
+        return ressources[(int)ressource];
     }
 
 

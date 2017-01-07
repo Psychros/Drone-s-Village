@@ -1,12 +1,13 @@
 ﻿using UnityEngine;
-using System.Collections;
+using System.Collections.Generic;
 
 public class NPC : MonoBehaviour {
 
     [HideInInspector]public bool isMoving;
     public float speed = 2f, turnSpeed = 150f;
-    public const int MOVE_POWER = 5;   //The maximal movePower of the NPC
-    public int movePower;          //The current movePower of the NPC
+    public const int MOVE_POWER = 5;     //The maximal movePower of the NPC
+    public int movePower;                //The current movePower of the NPC
+    public static List<Vector2Int> allFinalDestinations = new List<Vector2Int>();//The finalDestinations of all NPCs
 
     private Vector3 nextDestination;
     public Vector3 NextDestination
@@ -19,15 +20,20 @@ public class NPC : MonoBehaviour {
     {
         get {return finalDestination;}
         set {
-            World.instance.setNPCAtPosition(null, nextDestination); //Resets the hexagonNPC at the old position
-            finalDestination = value;
-            isMoving = true;
+            if (!allFinalDestinations.Contains(value))
+            {
+                allFinalDestinations.Add(value);
 
-            //Removes the hexagonBorder when the NPC gets a new destination
-            World.instance.destroyHexagonBorder();
+                World.instance.setNPCAtPosition(null, nextDestination); //Resets the hexagonNPC at the old position
+                finalDestination = value;
+                isMoving = true;
 
-            selectNextDestination();
-            transform.LookAt(nextDestination + new Vector3(0, transform.position.y, 0));
+                //Removes the hexagonBorder when the NPC gets a new destination
+                World.instance.destroyHexagonBorder();
+
+                selectNextDestination();
+                transform.LookAt(nextDestination + new Vector3(0, transform.position.y, 0));
+            }
         }
     }
 
@@ -80,23 +86,7 @@ public class NPC : MonoBehaviour {
             {
                 if (Vector3.Distance(nextDestination, Hexagon.getWorldPosition(finalDestination)) < .2f)
                 {
-                    //Select the command
-                    if (InputManager.instance.cutTreeOrBuild)
-                        buildBuilding();
-                    else
-                        cutTree();
-
-                    //Set a new HexagonBorder around the NPC if it is selected
-                    if (isSelected)
-                    {
-                        Vector2Int v = Hexagon.getHexPositionInt(nextDestination);
-                        World.instance.generateHexagonBorder(v, movePower);
-                    }
-
-                    //save that there is a NPC at this position
-                    World.instance.setNPCAtPosition(this, nextDestination);
-
-                    isMoving = false;
+                    reachDestination();
                 }
 
                 selectNextDestination();
@@ -153,12 +143,44 @@ public class NPC : MonoBehaviour {
 
         if (v != null)
         {
-            nextDestination = Hexagon.getWorldPosition(v);
-            transform.LookAt(nextDestination + new Vector3(0, transform.position.y, 0));
+            //If there is a NPC at the destination the npc has to stand
+            if (World.instance.getNPCAtPosition(v) != null) {
+                reachDestination();
+                transform.LookAt(Hexagon.getWorldPosition(v) + new Vector3(0, transform.position.y, 0));
+            }
+            else
+            {
+                nextDestination = Hexagon.getWorldPosition(v);
+                transform.LookAt(nextDestination + new Vector3(0, transform.position.y, 0));
 
-            //Reduce the movePower
-            movePower--;
+                //Reduce the movePower
+                movePower--;
+            }
         }
+    }
+
+    public void reachDestination()
+    {
+        //Select the command
+        if (InputManager.instance.cutTreeOrBuild)
+            buildBuilding();
+        else
+            cutTree();
+
+        //Set a new HexagonBorder around the NPC if it is selected
+        if (isSelected)
+        {
+            Vector2Int v = Hexagon.getHexPositionInt(nextDestination);
+            World.instance.generateHexagonBorder(v, movePower);
+        }
+
+        //save that there is a NPC at this position
+        World.instance.setNPCAtPosition(this, nextDestination);
+
+        isMoving = false;
+
+        //Remove the destination from the destinationList
+        allFinalDestinations.Remove(finalDestination);
     }
 
 

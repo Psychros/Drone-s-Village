@@ -200,6 +200,11 @@ public class World : MonoBehaviour
         return getChunkAt(x, z).getNPCAtGlobalCoords(x, z);
     }
 
+    public NPC getNPCAtPosition(Vector2Int v)
+    {
+        return getChunkAt(v.x, v.z).getNPCAtGlobalCoords(v.x, v.z);
+    }
+
     public void setNPCAtPosition(NPC npc, Vector3 position)
     {
         Vector2Int p = Hexagon.getHexPositionInt(position);

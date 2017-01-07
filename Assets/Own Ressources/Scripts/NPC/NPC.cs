@@ -8,6 +8,7 @@ public class NPC : MonoBehaviour {
     public const int MOVE_POWER = 5;     //The maximal movePower of the NPC
     public int movePower;                //The current movePower of the NPC
     public static List<Vector2Int> allFinalDestinations = new List<Vector2Int>();//The finalDestinations of all NPCs
+    public static List<Vector2Int> allNextDestinations = new List<Vector2Int>();//The nextDestinations of all NPCs
 
     private Vector3 nextDestination;
     public Vector3 NextDestination
@@ -84,11 +85,13 @@ public class NPC : MonoBehaviour {
             //The NPC is at the goal
             if (Vector3.Distance(new Vector3(transform.position.x, 0, transform.position.z), nextDestination) < 0.2f)
             {
+                //Test if the NPC is at the finalDestination
                 if (Vector3.Distance(nextDestination, Hexagon.getWorldPosition(finalDestination)) < .2f)
                 {
                     reachDestination();
                 }
 
+                allNextDestinations.Remove(Hexagon.getHexPositionInt(nextDestination));
                 selectNextDestination();
             }
         }
@@ -144,7 +147,7 @@ public class NPC : MonoBehaviour {
         if (v != null)
         {
             //If there is a NPC at the destination the npc has to stand
-            if (World.instance.getNPCAtPosition(v) != null) {
+            if (World.instance.getNPCAtPosition(v) != null || allNextDestinations.Contains(v)) {
                 reachDestination();
                 transform.LookAt(Hexagon.getWorldPosition(v) + new Vector3(0, transform.position.y, 0));
             }
@@ -155,6 +158,8 @@ public class NPC : MonoBehaviour {
 
                 //Reduce the movePower
                 movePower--;
+
+                allNextDestinations.Add(Hexagon.getHexPositionInt(nextDestination));
             }
         }
     }

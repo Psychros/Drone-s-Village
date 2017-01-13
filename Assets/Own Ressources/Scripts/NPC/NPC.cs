@@ -25,7 +25,8 @@ public class NPC : MonoBehaviour {
             {
                 allFinalDestinations.Add(value);
 
-                World.instance.setNPCAtPosition(null, nextDestination); //Resets the hexagonNPC at the old position
+                //Resets the hexagonNPC at the old position
+                World.instance.setNPCAtPosition(null, nextDestination); 
                 finalDestination = value;
                 isMoving = true;
 
@@ -58,7 +59,7 @@ public class NPC : MonoBehaviour {
     void Start()
     {
         transform.forward = Vector3.Cross(transform.forward, transform.up);
-        Destination = Hexagon.getHexPositionInt(transform.position);
+        finalDestination = Hexagon.getHexPositionInt(transform.position);
         nextDestination = Hexagon.getWorldPosition(finalDestination.x, finalDestination.z);
         isMoving = false;
 

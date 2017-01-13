@@ -49,11 +49,11 @@ public class Chunk : MonoBehaviour{
                     else
                         chunkBiomes[i, j] = (int)Bioms.StonePlain;
                 }
-                else if (biom > .52f)
+                else if (biom > .57f)
                     chunkBiomes[i, j] = Random.value > .5 ? (Random.value > .2 ? (int)Bioms.Plain : (int)Bioms.PlainDandelion) : (int)Bioms.Forest;
-                else if (biom > .49f)
+                else if (biom > .55f)
                     chunkBiomes[i, j] = Random.value > .2 ? (int)Bioms.Desert : (int)Bioms.DesertShell;
-                else if (biom > .4f)
+                else if (biom > .52f)
                     chunkBiomes[i, j] = Random.value > .05 ? (int)Bioms.Ocean : (int)Bioms.OceanMountain;
                 else
                     chunkBiomes[i, j] = (int)Bioms.Ocean;

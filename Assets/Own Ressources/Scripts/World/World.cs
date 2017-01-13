@@ -77,7 +77,7 @@ public class World : MonoBehaviour
 
             Chunk c = getChunkAt(x, z);
             print(c.posX + ", " + c.posZ + "    " + getBiom(x, z));
-            if (getBiom(x, z) != Bioms.Ocean && getBiom(x, z) != Bioms.OceanMountain)
+            if (getBiom(x, z) == Bioms.Plain || getBiom(x, z) == Bioms.PlainDandelion || getBiom(x, z) == Bioms.Forest)
             {
                 Vector3 shipPos = Hexagon.getWorldPosition(x, z);
 

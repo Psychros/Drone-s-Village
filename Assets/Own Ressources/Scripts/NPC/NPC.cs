@@ -5,7 +5,7 @@ public class NPC : MonoBehaviour {
 
     [HideInInspector]public bool isMoving;
     public float speed = 2f, turnSpeed = 150f;
-    public const int MOVE_POWER = 5;     //The maximal movePower of the NPC
+    public int MOVE_POWER = 5;           //The maximal movePower of the NPC
     public int movePower;                //The current movePower of the NPC
     public static List<Vector2Int> allFinalDestinations = new List<Vector2Int>();//The finalDestinations of all NPCs
     public static List<Vector2Int> allNextDestinations = new List<Vector2Int>();//The nextDestinations of all NPCs
@@ -91,6 +91,8 @@ public class NPC : MonoBehaviour {
                 {
                     reachDestination();
                 }
+
+                reachHexagon();
 
                 allNextDestinations.Remove(Hexagon.getHexPositionInt(nextDestination));
                 selectNextDestination();
@@ -187,6 +189,16 @@ public class NPC : MonoBehaviour {
 
         //Remove the destination from the destinationList
         allFinalDestinations.Remove(finalDestination);
+    }
+
+
+    public void reachHexagon()
+    {
+        //InputManager.instance.activateNPCBox(this);
+
+        //save the NPCPosition
+        if(movePower == 0)
+            World.instance.setNPCAtPosition(this, nextDestination);
     }
 
 

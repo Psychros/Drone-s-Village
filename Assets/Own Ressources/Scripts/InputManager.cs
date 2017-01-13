@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 public class InputManager : MonoBehaviour {
     public static InputManager instance;
@@ -15,9 +16,12 @@ public class InputManager : MonoBehaviour {
 
     public GameObject pausemenu;
     public GameObject buildmenu;
+    public GameObject npcBpx;
+
+    public Text movePower;
 
     //False = cut, True = build
-    public bool cutTreeOrBuild = false;
+    [HideInInspector] public bool cutTreeOrBuild = false;
 
     [HideInInspector] public GameObject[] currentHexagonBorder;
     [HideInInspector] public NPC selectedNPC = null;
@@ -31,7 +35,7 @@ public class InputManager : MonoBehaviour {
     void Update()
     {
         if (Input.GetKeyDown(rightClick))
-            if(!selectedNPC.isMoving)
+            if(selectedNPC != null && !selectedNPC.isMoving)
                 selectedNPC.Destination = Hexagon.getHexPositionInt(HexagonFrame.instance.selectedPosition);
         if (Input.GetMouseButtonDown(0))
             selectNPC();
@@ -75,6 +79,8 @@ public class InputManager : MonoBehaviour {
 
             selectedNPC = World.instance.getNPCAtPosition(HexagonFrame.instance.selectedPosition);
             selectedNPC.IsSelected = true;
+
+            activateNPCBox(selectedNPC);
         }
         else
         {
@@ -84,5 +90,12 @@ public class InputManager : MonoBehaviour {
                 selectedNPC = null;
             }
         }
+    }
+
+    public void activateNPCBox(NPC npc)
+    {
+        npcBpx.SetActive(true);
+
+        movePower.text = npc.movePower + "/" + npc.MOVE_POWER;
     }
 }

@@ -299,6 +299,9 @@ public class World : MonoBehaviour
         }
 
         //Rebuild the hexagonBorder 
-        generateHexagonBorder(Hexagon.getHexPositionInt(InputManager.instance.selectedNPC.NextDestination), InputManager.instance.selectedNPC.movePower);
+        if (!InputManager.instance.selectedNPC.isMoving)
+            generateHexagonBorder(Hexagon.getHexPositionInt(InputManager.instance.selectedNPC.NextDestination), InputManager.instance.selectedNPC.movePower);
+        else
+            destroyHexagonBorder();
     }
 }

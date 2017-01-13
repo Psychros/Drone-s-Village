@@ -225,6 +225,9 @@ public class NPC : MonoBehaviour {
 
     public void resetMovePower()
     {
-        movePower += MOVE_POWER;
+        if(movePower < 0)
+            movePower += MOVE_POWER;
+        else
+            movePower = MOVE_POWER;
     }
 }

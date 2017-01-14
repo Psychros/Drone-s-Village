@@ -16,6 +16,12 @@ public class NPC : MonoBehaviour {
         get { return nextDestination; }
     }
 
+    private Vector3 curPos;
+    public Vector3 CurDestination
+    {
+        get { return curPos; }
+    }
+
     private Vector2Int finalDestination;
     public Vector2Int Destination
     {
@@ -47,7 +53,7 @@ public class NPC : MonoBehaviour {
             isSelected = value;
             if (isSelected)
             {
-                Vector2Int posOfHexagonBorder = Hexagon.getHexPositionInt(nextDestination);
+                Vector2Int posOfHexagonBorder = Hexagon.getHexPositionInt(curPos);
                 World.instance.generateHexagonBorder(posOfHexagonBorder, movePower);
             }
             else
@@ -61,6 +67,7 @@ public class NPC : MonoBehaviour {
         transform.forward = Vector3.Cross(transform.forward, transform.up);
         finalDestination = Hexagon.getHexPositionInt(transform.position);
         nextDestination = Hexagon.getWorldPosition(finalDestination.x, finalDestination.z);
+        curPos = nextDestination;
         isMoving = false;
 
         movePower = MOVE_POWER;
@@ -175,12 +182,12 @@ public class NPC : MonoBehaviour {
         //Set a new HexagonBorder around the NPC if it is selected
         if (isSelected)
         {
-            Vector2Int v = Hexagon.getHexPositionInt(nextDestination);
+            Vector2Int v = Hexagon.getHexPositionInt(curPos);
             World.instance.generateHexagonBorder(v, movePower);
         }
 
         //save that there is a NPC at this position
-        World.instance.setNPCAtPosition(this, nextDestination);
+        World.instance.setNPCAtPosition(this, curPos);
 
         isMoving = false;
 
@@ -191,13 +198,15 @@ public class NPC : MonoBehaviour {
 
     public void reachHexagon()
     {
+        curPos = nextDestination;
+
         //Reduce the movePower
         if(movePower > 0)
             movePower--;
 
         //save the NPCPosition
         if (movePower == 0)
-            World.instance.setNPCAtPosition(this, nextDestination);
+            World.instance.setNPCAtPosition(this, curPos);
 
         if(isSelected)
             InputManager.instance.recalculateNPCMovePower(this);

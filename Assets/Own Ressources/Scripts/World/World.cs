@@ -263,9 +263,13 @@ public class World : MonoBehaviour
         Vector2Int[] allNeighbours = neighbours.ToArray();
         for (int i = 0; i < allNeighbours.Length; i++)
         {
-            Vector3 posBorder = Hexagon.getWorldPosition(allNeighbours[i]) + new Vector3(0, .01f, 0);
-            currentHexagonBorder[i + 1] = Instantiate(hexagonBorderModels[(int)HexagonBorders.BorderYellow]);
-            currentHexagonBorder[i + 1].transform.position = posBorder;
+            //The position must be in the world
+            if (allNeighbours[i].x >= 0 && allNeighbours[i].x < width * Chunk.chunkSize && allNeighbours[i].z >= 0 && allNeighbours[i].z < height * Chunk.chunkSize)
+            {
+                Vector3 posBorder = Hexagon.getWorldPosition(allNeighbours[i]) + new Vector3(0, .01f, 0);
+                currentHexagonBorder[i + 1] = Instantiate(hexagonBorderModels[(int)HexagonBorders.BorderYellow]);
+                currentHexagonBorder[i + 1].transform.position = posBorder;
+            }
         }
     }
 

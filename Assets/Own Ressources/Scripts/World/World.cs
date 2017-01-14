@@ -142,8 +142,7 @@ public class World : MonoBehaviour
 
     public Bioms getBiom(Vector2Int v)
     {
-        Chunk c = getChunkAt(v.x, v.z);
-        return c.getBiomWorldCoords(v.x, v.z);
+        return getChunkAt(v.x, v.z).getBiomWorldCoords(v.x, v.z);
     }
 
 

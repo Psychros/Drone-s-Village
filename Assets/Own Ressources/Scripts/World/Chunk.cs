@@ -101,7 +101,7 @@ public class Chunk : MonoBehaviour{
     public Bioms getBiomWorldCoords(int x, int z)
     {
         Vector2Int pos = getPositionInChunk(x, z);
-        print("Worldcoords: " + x + ", " + z + "    " + "Chunkcoords: " + pos.x + ", " + pos.z + "    " + "Biom: " + (Bioms)chunkBiomes[pos.x, pos.z]);
+        //print("Worldcoords: " + x + ", " + z + "    " + "Chunkcoords: " + pos.x + ", " + pos.z + "    " + "Biom: " + (Bioms)chunkBiomes[pos.x, pos.z]);
         return (Bioms)chunkBiomes[pos.x, pos.z];
     }
 

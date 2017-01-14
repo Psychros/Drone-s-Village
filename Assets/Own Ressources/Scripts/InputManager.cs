@@ -88,6 +88,7 @@ public class InputManager : MonoBehaviour {
             {
                 selectedNPC.IsSelected = false;
                 selectedNPC = null;
+                deactivateNPCBox();
             }
         }
     }
@@ -95,7 +96,16 @@ public class InputManager : MonoBehaviour {
     public void activateNPCBox(NPC npc)
     {
         npcBpx.SetActive(true);
+        recalculateNPCMovePower(npc);
+    }
 
+    public void deactivateNPCBox()
+    {
+        npcBpx.SetActive(false);
+    }
+
+    public void recalculateNPCMovePower(NPC npc)
+    {
         movePower.text = npc.movePower + "/" + npc.MOVE_POWER;
     }
 }

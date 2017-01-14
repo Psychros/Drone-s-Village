@@ -71,7 +71,7 @@ public class NPC : MonoBehaviour {
 
 
     void Update () {
-        if (isMoving && movePower >= 0)
+        if (isMoving && movePower > 0)
         {
             //Rotation
             /*Vector3 destinationRelative = transform.InverseTransformPoint(nextDestination);
@@ -86,13 +86,13 @@ public class NPC : MonoBehaviour {
             //The NPC is at the goal
             if (Vector3.Distance(new Vector3(transform.position.x, 0, transform.position.z), nextDestination) < 0.2f)
             {
+                reachHexagon();
+
                 //Test if the NPC is at the finalDestination
                 if (Vector3.Distance(nextDestination, Hexagon.getWorldPosition(finalDestination)) < .2f)
                 {
                     reachDestination();
                 }
-
-                reachHexagon();
 
                 allNextDestinations.Remove(Hexagon.getHexPositionInt(nextDestination));
                 selectNextDestination();
@@ -159,9 +159,6 @@ public class NPC : MonoBehaviour {
                 nextDestination = Hexagon.getWorldPosition(v);
                 transform.LookAt(nextDestination + new Vector3(0, transform.position.y, 0));
 
-                //Reduce the movePower
-                movePower--;
-
                 allNextDestinations.Add(Hexagon.getHexPositionInt(nextDestination));
             }
         }
@@ -194,11 +191,16 @@ public class NPC : MonoBehaviour {
 
     public void reachHexagon()
     {
-        //InputManager.instance.activateNPCBox(this);
+        //Reduce the movePower
+        if(movePower > 0)
+            movePower--;
 
         //save the NPCPosition
-        if(movePower == 0)
+        if (movePower == 0)
             World.instance.setNPCAtPosition(this, nextDestination);
+
+        if(isSelected)
+            InputManager.instance.recalculateNPCMovePower(this);
     }
 
 

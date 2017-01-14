@@ -80,7 +80,7 @@ public class InputManager : MonoBehaviour {
             selectedNPC = World.instance.getNPCAtPosition(HexagonFrame.instance.selectedPosition);
             selectedNPC.IsSelected = true;
 
-            activateNPCBox(selectedNPC);
+            activateNPCBox();
         }
         else
         {
@@ -93,10 +93,10 @@ public class InputManager : MonoBehaviour {
         }
     }
 
-    public void activateNPCBox(NPC npc)
+    public void activateNPCBox()
     {
         npcBpx.SetActive(true);
-        recalculateNPCMovePower(npc);
+        recalculateNPCMovePower();
     }
 
     public void deactivateNPCBox()
@@ -104,8 +104,8 @@ public class InputManager : MonoBehaviour {
         npcBpx.SetActive(false);
     }
 
-    public void recalculateNPCMovePower(NPC npc)
+    public void recalculateNPCMovePower()
     {
-        movePower.text = npc.movePower + "/" + npc.MOVE_POWER;
+        movePower.text = selectedNPC.movePower + "/" + selectedNPC.MOVE_POWER;
     }
 }

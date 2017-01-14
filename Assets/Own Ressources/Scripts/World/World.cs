@@ -91,19 +91,6 @@ public class World : MonoBehaviour
                 g.transform.position = shipPos + droneModel.transform.position;
                 setNPCAtPosition(drone, g.transform.position);
 
-                //Place the second drone over the ship
-                GameObject g2 = Instantiate(droneModel);
-                NPC drone2 = g2.AddComponent<NPC>();
-                Vector2Int v = Hexagon.getHexPositionInt(shipPos);
-                g2.transform.position = Hexagon.getWorldPosition(v.x+1, v.z) + droneModel.transform.position;
-                setNPCAtPosition(drone2, g2.transform.position);
-
-                //Place the third drone over the ship
-                GameObject g3 = Instantiate(droneModel);
-                NPC drone3 = g3.AddComponent<NPC>();
-                g3.transform.position = Hexagon.getWorldPosition(v.x - 1, v.z) + droneModel.transform.position;
-                setNPCAtPosition(drone3, g3.transform.position);
-
                 //Focus the camera
                 Camera.main.transform.position = shipPos + new Vector3(0, Camera.main.transform.position.y, -8f);
                 break;
@@ -299,9 +286,12 @@ public class World : MonoBehaviour
             npc.resetMovePower();
         }
 
-        //Rebuild the hexagonBorder 
+        //Rebuild the hexagonBorder and the npcBox
         if (!InputManager.instance.selectedNPC.isMoving)
+        {
             generateHexagonBorder(Hexagon.getHexPositionInt(InputManager.instance.selectedNPC.NextDestination), InputManager.instance.selectedNPC.movePower);
+            InputManager.instance.recalculateNPCMovePower();
+        }
         else
             destroyHexagonBorder();
     }

@@ -209,7 +209,7 @@ public class NPC : MonoBehaviour {
             World.instance.setNPCAtPosition(this, curPos);
 
         if(isSelected)
-            InputManager.instance.recalculateNPCMovePower(this);
+            InputManager.instance.recalculateNPCMovePower();
     }
 
 

@@ -38,8 +38,8 @@ public class Chunk : MonoBehaviour{
                 float z = World.instance.offsetZ + (float)(j + posZ) / worldConstant * 5f;
                 float biom = Mathf.PerlinNoise(x, z);
 
-                if (biom > .85f)
-                    chunkBiomes[i, j] = (int)Bioms.HighMountain;
+                if (biom > .8f)
+                    chunkBiomes[i, j] = Random.value > .3 ? (int)Bioms.HighMountain : (int)Bioms.Mountain;
                 else if (biom > .8f)
                     chunkBiomes[i, j] = (int)Bioms.Mountain;
                 else if (biom > .75f)

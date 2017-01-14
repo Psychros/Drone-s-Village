@@ -27,7 +27,7 @@ public class NPC : MonoBehaviour {
     {
         get {return finalDestination;}
         set {
-            if (!allFinalDestinations.Contains(value))
+            if (World.instance.getBiom(value) != Bioms.HighMountain && !allFinalDestinations.Contains(value))
             {
                 allFinalDestinations.Add(value);
 

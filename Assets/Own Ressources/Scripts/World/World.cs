@@ -140,6 +140,12 @@ public class World : MonoBehaviour
         return c.getBiomWorldCoords(x, z);
     }
 
+    public Bioms getBiom(Vector2Int v)
+    {
+        Chunk c = getChunkAt(v.x, v.z);
+        return c.getBiomWorldCoords(v.x, v.z);
+    }
+
 
     //changes the biom of a hexagon
     public void changeBiom(int x, int z, Bioms newBiom)
@@ -259,7 +265,7 @@ public class World : MonoBehaviour
             nextLayer = new List<Vector2Int>();
         }
 
-        //Generate the yellow border
+        //Generate the remaining border
         Vector2Int[] allNeighbours = neighbours.ToArray();
         for (int i = 0; i < allNeighbours.Length; i++)
         {
@@ -267,7 +273,14 @@ public class World : MonoBehaviour
             if (allNeighbours[i].x >= 0 && allNeighbours[i].x < width * Chunk.chunkSize && allNeighbours[i].z >= 0 && allNeighbours[i].z < height * Chunk.chunkSize)
             {
                 Vector3 posBorder = Hexagon.getWorldPosition(allNeighbours[i]) + new Vector3(0, .01f, 0);
-                currentHexagonBorder[i + 1] = Instantiate(hexagonBorderModels[(int)HexagonBorders.BorderYellow]);
+
+                //Red border on High Mountains
+                if (getBiom(allNeighbours[i]) == Bioms.HighMountain)
+                    currentHexagonBorder[i + 1] = Instantiate(hexagonBorderModels[(int)HexagonBorders.BorderRed]);
+                //Otherwise generate a yellow border
+                else
+                    currentHexagonBorder[i + 1] = Instantiate(hexagonBorderModels[(int)HexagonBorders.BorderYellow]);
+
                 currentHexagonBorder[i + 1].transform.position = posBorder;
             }
         }
@@ -290,13 +303,16 @@ public class World : MonoBehaviour
             npc.resetMovePower();
         }
 
-        //Rebuild the hexagonBorder and the npcBox
+        //Rebuild the hexagonBorder
         if (!InputManager.instance.selectedNPC.isMoving)
         {
             generateHexagonBorder(Hexagon.getHexPositionInt(InputManager.instance.selectedNPC.NextDestination), InputManager.instance.selectedNPC.movePower);
-            InputManager.instance.recalculateNPCMovePower();
         }
         else
             destroyHexagonBorder();
+
+        //Rebuild the npcBox
+        if(InputManager.instance.selectedNPC != null)
+            InputManager.instance.recalculateNPCMovePower();
     }
 }

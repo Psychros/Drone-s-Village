@@ -17,7 +17,7 @@ public class NPC : MonoBehaviour {
     }
 
     private Vector3 curPos;
-    public Vector3 CurDestination
+    public Vector3 CurPosition
     {
         get { return curPos; }
     }
@@ -27,7 +27,7 @@ public class NPC : MonoBehaviour {
     {
         get {return finalDestination;}
         set {
-            if (World.instance.getBiom(value) != Bioms.HighMountain && !allFinalDestinations.Contains(value))
+            if (World.instance.getBiom(value) != Bioms.HighMountain && !allFinalDestinations.Contains(value) && value != Hexagon.getHexPositionInt(curPos))
             {
                 allFinalDestinations.Add(value);
 
@@ -112,46 +112,8 @@ public class NPC : MonoBehaviour {
     {
         Vector2Int pos = Hexagon.getHexPositionInt(nextDestination);
 
-        //Calculate the directionvector
-        int x = 0, z = 0;
-        if (finalDestination.x - pos.x > 0)
-            x = 1;
-        else if (finalDestination.x - pos.x < 0)
-            x = -1;
-
-        if (finalDestination.z - pos.z > 0)
-            z = 1;
-        else if (finalDestination.z - pos.z < 0)
-            z = -1;
-
-        //Get the next hexagon
-        Vector2Int v = null;
-        if (x == 1 && z == 1)
-            v = Hexagon.getHexagonTopRight(pos);
-        if (x == -1 && z == 1)
-            v = Hexagon.getHexagonTopLeft(pos);
-        if (x == 1 && z == 0)
-            v = Hexagon.getHexagonRight(pos);
-        if (x == -1 && z == 0)
-            v = Hexagon.getHexagonLeft(pos);
-        if (x == 1 && z == -1)
-            v = Hexagon.getHexagonDownRight(pos);
-        if (x == -1 && z == -1)
-            v = Hexagon.getHexagonDownLeft(pos);
-        if (x == 0 && z == -1)
-        {
-            if(pos.z % 2 == 0)
-                v = Hexagon.getHexagonDownRight(pos);
-            else
-                v = Hexagon.getHexagonDownLeft(pos);
-        }
-        if (x == 0 && z == 1)
-        {
-            if (pos.z % 2 == 0)
-                v = Hexagon.getHexagonTopRight(pos);
-            else
-                v = Hexagon.getHexagonTopLeft(pos);
-        }
+        //Calculate the directionVector
+        Vector2Int v = Hexagon.nextHexagon(pos, finalDestination);
 
 
         if (v != null)

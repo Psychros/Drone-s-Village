@@ -2,5 +2,5 @@
 using System.Collections;
 
 public enum HexagonBorders {
-    BorderBlue, BorderYellow, BorderRed
+    BorderBlue, BorderYellow, BorderRed, BorderLightGray, BorderDarkGray
 }

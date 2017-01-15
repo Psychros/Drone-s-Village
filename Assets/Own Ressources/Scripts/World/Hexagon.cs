@@ -147,4 +147,52 @@ public class Hexagon : MonoBehaviour {
         return list;
     }
 
+    //Returns the next destination on the way from curPos to endPos
+    public static Vector2Int nextHexagon(Vector2Int curPos, Vector2Int endPos)
+    {
+        if (curPos == endPos)
+            return null;
+
+        int x = 0, z = 0;
+        if (endPos.x - curPos.x > 0)
+            x = 1;
+        else if (endPos.x - curPos.x < 0)
+            x = -1;
+
+        if (endPos.z - curPos.z > 0)
+            z = 1;
+        else if (endPos.z - curPos.z < 0)
+            z = -1;
+
+        //Get the next hexagon
+        Vector2Int v = null;
+        if (x == 1 && z == 1)
+            v = getHexagonTopRight(curPos);
+        if (x == -1 && z == 1)
+            v = getHexagonTopLeft(curPos);
+        if (x == 1 && z == 0)
+            v = getHexagonRight(curPos);
+        if (x == -1 && z == 0)
+            v = getHexagonLeft(curPos);
+        if (x == 1 && z == -1)
+            v = getHexagonDownRight(curPos);
+        if (x == -1 && z == -1)
+            v = getHexagonDownLeft(curPos);
+        if (x == 0 && z == -1)
+        {
+            if (curPos.z % 2 == 0)
+                v = getHexagonDownRight(curPos);
+            else
+                v = getHexagonDownLeft(curPos);
+        }
+        if (x == 0 && z == 1)
+        {
+            if (curPos.z % 2 == 0)
+                v = getHexagonTopRight(curPos);
+            else
+                v = getHexagonTopLeft(curPos);
+        }
+
+        return v;
+    }
 }

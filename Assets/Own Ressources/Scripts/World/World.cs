@@ -24,6 +24,7 @@ public class World : MonoBehaviour
 
     //Other stuff
     [HideInInspector] public GameObject[] currentHexagonBorder;
+    [HideInInspector] public GameObject[] wayHexagonBorder;
     [HideInInspector] public List<NPC> npcs = new List<NPC>();
     [HideInInspector] public Inventory inventory;
 
@@ -44,6 +45,7 @@ public class World : MonoBehaviour
 
         //Initialize the Hexagonborder
         currentHexagonBorder = new GameObject[150];
+        wayHexagonBorder     = new GameObject[100];
 
         //Get the inventory
         inventory = GetComponent<Inventory>();
@@ -92,7 +94,7 @@ public class World : MonoBehaviour
                 setNPCAtPosition(drone, g.transform.position);
 
                 //Focus the camera
-                Camera.main.transform.position = shipPos + new Vector3(0, Camera.main.transform.position.y, -8f);
+                Camera.main.GetComponent<CameraController>().focusOn(shipPos);
                 break;
             }
         }
@@ -293,6 +295,47 @@ public class World : MonoBehaviour
         }
     }
 
+    //Shows the way that a npc has to fly
+    public void showWay(Vector2Int endPos)
+    {
+        destroyWayBorder();
+
+        Vector2Int curPos = Hexagon.getHexPositionInt(InputManager.instance.selectedNPC.CurPosition);
+        int movePower = InputManager.instance.selectedNPC.movePower;
+
+        //Calculate and show the way
+        for (int i=0; curPos != endPos &&curPos != endPos && i < wayHexagonBorder.Length; i++)
+        {
+            Vector2Int nextPos = Hexagon.nextHexagon(curPos, endPos);
+
+            if (nextPos != null)
+            {
+                //Show in the way the range of the npc in lightGray and the rest in darkGray
+                if (movePower > 0)
+                {
+                    wayHexagonBorder[i] = Instantiate(hexagonBorderModels[(int)HexagonBorders.BorderDarkGray]);
+
+                    movePower--;
+                }
+                else
+                {
+                    wayHexagonBorder[i] = Instantiate(hexagonBorderModels[(int)HexagonBorders.BorderDarkGray]);
+                }
+                wayHexagonBorder[i].transform.position = Hexagon.getWorldPosition(nextPos) + new Vector3(0, .02f, 0);
+
+                //The way starts now from the next field
+                curPos = nextPos;
+            }
+        }
+    }
+
+    public void destroyWayBorder()
+    {
+        for (int i = 0; i < wayHexagonBorder.Length; i++)
+        {
+            Destroy(wayHexagonBorder[i]);
+        }
+    }
 
     public void nextRound()
     {

@@ -29,7 +29,7 @@ public class HexagonFrame : MonoBehaviour {
         //Set the position of the hexagonFrame to the selected Hexagon
         if ((CameraController.instance.isMoving) || (mousePosition.x != Input.mousePosition.x) || (mousePosition.y != Input.mousePosition.y))
         {
-            //If the player selects no hexagon the position is Vector3.down
+            //If the player selects no hexagon the position is RayCastManager.noResult
             hexagonFrame.transform.position = RayCastManager.getWorldCoordsRaycast("Hexagon");
             selectedPosition = hexagonFrame.transform.position;
         }

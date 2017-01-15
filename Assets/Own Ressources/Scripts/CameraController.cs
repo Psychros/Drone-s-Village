@@ -140,4 +140,9 @@ public class CameraController : MonoBehaviour {
         //Move the camera
         Camera.main.transform.position += new Vector3(moveX2, 0, moveZ2);
     }
+
+    public void focusOn(Vector3 v)
+    {
+        transform.position = v + new Vector3(0, Camera.main.transform.position.y, -8f);
+    }
 }

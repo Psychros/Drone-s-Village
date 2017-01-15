@@ -7,12 +7,12 @@ public class InputManager : MonoBehaviour {
 
     public Texture2D mouseIcon; 
 
-    public KeyCode rightClick     = KeyCode.Mouse1;
-    public KeyCode leftClick      = KeyCode.Mouse0;
-    public KeyCode switchFunction = KeyCode.E;
-    public KeyCode buildmenuKey   = KeyCode.F;
-    public KeyCode nextRoundKey   = KeyCode.N;
-    public KeyCode pausemenuKey   = KeyCode.Escape;
+    public KeyCode selectDestination = KeyCode.Mouse1;
+    public KeyCode switchFunction    = KeyCode.E;
+    public KeyCode buildmenuKey      = KeyCode.B;
+    public KeyCode focusCameraKey    = KeyCode.F;
+    public KeyCode nextRoundKey      = KeyCode.N;
+    public KeyCode pausemenuKey      = KeyCode.Escape;
 
     public GameObject pausemenu;
     public GameObject buildmenu;
@@ -22,8 +22,6 @@ public class InputManager : MonoBehaviour {
 
     //False = cut, True = build
     [HideInInspector] public bool cutTreeOrBuild = false;
-
-    [HideInInspector] public GameObject[] currentHexagonBorder;
     [HideInInspector] public NPC selectedNPC = null;
 
     void Start()
@@ -34,11 +32,26 @@ public class InputManager : MonoBehaviour {
 
     void Update()
     {
-        if (Input.GetKeyDown(rightClick))
-            if(selectedNPC != null && !selectedNPC.isMoving)
-                selectedNPC.Destination = Hexagon.getHexPositionInt(HexagonFrame.instance.selectedPosition);
+        //LeftMouseButton
         if (Input.GetMouseButtonDown(0))
             selectNPC();
+
+        //Set the destination for a npc
+        if (Input.GetKeyUp(selectDestination))
+            if (selectedNPC != null && !selectedNPC.isMoving && HexagonFrame.instance.selectedPosition != RayCastManager.noResult)
+            {
+                selectedNPC.Destination = Hexagon.getHexPositionInt(HexagonFrame.instance.selectedPosition);
+                World.instance.destroyWayBorder();
+            }
+
+        //Show the way that a npc has to fly
+        if (Input.GetKey(selectDestination))
+        {
+            if (selectedNPC != null && !selectedNPC.isMoving && HexagonFrame.instance.selectedPosition != RayCastManager.noResult)
+                World.instance.showWay(Hexagon.getHexPositionInt(HexagonFrame.instance.selectedPosition));
+            else
+                World.instance.destroyWayBorder();
+        }
 
         if (Input.GetKeyDown(switchFunction))
             cutTreeOrBuild = !cutTreeOrBuild;
@@ -57,6 +70,10 @@ public class InputManager : MonoBehaviour {
 
         if (Input.GetKeyDown(nextRoundKey))
             World.instance.nextRound();
+
+        if (Input.GetKeyDown(focusCameraKey))
+            Camera.main.GetComponent<CameraController>().focusOn(HexagonFrame.instance.selectedPosition);
+
     }
 
     public void activateMenu(GameObject menu)
@@ -108,4 +125,6 @@ public class InputManager : MonoBehaviour {
     {
         movePower.text = selectedNPC.movePower + "/" + selectedNPC.MOVE_POWER;
     }
+
+    
 }

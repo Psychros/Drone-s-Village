@@ -72,6 +72,7 @@ public class CameraController : MonoBehaviour {
         currentMouseMoveSpeed = currentMoveSpeed / 3f;
     }
 
+    //Uses the mousePosition
     private void moveCameraAtTheScreenEdge()
     {
         //Reset isMoving
@@ -139,6 +140,24 @@ public class CameraController : MonoBehaviour {
 
         //Move the camera
         Camera.main.transform.position += new Vector3(moveX2, 0, moveZ2);
+    }
+
+    //Moves the camera in the Direction d
+    public void move(Direction d)
+    {
+        float moveX = 0;
+        float moveZ = 0;
+
+        if (d == Direction.Forward)
+            moveZ = 1;
+        else if (d == Direction.Back)
+            moveZ = -1;
+        else if (d == Direction.Right)
+            moveX = 1;
+        else if(d == Direction.Left)
+            moveX = -1;
+
+        moveCamera(moveX * currentMoveSpeed, moveZ * currentMoveSpeed);
     }
 
     public void focusOn(Vector3 v)

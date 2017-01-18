@@ -10,9 +10,15 @@ public class InputManager : MonoBehaviour {
     public KeyCode selectDestination = KeyCode.Mouse1;
     public KeyCode switchFunction    = KeyCode.E;
     public KeyCode buildmenuKey      = KeyCode.B;
-    public KeyCode focusCameraKey    = KeyCode.F;
     public KeyCode nextRoundKey      = KeyCode.N;
     public KeyCode pausemenuKey      = KeyCode.Escape;
+
+    //CameraKeys
+    public KeyCode focusCameraKey = KeyCode.F;
+    public KeyCode moveForwardKey = KeyCode.W;
+    public KeyCode moveLeftKey    = KeyCode.A;
+    public KeyCode moveBackKey    = KeyCode.S;
+    public KeyCode moveRightKey   = KeyCode.D;
 
     public GameObject pausemenu;
     public GameObject buildmenu;
@@ -59,6 +65,9 @@ public class InputManager : MonoBehaviour {
         if (Input.GetKeyDown(nextRoundKey))
             World.instance.nextRound();
 
+        if(Input.GetKeyDown(moveForwardKey))
+
+
 
         /*
          * Keys for controlling the camera
@@ -67,6 +76,14 @@ public class InputManager : MonoBehaviour {
         if (Input.GetKeyDown(focusCameraKey) && selectedNPC != null)
             Camera.main.GetComponent<CameraController>().focusOn(selectedNPC.CurPosition);
 
+        if (Input.GetKey(moveForwardKey))
+            Camera.main.GetComponent<CameraController>().move(Direction.Forward);
+        if (Input.GetKey(moveBackKey))
+            Camera.main.GetComponent<CameraController>().move(Direction.Back);
+        if (Input.GetKey(moveRightKey))
+            Camera.main.GetComponent<CameraController>().move(Direction.Right);
+        if (Input.GetKey(moveLeftKey))
+            Camera.main.GetComponent<CameraController>().move(Direction.Left);
 
 
         /*

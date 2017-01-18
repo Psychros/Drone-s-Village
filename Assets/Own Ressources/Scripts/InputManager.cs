@@ -23,6 +23,7 @@ public class InputManager : MonoBehaviour {
     //False = cut, True = build
     [HideInInspector] public bool cutTreeOrBuild = false;
     [HideInInspector] public NPC selectedNPC = null;
+    private bool isSelecting = false;
 
     void Start()
     {
@@ -32,20 +33,58 @@ public class InputManager : MonoBehaviour {
 
     void Update()
     {
-        //LeftMouseButton
-        if (Input.GetMouseButtonDown(0))
+        //Select or deselect a npc
+        if (Input.GetMouseButtonDown(0) && !isSelecting)
             selectNPC();
 
-        //Set the destination for a npc
-        if (Input.GetKeyUp(selectDestination))
-            if (selectedNPC != null && !selectedNPC.isMoving && HexagonFrame.instance.selectedPosition != RayCastManager.noResult)
-            {
-                selectedNPC.Destination = Hexagon.getHexPositionInt(HexagonFrame.instance.selectedPosition);
-                World.instance.destroyWayBorder();
-            }
+        //Switch between cut or build
+        if (Input.GetKeyDown(switchFunction))
+            cutTreeOrBuild = !cutTreeOrBuild;
+
+        //Open the buildmenu
+        if (Input.GetKeyDown(buildmenuKey))
+            if (!buildmenu.active)
+                activateMenu(buildmenu);
+            else
+                deactivateMenu(buildmenu);
+
+        //Open the pausemenu
+        if (Input.GetKeyDown(pausemenuKey))
+            if (!pausemenu.active)
+                activateMenu(pausemenu);
+            else
+                deactivateMenu(pausemenu);
+
+        //start the next round
+        if (Input.GetKeyDown(nextRoundKey))
+            World.instance.nextRound();
+
+
+        /*
+         * Keys for controlling the camera
+         */
+        //Focus the camera on the current npc
+        if (Input.GetKeyDown(focusCameraKey) && selectedNPC != null)
+            Camera.main.GetComponent<CameraController>().focusOn(selectedNPC.CurPosition);
+
+
+
+        /*
+         *  Keys for selecting the destination of a npc
+         */
+        //Start a selecting process
+        if (Input.GetKeyDown(selectDestination))
+            isSelecting = true;
+
+        //Cancel the selecting process
+        if (Input.GetMouseButtonDown(0) && isSelecting)
+        {
+            isSelecting = false;
+            World.instance.destroyWayBorder();
+        }
 
         //Show the way that a npc has to fly
-        if (Input.GetKey(selectDestination))
+        if (Input.GetKey(selectDestination) && isSelecting)
         {
             if (selectedNPC != null && !selectedNPC.isMoving && HexagonFrame.instance.selectedPosition != RayCastManager.noResult)
                 World.instance.showWay(Hexagon.getHexPositionInt(HexagonFrame.instance.selectedPosition));
@@ -53,27 +92,16 @@ public class InputManager : MonoBehaviour {
                 World.instance.destroyWayBorder();
         }
 
-        if (Input.GetKeyDown(switchFunction))
-            cutTreeOrBuild = !cutTreeOrBuild;
-
-        if (Input.GetKeyDown(buildmenuKey))
-            if (!buildmenu.active)
-                activateMenu(buildmenu);
-            else
-                deactivateMenu(buildmenu);
-
-        if (Input.GetKeyDown(pausemenuKey))
-            if (!pausemenu.active)
-                activateMenu(pausemenu);
-            else
-                deactivateMenu(pausemenu);
-
-        if (Input.GetKeyDown(nextRoundKey))
-            World.instance.nextRound();
-
-        if (Input.GetKeyDown(focusCameraKey))
-            Camera.main.GetComponent<CameraController>().focusOn(HexagonFrame.instance.selectedPosition);
-
+        //Set the destination for a npc
+        if (Input.GetKeyUp(selectDestination) && isSelecting)
+        {
+            isSelecting = false;
+            if (selectedNPC != null && !selectedNPC.isMoving && HexagonFrame.instance.selectedPosition != RayCastManager.noResult)
+            {
+                selectedNPC.Destination = Hexagon.getHexPositionInt(HexagonFrame.instance.selectedPosition);
+                World.instance.destroyWayBorder();
+            }
+        }
     }
 
     public void activateMenu(GameObject menu)

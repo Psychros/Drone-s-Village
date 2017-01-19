@@ -65,8 +65,6 @@ public class InputManager : MonoBehaviour {
         if (Input.GetKeyDown(nextRoundKey))
             World.instance.nextRound();
 
-        if(Input.GetKeyDown(moveForwardKey))
-
 
 
         /*
@@ -124,11 +122,13 @@ public class InputManager : MonoBehaviour {
     public void activateMenu(GameObject menu)
     {
         menu.SetActive(true);
+        Camera.main.GetComponent<CameraController>().enableMove = false;
     }
 
     public void deactivateMenu(GameObject menu)
     {
         menu.SetActive(false);
+        Camera.main.GetComponent<CameraController>().enableMove = false;
     }
 
     public void selectNPC()

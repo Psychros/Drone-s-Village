@@ -163,12 +163,14 @@ public class NPC : MonoBehaviour {
         curPos = nextDestination;
 
         //Reduce the movePower
-        if(movePower > 0)
+        if (movePower > 0)
             movePower--;
-
-        //save the NPCPosition
-        if (movePower == 0)
+        else
+        {
+            //Save the NPCPosition
             World.instance.setNPCAtPosition(this, curPos);
+            World.instance.generateHexagonBorder(Hexagon.getHexPositionInt(curPos), 0);
+        }
 
         if(isSelected)
             InputManager.instance.recalculateNPCMovePower();

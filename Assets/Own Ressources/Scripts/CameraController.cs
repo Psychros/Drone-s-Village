@@ -5,6 +5,7 @@ public class CameraController : MonoBehaviour {
     public static CameraController instance;
 
     //Camera
+    public bool enableMove = true;
     public float zoomSpeed = 1f;
     public float minZoom = 10f,
                  maxZoom = 60f;
@@ -13,7 +14,7 @@ public class CameraController : MonoBehaviour {
                  currentMouseMoveSpeed; //The moveSpeed for the movement with the mouse
     public float startZoom = 10;
     public bool isMoving = false;
-    [HideInInspector] public static float factor = 20;      //How far away from the Screenedge must the camera be?(Not in pixels)
+    [HideInInspector] public static float factor = 40;      //How far away from the Screenedge must the camera be?(Not in pixels)
     private Vector3 oldMousePosition;
 
 
@@ -35,8 +36,12 @@ public class CameraController : MonoBehaviour {
 
 
         //Move the camera
-        moveCameraAtTheScreenEdge();
-        moveCameraWithLeftMouse();
+        if (enableMove)
+        {
+            if(!Input.GetMouseButton(0))
+                moveCameraAtTheScreenEdge();
+            moveCameraWithLeftMouse();
+        }
 
         //Actualize the oldMousePosition
         if (oldMousePosition != Input.mousePosition)
@@ -72,7 +77,7 @@ public class CameraController : MonoBehaviour {
         currentMouseMoveSpeed = currentMoveSpeed / 3f;
     }
 
-    //Uses the mousePosition
+    //Moves the camera when the player puts the mouse in a screenedge
     private void moveCameraAtTheScreenEdge()
     {
         //Reset isMoving
@@ -111,12 +116,13 @@ public class CameraController : MonoBehaviour {
     }
 
 
+    //The player can click and drag the camera with the mouse
     public void moveCameraWithLeftMouse()
     {
         if ((!isMoving) && (Input.GetKey(KeyCode.Mouse0)) && (oldMousePosition != Input.mousePosition)) //!isMoving removes a doubled movement
         {
-            float moveX = oldMousePosition.x - Input.mousePosition.x;
-            float moveZ = oldMousePosition.y - Input.mousePosition.y;
+            float moveX = (oldMousePosition.x - Input.mousePosition.x) / Hexagon.factorX;
+            float moveZ = (oldMousePosition.y - Input.mousePosition.y) / Hexagon.factorZ;
 
             moveCamera(moveX * currentMouseMoveSpeed, moveZ * currentMouseMoveSpeed);
         }

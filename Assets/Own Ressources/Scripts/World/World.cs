@@ -301,7 +301,7 @@ public class World : MonoBehaviour
         destroyWayBorder();
 
         Vector2Int curPos = Hexagon.getHexPositionInt(InputManager.instance.selectedNPC.CurPosition);
-        int movePower = InputManager.instance.selectedNPC.movePower;
+        int movePower = InputManager.instance.selectedNPC.MovePower;
 
 
         //If there is a HighMountain on the field no border should be generated
@@ -353,7 +353,7 @@ public class World : MonoBehaviour
         //Rebuild the hexagonBorder
         if (!InputManager.instance.selectedNPC.isMoving)
         {
-            generateHexagonBorder(Hexagon.getHexPositionInt(InputManager.instance.selectedNPC.NextDestination), InputManager.instance.selectedNPC.movePower);
+            generateHexagonBorder(Hexagon.getHexPositionInt(InputManager.instance.selectedNPC.NextDestination), InputManager.instance.selectedNPC.MovePower);
         }
         else
             destroyHexagonBorder();

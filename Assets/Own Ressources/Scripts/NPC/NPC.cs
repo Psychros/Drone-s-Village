@@ -6,9 +6,25 @@ public class NPC : MonoBehaviour {
     [HideInInspector]public bool isMoving;
     public float speed = 2f, turnSpeed = 150f;
     public int MOVE_POWER = 5;           //The maximal movePower of the NPC
-    public int movePower;                //The current movePower of the NPC
     public static List<Vector2Int> allFinalDestinations = new List<Vector2Int>();//The finalDestinations of all NPCs
     public static List<Vector2Int> allNextDestinations = new List<Vector2Int>();//The nextDestinations of all NPCs
+
+    //The current movePower of the NPC
+    private int movePower;  
+    public int MovePower
+    {
+        get { return movePower; }
+        set
+        {
+            movePower = value;
+            if (isSelected)
+            {
+                InputManager.instance.recalculateNPCBox();
+                if(!isMoving)
+                    World.instance.generateHexagonBorder(Hexagon.getHexPositionInt(curPos), MovePower);
+            }
+        }
+    }              
 
     private Vector3 nextDestination;
     public Vector3 NextDestination
@@ -54,7 +70,7 @@ public class NPC : MonoBehaviour {
             if (isSelected)
             {
                 Vector2Int posOfHexagonBorder = Hexagon.getHexPositionInt(curPos);
-                World.instance.generateHexagonBorder(posOfHexagonBorder, movePower);
+                World.instance.generateHexagonBorder(posOfHexagonBorder, MovePower);
             }
             else
                 World.instance.destroyHexagonBorder();
@@ -70,7 +86,7 @@ public class NPC : MonoBehaviour {
         curPos = nextDestination;
         isMoving = false;
 
-        movePower = MOVE_POWER;
+        MovePower = MOVE_POWER;
 
         //Add the npc to the worldlist
         World.instance.npcs.Add(this);
@@ -78,16 +94,8 @@ public class NPC : MonoBehaviour {
 
 
     void Update () {
-        if (isMoving && movePower > 0)
+        if (isMoving && MovePower > 0)
         {
-            //Rotation
-            /*Vector3 destinationRelative = transform.InverseTransformPoint(nextDestination);
-            if (destinationRelative.x > 0)
-                transform.Rotate(0, turnSpeed * Time.deltaTime, 0);
-            else
-                transform.Rotate(0, turnSpeed * Time.deltaTime * -1, 0);
-            */
-
             //Position
             transform.position = Vector3.MoveTowards(transform.position, transform.position + transform.forward, Time.deltaTime * speed);
             //The NPC is at the goal
@@ -135,17 +143,11 @@ public class NPC : MonoBehaviour {
 
     public void reachDestination()
     {
-        //Select the command
-        if (InputManager.instance.cutTreeOrBuild)
-            buildBuilding();
-        else
-            cutTree();
-
         //Set a new HexagonBorder around the NPC if it is selected
         if (isSelected)
         {
             Vector2Int v = Hexagon.getHexPositionInt(curPos);
-            World.instance.generateHexagonBorder(v, movePower);
+            World.instance.generateHexagonBorder(v, MovePower);
         }
 
         //save that there is a NPC at this position
@@ -163,34 +165,34 @@ public class NPC : MonoBehaviour {
         curPos = nextDestination;
 
         //Reduce the movePower
-        if (movePower > 0)
-            movePower--;
+        if (MovePower > 0)
+            MovePower--;
         else
         {
             //Save the NPCPosition
             World.instance.setNPCAtPosition(this, curPos);
             World.instance.generateHexagonBorder(Hexagon.getHexPositionInt(curPos), 0);
         }
-
-        if(isSelected)
-            InputManager.instance.recalculateNPCBox();
     }
 
 
     public void cutTree()
     {
-        Vector2Int pos = finalDestination;
-
-        if (World.instance.getBiom(pos.x, pos.z) == Bioms.Forest)
+        if (MovePower > 0)
         {
-            World.instance.getStructureGameObject(pos.x, pos.z).AddComponent<CutTree>();
+            Vector2Int pos = finalDestination;
+
+            if (World.instance.getBiom(pos.x, pos.z) == Bioms.Forest)
+            {
+                World.instance.getStructureGameObject(pos.x, pos.z).AddComponent<CutTree>();
+                MovePower--;
+            }
         }
     }
 
     public void buildBuilding()
     {
         Vector2Int des = finalDestination;
-        //print("OwnPosition:" + pos2 + ", " + transform.position + " Destination: " + destination + "  realDestination: " + des);
         if (World.instance.getBiom(des.x, des.z) == Bioms.Plain)
         {
             World.instance.changeStructure(des.x, des.z, Structures.StoreHouse);
@@ -213,9 +215,9 @@ public class NPC : MonoBehaviour {
 
     public void resetMovePower()
     {
-        if(movePower < 0)
-            movePower += MOVE_POWER;
+        if(MovePower < 0)
+            MovePower += MOVE_POWER;
         else
-            movePower = MOVE_POWER;
+            MovePower = MOVE_POWER;
     }
 }

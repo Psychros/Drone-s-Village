@@ -157,6 +157,6 @@ public class InputManager : MonoBehaviour {
 
     public void recalculateNPCBox()
     {
-        movePower.text = selectedNPC.movePower + "/" + selectedNPC.MOVE_POWER;
+        movePower.text = selectedNPC.MovePower + "/" + selectedNPC.MOVE_POWER;
     }
 }

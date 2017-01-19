@@ -161,6 +161,7 @@ public class InputManager : MonoBehaviour {
     public void deactivateNPCCommandBox()
     {
         npcCommandBpx.SetActive(false);
+        buildmenu.SetActive(false);
     }
 
     public void recalculateNPCBox()
@@ -182,15 +183,13 @@ public class InputManager : MonoBehaviour {
         else
             t.gameObject.SetActive(false);
 
-        //BuildBuilding
-        Transform t2 = npcCommandBpx.transform.FindChild("Build Button");
+        //Activate the buildMenu
         if (World.instance.getBiom(Hexagon.getHexPositionInt(selectedNPC.CurPosition)) == Bioms.Plain)
         {
-            t2.gameObject.SetActive(true);
-            isActive = true;
+            buildmenu.SetActive(true);
         }
         else
-            t2.gameObject.SetActive(false);
+            buildmenu.SetActive(false);
 
         //Activate the npcCommandBox
         if (isActive)

@@ -172,6 +172,7 @@ public class InputManager : MonoBehaviour {
     {
         bool isActive = false;
 
+        //CutTree
         Transform t = npcCommandBpx.transform.FindChild("CutTree Button");
         if (World.instance.getBiom(Hexagon.getHexPositionInt(selectedNPC.CurPosition)) == Bioms.Forest)
         {
@@ -181,6 +182,15 @@ public class InputManager : MonoBehaviour {
         else
             t.gameObject.SetActive(false);
 
+        //BuildBuilding
+        Transform t2 = npcCommandBpx.transform.FindChild("Build Button");
+        if (World.instance.getBiom(Hexagon.getHexPositionInt(selectedNPC.CurPosition)) == Bioms.Plain)
+        {
+            t2.gameObject.SetActive(true);
+            isActive = true;
+        }
+        else
+            t2.gameObject.SetActive(false);
 
         //Activate the npcCommandBox
         if (isActive)

@@ -7,4 +7,9 @@ public class NPCCommandBox : MonoBehaviour {
     {
         InputManager.instance.selectedNPC.cutTree();
     }
+
+    public void build()
+    {
+        InputManager.instance.selectedNPC.buildBuilding();
+    }
 }

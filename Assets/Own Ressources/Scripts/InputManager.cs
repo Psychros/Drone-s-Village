@@ -122,13 +122,11 @@ public class InputManager : MonoBehaviour {
     public void activateMenu(GameObject menu)
     {
         menu.SetActive(true);
-        Camera.main.GetComponent<CameraController>().enableMove = false;
     }
 
     public void deactivateMenu(GameObject menu)
     {
         menu.SetActive(false);
-        Camera.main.GetComponent<CameraController>().enableMove = false;
     }
 
     public void selectNPC()
@@ -144,7 +142,7 @@ public class InputManager : MonoBehaviour {
 
             activateNPCBox();
         }
-        else
+        /*else
         {
             if (selectedNPC != null)
             {
@@ -152,13 +150,13 @@ public class InputManager : MonoBehaviour {
                 selectedNPC = null;
                 deactivateNPCBox();
             }
-        }
+        }*/
     }
 
     public void activateNPCBox()
     {
         npcBpx.SetActive(true);
-        recalculateNPCMovePower();
+        recalculateNPCBox();
     }
 
     public void deactivateNPCBox()
@@ -166,10 +164,8 @@ public class InputManager : MonoBehaviour {
         npcBpx.SetActive(false);
     }
 
-    public void recalculateNPCMovePower()
+    public void recalculateNPCBox()
     {
         movePower.text = selectedNPC.movePower + "/" + selectedNPC.MOVE_POWER;
     }
-
-    
 }

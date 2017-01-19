@@ -355,6 +355,6 @@ public class World : MonoBehaviour
 
         //Rebuild the npcBox
         if(InputManager.instance.selectedNPC != null)
-            InputManager.instance.recalculateNPCMovePower();
+            InputManager.instance.recalculateNPCBox();
     }
 }

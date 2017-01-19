@@ -173,7 +173,7 @@ public class NPC : MonoBehaviour {
         }
 
         if(isSelected)
-            InputManager.instance.recalculateNPCMovePower();
+            InputManager.instance.recalculateNPCBox();
     }
 
 

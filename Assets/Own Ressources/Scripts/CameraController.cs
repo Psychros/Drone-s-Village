@@ -14,7 +14,6 @@ public class CameraController : MonoBehaviour {
                  currentMouseMoveSpeed; //The moveSpeed for the movement with the mouse
     public float startZoom = 10;
     public bool isMoving = false;
-    [HideInInspector] public static float factor = 40;      //How far away from the Screenedge must the camera be?(Not in pixels)
     private Vector3 oldMousePosition;
 
 
@@ -87,12 +86,12 @@ public class CameraController : MonoBehaviour {
         float moveZ = 0;
 
         //Move in x-direction
-        if (Input.mousePosition.x <= Screen.width / factor)
+        if (Input.mousePosition.x <= 1)
         {   
             moveX = -1;
             isMoving = true;
         }
-        else if (Input.mousePosition.x >= Screen.width - Screen.width / factor)       
+        else if (Input.mousePosition.x >= Screen.width - 1)       
         {
             moveX = 1;
             isMoving = true;
@@ -100,12 +99,12 @@ public class CameraController : MonoBehaviour {
 
 
         //Move in z-direction
-        if (Input.mousePosition.y <= Screen.height / factor)
+        if (Input.mousePosition.y <= 1)
         {   
             moveZ = -1;
             isMoving = true;
         }
-        else if (Input.mousePosition.y >= Screen.height - Screen.height / factor)
+        else if (Input.mousePosition.y >= Screen.height - 1)
         { 
             moveZ = 1;
             isMoving = true;

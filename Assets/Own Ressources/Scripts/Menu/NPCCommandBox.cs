@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class NPCBox : MonoBehaviour {
+public class NPCCommandBox : MonoBehaviour {
 
 	public void cutTree()
     {

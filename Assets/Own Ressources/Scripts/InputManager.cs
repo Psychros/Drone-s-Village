@@ -23,6 +23,7 @@ public class InputManager : MonoBehaviour {
     public GameObject pausemenu;
     public GameObject buildmenu;
     public GameObject npcBpx;
+    public GameObject npcCommandBpx;
 
     public Text movePower;
 
@@ -147,16 +148,44 @@ public class InputManager : MonoBehaviour {
     public void activateNPCBox()
     {
         npcBpx.SetActive(true);
+        recalculateNPCCommandBox();
         recalculateNPCBox();
     }
 
     public void deactivateNPCBox()
     {
         npcBpx.SetActive(false);
+        npcCommandBpx.SetActive(false);
+    }
+
+    public void deactivateNPCCommandBox()
+    {
+        npcCommandBpx.SetActive(false);
     }
 
     public void recalculateNPCBox()
     {
         movePower.text = selectedNPC.MovePower + "/" + selectedNPC.MOVE_POWER;
+    }
+
+    public void recalculateNPCCommandBox()
+    {
+        bool isActive = false;
+
+        Transform t = npcCommandBpx.transform.FindChild("CutTree Button");
+        if (World.instance.getBiom(Hexagon.getHexPositionInt(selectedNPC.CurPosition)) == Bioms.Forest)
+        {
+            t.gameObject.SetActive(true);
+            isActive = true;
+        }
+        else
+            t.gameObject.SetActive(false);
+
+
+        //Activate the npcCommandBox
+        if (isActive)
+            npcCommandBpx.SetActive(true);
+        else
+            npcCommandBpx.SetActive(false);
     }
 }

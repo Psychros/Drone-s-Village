@@ -55,6 +55,9 @@ public class NPC : MonoBehaviour {
                 //Removes the hexagonBorder when the NPC gets a new destination
                 World.instance.destroyHexagonBorder();
 
+                //Deactivate the npcCommandBox
+                InputManager.instance.deactivateNPCCommandBox();
+
                 selectNextDestination();
                 transform.LookAt(nextDestination + new Vector3(0, transform.position.y, 0));
             }
@@ -127,7 +130,8 @@ public class NPC : MonoBehaviour {
         if (v != null)
         {
             //If there is a NPC at the destination the npc has to stand
-            if (World.instance.getNPCAtPosition(v) != null || allNextDestinations.Contains(v)) {
+            if (World.instance.getNPCAtPosition(v) != null || allNextDestinations.Contains(v))
+            {
                 reachDestination();
                 transform.LookAt(Hexagon.getWorldPosition(v) + new Vector3(0, transform.position.y, 0));
             }
@@ -137,23 +141,32 @@ public class NPC : MonoBehaviour {
                 transform.LookAt(nextDestination + new Vector3(0, transform.position.y, 0));
 
                 allNextDestinations.Add(Hexagon.getHexPositionInt(nextDestination));
+
+                //Save the NPCPosition at the end of a round
+                if (MovePower == 0)
+                {
+                    World.instance.setNPCAtPosition(this, curPos);
+                    World.instance.generateHexagonBorder(Hexagon.getHexPositionInt(curPos), MovePower);
+                }
             }
         }
     }
 
     public void reachDestination()
     {
+        isMoving = false;
+
         //Set a new HexagonBorder around the NPC if it is selected
         if (isSelected)
         {
             Vector2Int v = Hexagon.getHexPositionInt(curPos);
             World.instance.generateHexagonBorder(v, MovePower);
+
+            InputManager.instance.recalculateNPCCommandBox();
         }
 
         //save that there is a NPC at this position
         World.instance.setNPCAtPosition(this, curPos);
-
-        isMoving = false;
 
         //Remove the destination from the destinationList
         allFinalDestinations.Remove(finalDestination);
@@ -167,12 +180,6 @@ public class NPC : MonoBehaviour {
         //Reduce the movePower
         if (MovePower > 0)
             MovePower--;
-        else
-        {
-            //Save the NPCPosition
-            World.instance.setNPCAtPosition(this, curPos);
-            World.instance.generateHexagonBorder(Hexagon.getHexPositionInt(curPos), 0);
-        }
     }
 
 

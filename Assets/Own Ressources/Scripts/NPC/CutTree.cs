@@ -11,6 +11,7 @@ public class CutTree : MonoBehaviour {
     {
         Vector2Int pos = Hexagon.getHexPositionInt(transform.position);
         World.instance.changeBiom(pos.x, pos.z, Bioms.Plain);
+        InputManager.instance.recalculateNPCCommandBox();
     }
 
 	// Update is called once per frame

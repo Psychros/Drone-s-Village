@@ -26,6 +26,7 @@ public class World : MonoBehaviour
     [HideInInspector] public GameObject[] currentHexagonBorder;
     [HideInInspector] public GameObject[] wayHexagonBorder;
     [HideInInspector] public List<NPC> npcs = new List<NPC>();
+    [HideInInspector] public List<Building> buildings = new List<Building>();
     [HideInInspector] public Inventory inventory;
 
     // Use this for initialization
@@ -348,6 +349,12 @@ public class World : MonoBehaviour
         foreach(NPC npc in npcs)
         {
             npc.resetMovePower();
+        }
+
+        //next round for the buildings
+        foreach (Building b in buildings)
+        {
+            b.nextRound();
         }
 
         //Rebuild the hexagonBorder

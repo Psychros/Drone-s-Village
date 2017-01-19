@@ -8,4 +8,9 @@ public abstract class Building : MonoBehaviour {
     {
         
     }
+
+    public virtual void nextRound()
+    {
+        World.instance.GetComponent<Inventory>().addRessource(Ressources.Wood, 1);
+    }
 }

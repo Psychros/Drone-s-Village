@@ -197,12 +197,12 @@ public class NPC : MonoBehaviour {
         }
     }
 
-    public void buildBuilding()
+    public void buildBuilding(Structures b)
     {
         Vector2Int des = finalDestination;
         if (World.instance.getBiom(des.x, des.z) == Bioms.Plain)
         {
-            World.instance.changeStructure(des.x, des.z, Structures.StoreHouse);
+            World.instance.changeStructure(des.x, des.z, b);
             GameObject g = World.instance.getStructureGameObject(des.x, des.z);
 
             //The building can only be build if there are enough ressources

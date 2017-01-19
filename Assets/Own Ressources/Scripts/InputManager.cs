@@ -142,15 +142,6 @@ public class InputManager : MonoBehaviour {
 
             activateNPCBox();
         }
-        /*else
-        {
-            if (selectedNPC != null)
-            {
-                selectedNPC.IsSelected = false;
-                selectedNPC = null;
-                deactivateNPCBox();
-            }
-        }*/
     }
 
     public void activateNPCBox()

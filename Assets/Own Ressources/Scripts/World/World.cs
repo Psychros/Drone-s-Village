@@ -303,6 +303,16 @@ public class World : MonoBehaviour
         Vector2Int curPos = Hexagon.getHexPositionInt(InputManager.instance.selectedNPC.CurPosition);
         int movePower = InputManager.instance.selectedNPC.movePower;
 
+
+        //If there is a HighMountain on the field no border should be generated
+        if (getBiom(endPos) == Bioms.HighMountain)
+        {
+            wayHexagonBorder[0] = Instantiate(hexagonBorderModels[(int)HexagonBorders.BorderRed]);
+            wayHexagonBorder[0].transform.position = Hexagon.getWorldPosition(endPos) + new Vector3(0, .02f, 0);
+            return;
+        }
+
+
         //Calculate and show the way
         for (int i=0; curPos != endPos &&curPos != endPos && i < wayHexagonBorder.Length; i++)
         {
@@ -310,17 +320,12 @@ public class World : MonoBehaviour
 
             if (nextPos != null)
             {
+
                 //Show in the way the range of the npc in lightGray and the rest in darkGray
                 if (movePower > 0)
-                {
-                    wayHexagonBorder[i] = Instantiate(hexagonBorderModels[(int)HexagonBorders.BorderDarkGray]);
-
                     movePower--;
-                }
-                else
-                {
-                    wayHexagonBorder[i] = Instantiate(hexagonBorderModels[(int)HexagonBorders.BorderDarkGray]);
-                }
+
+                wayHexagonBorder[i] = Instantiate(hexagonBorderModels[(int)HexagonBorders.BorderDarkGray]);
                 wayHexagonBorder[i].transform.position = Hexagon.getWorldPosition(nextPos) + new Vector3(0, .02f, 0);
 
                 //The way starts now from the next field

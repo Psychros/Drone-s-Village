@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 using System.Diagnostics;
 using System.Collections.Generic;
@@ -21,6 +22,12 @@ public class World : MonoBehaviour
     [HideInInspector] public float offsetX, offsetZ;
     public int width = 8;
     public int height = 8;
+
+    //DayLightCycle
+    public int time = 8;        //Time in hours
+    public static int DAY_LENGTH = 24;
+    public Text timeText;
+    public int nightTime = 6;
 
     //Other stuff
     [HideInInspector] public GameObject[] currentHexagonBorder;
@@ -376,7 +383,17 @@ public class World : MonoBehaviour
         if(InputManager.instance.selectedNPC != null)
             InputManager.instance.recalculateNPCBox();
 
+
         //Select a NPC if nothing is selected
+        selectFirstNPC();
+
+        //DayLightCycle
+        nextHour();
+    }
+
+    //Select a NPC if nothing is selected
+    private void selectFirstNPC()
+    {
         if (InputManager.instance.selectedNPC == null)
         {
             if (npcs.First() != null)
@@ -385,5 +402,43 @@ public class World : MonoBehaviour
                 Camera.main.GetComponent<CameraController>().focusOn(npcs.First().CurPosition);
             }
         }
+    }
+
+    //DayLightCycle
+    private void nextHour()
+    {
+        //The next day comes
+        if (time == DAY_LENGTH - 1)
+            time = 0;
+        else
+            time++;
+
+        if (time < nightTime)
+            transform.Find("Directional Light").GetComponent<Light>().intensity = .2f;
+        else if (time == nightTime || time == DAY_LENGTH - 1)
+        {
+            transform.Find("Directional Light").GetComponent<Light>().intensity = .5f;
+            foreach (NPC npc in npcs)
+            {
+                Light l = npc.GetComponentInChildren<Light>();
+                if (l != null)
+                    l.enabled = true;
+            }
+        }
+        else if (time == nightTime + 1 || time == DAY_LENGTH - 2)
+            transform.Find("Directional Light").GetComponent<Light>().intensity = .8f;
+        else
+        {
+            transform.Find("Directional Light").GetComponent<Light>().intensity = 1f;
+            foreach (NPC npc in npcs)
+            {
+                Light l = npc.GetComponentInChildren<Light>();
+                if (l != null)
+                    l.enabled = false;
+            }
+        }
+
+        //Show the time
+        timeText.text = time + "h";
     }
 }

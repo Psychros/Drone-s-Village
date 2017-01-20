@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 using UnityEditor;
 
@@ -55,6 +56,9 @@ public class WorldEditor : Editor {
                 EditorGUILayout.LabelField("");
             }
         }
+
+        //Time
+        world.timeText = (Text)EditorGUILayout.ObjectField("Time Text: ", world.timeText, typeof(Text));
     }
 
 

@@ -211,6 +211,9 @@ public class NPC : MonoBehaviour {
                 World.instance.inventory.removeRessources(g.GetComponent<Building>().costs);
                 g.transform.position = new Vector3(g.transform.position.x, -1.014f, g.transform.position.z);
                 g.AddComponent<BuildBuilding>();
+
+                //Recalculate the NPCCommandBox
+                InputManager.instance.recalculateNPCCommandBox();
             }
             else
             {

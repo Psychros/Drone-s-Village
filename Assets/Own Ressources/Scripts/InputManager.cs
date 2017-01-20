@@ -195,32 +195,34 @@ public class InputManager : MonoBehaviour {
     public void recalculateNPCBox()
     {
         movePower.text = selectedNPC.MovePower + "/" + selectedNPC.MOVE_POWER;
+        recalculateNPCCommandBox();
     }
 
     public void recalculateNPCCommandBox()
     {
         bool isActive = false;
 
-        //CutTree
-        Transform t = npcCommandBpx.transform.FindChild("CutTree Button");
-        if (World.instance.getBiom(Hexagon.getHexPositionInt(selectedNPC.CurPosition)) == Bioms.Forest)
-        {
-            t.gameObject.SetActive(true);
-            isActive = true;
-        }
-        else
-            t.gameObject.SetActive(false);
+        if (selectedNPC.MovePower > 0) {
+            //CutTree
+            Transform t = npcCommandBpx.transform.FindChild("CutTree Button");
+            if (World.instance.getBiom(Hexagon.getHexPositionInt(selectedNPC.CurPosition)) == Bioms.Forest)
+            {
+                t.gameObject.SetActive(true);
+                isActive = true;
+            }
+            else
+                t.gameObject.SetActive(false);
 
-        if (selectedNPC.MovePower > 0)
-        {
+   
             //Activate the buildMenu
-            if (World.instance.getBiom(Hexagon.getHexPositionInt(selectedNPC.CurPosition)) == Bioms.Plain)
+            if (World.instance.getBiom(Hexagon.getHexPositionInt(selectedNPC.CurPosition)) == Bioms.Plain && World.instance.getStructure(Hexagon.getHexPositionInt(selectedNPC.CurPosition)) == Structures.None)
             {
                 buildmenu.SetActive(true);
             }
             else
                 buildmenu.SetActive(false);
         }
+
 
         //Activate the npcCommandBox
         if (isActive && selectedNPC.MovePower > 0)

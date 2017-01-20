@@ -136,7 +136,7 @@ public class Chunk : MonoBehaviour{
     public Structures getStructureGlobalCoords(int x, int z)
     {
         Vector2Int pos = getPositionInChunk(x, z);
-        return structuresData[x, z];
+        return structuresData[pos.x, pos.z];
     }
 
     public void changeStructureChunkCoords(int x, int z, Structures newStructure)
@@ -163,8 +163,8 @@ public class Chunk : MonoBehaviour{
     //Params are worldcoords
     public Vector2Int getPositionInChunk(int x, int z)
     {
-        int posX = x % Chunk.chunkSize;
-        int posZ = z % Chunk.chunkSize;
+        int posX = x % chunkSize;
+        int posZ = z % chunkSize;
 
         return new Vector2Int(posX, posZ);
     }

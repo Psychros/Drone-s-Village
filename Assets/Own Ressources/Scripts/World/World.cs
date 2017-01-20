@@ -165,6 +165,13 @@ public class World : MonoBehaviour
     }
 
     //Gets the structure at the hexagonposition x, z
+    public Structures getStructure(Vector2Int v)
+    {
+        Chunk c = getChunkAt(v.x, v.z);
+        return c.getStructureGlobalCoords(v.x, v.z);
+    }
+
+    //Gets the structure at the hexagonposition x, z
     public GameObject getStructureGameObject(int x, int z)
     {
         Chunk c = getChunkAt(x, z);

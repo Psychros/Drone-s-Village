@@ -143,6 +143,34 @@ public class InputManager : MonoBehaviour {
 
             activateNPCBox();
         }
+        else
+        {
+            //Deselect the current NPC
+            if (selectedNPC != null && selectedNPC.MovePower == 0)
+            {
+                selectedNPC.isSelected = false;
+                selectedNPC = null;
+                deactivateNPCBox();
+                World.instance.destroyHexagonBorder();
+            }
+        }
+    }
+
+    public void selectNPC(NPC npc)
+    {
+        if (selectedNPC != null)
+            selectedNPC.isSelected = false;
+
+        selectedNPC = npc;
+        if(npc != null)
+        {
+            selectedNPC.isSelected = true;
+            World.instance.generateHexagonBorder(Hexagon.getHexPositionInt(selectedNPC.CurPosition), selectedNPC.MovePower);
+        }
+        else
+        {
+            World.instance.destroyHexagonBorder();
+        }
     }
 
     public void activateNPCBox()
@@ -155,7 +183,7 @@ public class InputManager : MonoBehaviour {
     public void deactivateNPCBox()
     {
         npcBpx.SetActive(false);
-        npcCommandBpx.SetActive(false);
+        deactivateNPCCommandBox();
     }
 
     public void deactivateNPCCommandBox()
@@ -183,16 +211,19 @@ public class InputManager : MonoBehaviour {
         else
             t.gameObject.SetActive(false);
 
-        //Activate the buildMenu
-        if (World.instance.getBiom(Hexagon.getHexPositionInt(selectedNPC.CurPosition)) == Bioms.Plain)
+        if (selectedNPC.MovePower > 0)
         {
-            buildmenu.SetActive(true);
+            //Activate the buildMenu
+            if (World.instance.getBiom(Hexagon.getHexPositionInt(selectedNPC.CurPosition)) == Bioms.Plain)
+            {
+                buildmenu.SetActive(true);
+            }
+            else
+                buildmenu.SetActive(false);
         }
-        else
-            buildmenu.SetActive(false);
 
         //Activate the npcCommandBox
-        if (isActive)
+        if (isActive && selectedNPC.MovePower > 0)
             npcCommandBpx.SetActive(true);
         else
             npcCommandBpx.SetActive(false);

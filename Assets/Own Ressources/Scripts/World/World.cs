@@ -358,7 +358,7 @@ public class World : MonoBehaviour
         }
 
         //Rebuild the hexagonBorder
-        if (!InputManager.instance.selectedNPC.isMoving)
+        if (InputManager.instance.selectedNPC != null && !InputManager.instance.selectedNPC.isMoving)
         {
             generateHexagonBorder(Hexagon.getHexPositionInt(InputManager.instance.selectedNPC.NextDestination), InputManager.instance.selectedNPC.MovePower);
         }
@@ -368,5 +368,15 @@ public class World : MonoBehaviour
         //Rebuild the npcBox
         if(InputManager.instance.selectedNPC != null)
             InputManager.instance.recalculateNPCBox();
+
+        //Select a NPC if nothing is selected
+        if (InputManager.instance.selectedNPC == null)
+        {
+            if (npcs.First() != null)
+            {
+                InputManager.instance.selectNPC(npcs.First());
+                Camera.main.GetComponent<CameraController>().focusOn(npcs.First().CurPosition);
+            }
+        }
     }
 }

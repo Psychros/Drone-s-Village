@@ -23,8 +23,8 @@ public class CutTree : MonoBehaviour {
         else
         {
             Vector2Int pos = Hexagon.getHexPositionInt(transform.position);
-            
             World.instance.changeStructure(pos.x, pos.z, Structures.None);
+            InputManager.instance.recalculateNPCCommandBox();
 
             //Adds a wood
             World.instance.GetComponent<Inventory>().addRessource(Ressources.Wood, 1);

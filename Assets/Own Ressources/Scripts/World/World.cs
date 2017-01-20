@@ -24,10 +24,11 @@ public class World : MonoBehaviour
     public int height = 8;
 
     //DayLightCycle
-    public int time = 8;        //Time in hours
-    public static int DAY_LENGTH = 24;
+    [HideInInspector] public int time = 8;        //Time in hours
+    [HideInInspector] public static int DAY_LENGTH = 24;
+    public bool enableDayNightCycle = false;
     public Text timeText;
-    public int nightTime = 6;
+    [HideInInspector] public int nightTime = 6;
 
     //Other stuff
     [HideInInspector] public GameObject[] currentHexagonBorder;
@@ -388,7 +389,8 @@ public class World : MonoBehaviour
         selectFirstNPC();
 
         //DayLightCycle
-        nextHour();
+        if(enableDayNightCycle)
+            nextHour();
     }
 
     //Select a NPC if nothing is selected

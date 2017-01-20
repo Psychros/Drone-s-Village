@@ -19,9 +19,15 @@ public class NPC : MonoBehaviour {
             movePower = value;
             if (isSelected)
             {
-                InputManager.instance.recalculateNPCBox();
-                if(!isMoving)
+                if (!isMoving)
+                {
                     World.instance.generateHexagonBorder(Hexagon.getHexPositionInt(curPos), MovePower);
+                    InputManager.instance.recalculateNPCBox();
+                }
+                else
+                {
+                    InputManager.instance.recalculateNPCBoxOnly();
+                }
             }
         }
     }              

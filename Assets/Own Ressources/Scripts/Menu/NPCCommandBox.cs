@@ -8,12 +8,8 @@ public class NPCCommandBox : MonoBehaviour {
         InputManager.instance.selectedNPC.cutTree();
     }
 
-    public void build(string building)
+    public void build(Building building)
     {
-        if(building.Equals("StoreHouse"))
-            InputManager.instance.selectedNPC.buildBuilding(Structures.StoreHouse);
-        else if(building.Equals("Woodcutter"))
-            InputManager.instance.selectedNPC.buildBuilding(Structures.Woodcutter);
-
+        InputManager.instance.selectedNPC.buildBuilding(building);
     }
 }

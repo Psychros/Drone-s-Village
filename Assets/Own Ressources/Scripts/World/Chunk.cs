@@ -141,8 +141,11 @@ public class Chunk : MonoBehaviour{
 
     public void changeStructureChunkCoords(int x, int z, Structures newStructure)
     {
-        if(structures[x, z] != null)
+        if (structures[x, z] != null)
+        {
             Destroy(structures[x, z]);
+            structures[x, z] = null;
+        }
 
         if (newStructure != Structures.None)
         {
@@ -158,6 +161,21 @@ public class Chunk : MonoBehaviour{
     {
         Vector2Int pos = getPositionInChunk(x, z);
         changeStructureChunkCoords(pos.x, pos.z, newStructure);
+    }
+
+    public GameObject setBuildingGlobalCoords(int x, int z, Building building)
+    {
+        Vector2Int pos = getPositionInChunk(x, z);
+
+        if (building != null)
+        {
+            structures[pos.x, pos.z] = Instantiate(building.gameObject);
+            structures[pos.x, pos.z].transform.SetParent(gameObject.transform);
+            structures[pos.x, pos.z].transform.position = Hexagon.getWorldPosition(x, z);
+            structuresData[pos.x, pos.z] = Structures.Building;
+        }
+
+        return structures[pos.x, pos.z];
     }
 
     //Params are worldcoords

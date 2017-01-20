@@ -6,7 +6,7 @@ public enum Structures{
     Mountain, HighMountain, StoneOcean, Tree,
 
     //Buildings
-    Spaceship, StoreHouse, Woodcutter,
+    Spaceship, Building,
 
     None
 }

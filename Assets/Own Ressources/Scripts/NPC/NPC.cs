@@ -203,33 +203,23 @@ public class NPC : MonoBehaviour {
         }
     }
 
-    public void buildBuilding(Structures b)
+    public void buildBuilding(Building b)
     {
         if (MovePower > 0)
         {
             MovePower--;
 
             Vector2Int des = finalDestination;
-            if (World.instance.getBiom(des.x, des.z) == Bioms.Plain)
+            if (World.instance.getBiom(des.x, des.z) == Bioms.Plain && World.instance.inventory.hasRessources(b.costs))
             {
-                World.instance.changeStructure(des.x, des.z, b);
-                GameObject g = World.instance.getStructureGameObject(des.x, des.z);
+                GameObject g = World.instance.setBuilding(des.x, des.z, b);
 
-                //The building can only be build if there are enough ressources
-                if (World.instance.inventory.hasRessources(g.GetComponent<Building>().costs))
-                {
-                    World.instance.inventory.removeRessources(g.GetComponent<Building>().costs);
-                    g.transform.position = new Vector3(g.transform.position.x, -1.014f, g.transform.position.z);
-                    g.AddComponent<BuildBuilding>();
+                World.instance.inventory.removeRessources(g.GetComponent<Building>().costs);
+                g.transform.position = new Vector3(g.transform.position.x, -1.014f, g.transform.position.z);
+                g.AddComponent<BuildBuilding>();
 
-                    //Recalculate the NPCCommandBox
-                    InputManager.instance.recalculateNPCCommandBox();
-                }
-                else
-                {
-                    //Reset the structure
-                    World.instance.changeStructure(des.x, des.z, Structures.None);
-                }
+                //Recalculate the NPCCommandBox
+                InputManager.instance.recalculateNPCCommandBox();
             }
         }
     }

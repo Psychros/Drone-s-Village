@@ -193,6 +193,13 @@ public class World : MonoBehaviour
         c.changeStructureGlobalCoords(x, z, newStructure);
     }
 
+    //Don't
+    public GameObject setBuilding(int x, int z, Building newBuilding)
+    {
+        Chunk c = getChunkAt(x, z);
+        return c.setBuildingGlobalCoords(x, z, newBuilding);
+    }
+
     public bool isNPCAtPosition(Vector3 position)
     {
         Vector2Int p = Hexagon.getHexPositionInt(position);

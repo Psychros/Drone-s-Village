@@ -194,8 +194,16 @@ public class InputManager : MonoBehaviour {
 
     public void recalculateNPCBox()
     {
-        movePower.text = selectedNPC.MovePower + "/" + selectedNPC.MOVE_POWER;
-        recalculateNPCCommandBox();
+        if (selectedNPC != null)
+        {
+            npcBpx.SetActive(true);
+            movePower.text = selectedNPC.MovePower + "/" + selectedNPC.MOVE_POWER;
+            recalculateNPCCommandBox();
+        }
+        else
+        {
+            deactivateNPCBox();
+        }
     }
 
     public void recalculateNPCBoxOnly()

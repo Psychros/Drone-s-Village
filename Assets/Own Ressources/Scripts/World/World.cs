@@ -408,6 +408,7 @@ public class World : MonoBehaviour
             if (npcs.First() != null)
             {
                 InputManager.instance.selectNPC(npcs.First());
+                InputManager.instance.recalculateNPCBox();
                 Camera.main.GetComponent<CameraController>().focusOn(npcs.First().CurPosition);
             }
         }

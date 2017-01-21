@@ -225,16 +225,10 @@ public class InputManager : MonoBehaviour {
             }
             else
                 t.gameObject.SetActive(false);
-
-   
-            //Activate the buildMenu
-            if (!selectedNPC.isMoving && World.instance.getBiom(Hexagon.getHexPositionInt(selectedNPC.CurPosition)) == Bioms.Plain && World.instance.getStructure(Hexagon.getHexPositionInt(selectedNPC.CurPosition)) == Structures.None)
-            {
-                buildmenu.SetActive(true);
-            }
-            else
-                buildmenu.SetActive(false);
         }
+
+        //Activate the buildMenu
+        recalculateBuildMenu();
 
 
         //Activate the npcCommandBox
@@ -242,5 +236,15 @@ public class InputManager : MonoBehaviour {
             npcCommandBpx.SetActive(true);
         else
             npcCommandBpx.SetActive(false);
+    }
+
+    public void recalculateBuildMenu()
+    {
+        if (selectedNPC.MovePower > 0 && !selectedNPC.isMoving && World.instance.getBiom(Hexagon.getHexPositionInt(selectedNPC.CurPosition)) == Bioms.Plain && World.instance.getStructure(Hexagon.getHexPositionInt(selectedNPC.CurPosition)) == Structures.None)
+        {
+            buildmenu.SetActive(true);
+        }
+        else
+            buildmenu.SetActive(false);
     }
 }

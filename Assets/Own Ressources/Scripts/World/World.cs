@@ -14,6 +14,7 @@ public class World : MonoBehaviour
     public GameObject[] biomModels      = new GameObject[System.Enum.GetNames(typeof(BiomModels)).Length];
     public GameObject[] hexagonBorderModels    = new GameObject[System.Enum.GetNames(typeof(HexagonBorders)).Length];
     public GameObject[] structureModels = new GameObject[System.Enum.GetNames(typeof(Structures)).Length-1];
+    public GameObject[] buildingModels = new GameObject[System.Enum.GetNames(typeof(Buildings)).Length - 1];
     public BiomData[] biomsData = new BiomData[System.Enum.GetNames(typeof(Bioms)).Length];
     public GameObject droneModel;
 
@@ -131,7 +132,9 @@ public class World : MonoBehaviour
         int posX = x / Chunk.chunkSize;
         int posZ = z / Chunk.chunkSize;
 
-        return chunks[posX, posZ];
+        if(posX >= 0 && posX < Chunk.chunkSize && posZ >= 0 && posZ < Chunk.chunkSize)
+            return chunks[posX, posZ];
+        return null;
     }
 
     //Params are worldcoords
@@ -203,7 +206,11 @@ public class World : MonoBehaviour
     public bool isNPCAtPosition(Vector3 position)
     {
         Vector2Int p = Hexagon.getHexPositionInt(position);
-        return getChunkAt(p.x, p.z).isNPCAtGlobalCoords(p.x, p.z);
+        Chunk c = getChunkAt(p.x, p.z);
+        if (c != null)
+            return c.isNPCAtGlobalCoords(p.x, p.z);
+        else
+            return false;
     }
 
     public NPC getNPCAtPosition(Vector3 position)
@@ -246,6 +253,11 @@ public class World : MonoBehaviour
             }
             print(s);
         }
+    }
+
+    public bool isOneOfBioms(Vector2Int v, List<Bioms> bioms)
+    {
+        return getChunkAt(v.x, v.z).isOneOfBiomsGlobalCoords(v, bioms);
     }
 
     public void generateHexagonBorder(Vector2Int intPos, int size)

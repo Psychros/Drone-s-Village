@@ -9,6 +9,7 @@ public class WorldEditor : Editor {
     static bool showBiomModels = false;
     static bool showHexagonBorders = false;
     static bool showStructureModels = false;
+    static bool showBuildingModels = false;
     static bool showBioms = false;
 
     public override void OnInspectorGUI()
@@ -28,6 +29,9 @@ public class WorldEditor : Editor {
 
         //StructureModels
         getObjectsForArray("StructureModels: ", ref showStructureModels, ref world.structureModels, typeof(Structures));
+
+        //BuildingModels
+        getObjectsForArray("BuildingModels: ", ref showBuildingModels, ref world.buildingModels, typeof(Buildings));
 
         //Bioms
         showBioms = EditorGUILayout.Toggle("Bioms: ", showBioms);

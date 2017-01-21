@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class Chunk : MonoBehaviour{
     [HideInInspector] public int[,] chunkBiomes           = new int[chunkSize, chunkSize];
@@ -215,5 +216,18 @@ public class Chunk : MonoBehaviour{
     public NPC getNPCAtChunkCoords(int x, int z)
     {
         return npcs[x, z];
+    }
+
+    //Tests if at the position one of the given bioms exists
+    public bool isOneOfBiomsGlobalCoords(Vector2Int v, List<Bioms> bioms)
+    {
+        Vector2Int pos = getPositionInChunk(v.x, v.z);
+        foreach(Bioms biom in bioms)
+        {
+            if (getBiomChunkCoords(pos.x, pos.z) == biom)
+                return true;
+        }
+
+        return false;
     }
 }

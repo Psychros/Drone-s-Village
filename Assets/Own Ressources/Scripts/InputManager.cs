@@ -240,11 +240,40 @@ public class InputManager : MonoBehaviour {
 
     public void recalculateBuildMenu()
     {
-        if (selectedNPC.MovePower > 0 && !selectedNPC.isMoving && World.instance.getBiom(Hexagon.getHexPositionInt(selectedNPC.CurPosition)) == Bioms.Plain && World.instance.getStructure(Hexagon.getHexPositionInt(selectedNPC.CurPosition)) == Structures.None)
+        if (selectedNPC == null || selectedNPC.MovePower == 0)
+            return;
+
+        bool b = false;
+
+        if (selectedNPC.MovePower > 0 && !selectedNPC.isMoving && World.instance.getStructure(Hexagon.getHexPositionInt(selectedNPC.CurPosition)) == Structures.None)
         {
-            buildmenu.SetActive(true);
+            Vector2Int curPos = Hexagon.getHexPositionInt(selectedNPC.CurPosition);
+            /*
+             * Activate or deactivate the buttons and deactivate the buildmenu if all buttons are deactivated
+             */
+            if (canBuildingBeBuild(Buildings.StoreHouse, "StoreHouse Button", curPos)) b = true;
+            if (canBuildingBeBuild(Buildings.Woodcutter, "Woodcutter Button", curPos)) b = true;
+        }
+
+        buildmenu.SetActive(b);
+    }
+
+    //Only for this class important. Makes another method shorter
+    private bool canBuildingBeBuild(Buildings building, System.String button, Vector2Int curPos)
+    {
+        if (World.instance.isOneOfBioms(curPos, World.instance.buildingModels[(int)building].GetComponent<Building>().bioms))
+        {
+            Transform t = buildmenu.transform.Find(button);
+            t.GetComponent<Button>().enabled = true;
+            t.GetComponent<Image>().color = new Color(1, 1, 1, 1);
+            return true;
         }
         else
-            buildmenu.SetActive(false);
+        {
+            Transform t = buildmenu.transform.Find(button);
+            t.GetComponent<Button>().enabled = false;
+            t.GetComponent<Image>().color = new Color(.6f, .6f, .6f, .7f);
+            return false;
+        }
     }
 }

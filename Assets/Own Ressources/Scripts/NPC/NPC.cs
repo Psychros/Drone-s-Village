@@ -210,7 +210,7 @@ public class NPC : MonoBehaviour {
             MovePower--;
 
             Vector2Int des = finalDestination;
-            if (World.instance.getBiom(des.x, des.z) == Bioms.Plain && World.instance.inventory.hasRessources(b.costs))
+            if (World.instance.isOneOfBioms(des, b.bioms) && World.instance.inventory.hasRessources(b.costs))
             {
                 GameObject g = World.instance.setBuilding(des.x, des.z, b);
 

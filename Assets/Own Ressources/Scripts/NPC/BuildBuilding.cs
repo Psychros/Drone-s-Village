@@ -3,7 +3,7 @@ using System.Collections;
 
 public class BuildBuilding : MonoBehaviour {
 
-    public float speed = .1f;
+    public float speed = .3f;
 
     // Update is called once per frame
     void Update()

@@ -220,7 +220,7 @@ public class InputManager : MonoBehaviour {
 
    
             //Activate the buildMenu
-            if (World.instance.getBiom(Hexagon.getHexPositionInt(selectedNPC.CurPosition)) == Bioms.Plain && World.instance.getStructure(Hexagon.getHexPositionInt(selectedNPC.CurPosition)) == Structures.None)
+            if (!selectedNPC.isMoving && World.instance.getBiom(Hexagon.getHexPositionInt(selectedNPC.CurPosition)) == Bioms.Plain && World.instance.getStructure(Hexagon.getHexPositionInt(selectedNPC.CurPosition)) == Structures.None)
             {
                 buildmenu.SetActive(true);
             }
@@ -230,7 +230,7 @@ public class InputManager : MonoBehaviour {
 
 
         //Activate the npcCommandBox
-        if (isActive && selectedNPC.MovePower > 0)
+        if (isActive && selectedNPC.MovePower > 0 && !selectedNPC.isMoving)
             npcCommandBpx.SetActive(true);
         else
             npcCommandBpx.SetActive(false);

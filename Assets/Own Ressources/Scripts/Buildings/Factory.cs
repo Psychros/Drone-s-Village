@@ -4,15 +4,15 @@ using System.Collections.Generic;
 
 public class Factory : Building {
     public List<Cost> productCosts = new List<Cost>();
-    public Cost product; 
+    public Cost product;
 
-    // Use this for initialization
-    void Start () {
+    void Start()
+    {
         World.instance.buildings.Add(this);
-	}
-	
-	// Update is called once per frame
-	void Update () {
+    }
+
+    // Update is called once per frame
+    void Update () {
 	
 	}
 

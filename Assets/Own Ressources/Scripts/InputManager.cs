@@ -253,6 +253,7 @@ public class InputManager : MonoBehaviour {
              */
             if (canBuildingBeBuild(Buildings.StoreHouse, "StoreHouse Button", curPos)) b = true;
             if (canBuildingBeBuild(Buildings.Woodcutter, "Woodcutter Button", curPos)) b = true;
+            if (canBuildingBeBuild(Buildings.House     , "House Button"     , curPos)) b = true;
         }
 
         buildmenu.SetActive(b);

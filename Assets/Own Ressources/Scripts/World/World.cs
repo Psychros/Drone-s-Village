@@ -382,7 +382,7 @@ public class World : MonoBehaviour
         //Reset the movepower of the NPCs
         foreach(NPC npc in npcs)
         {
-            npc.resetMovePower();
+            npc.nextRound();
         }
 
         //next round for the buildings

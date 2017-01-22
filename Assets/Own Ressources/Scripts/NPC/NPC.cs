@@ -224,11 +224,18 @@ public class NPC : MonoBehaviour {
         }
     }
 
-    public void resetMovePower()
+    public void nextRound()
     {
+        //Reset the movePower
         if(MovePower < 0)
             MovePower += MOVE_POWER;
         else
             MovePower = MOVE_POWER;
+
+        //Removes the npc from the hexagon where he had to wait for new movePower
+        if(finalDestination != Hexagon.getHexPositionInt(curPos))
+        {
+            World.instance.setNPCAtPosition(null, Hexagon.getHexPositionInt(curPos));
+        }
     }
 }

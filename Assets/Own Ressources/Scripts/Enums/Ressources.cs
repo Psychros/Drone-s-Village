@@ -2,5 +2,5 @@
 using System.Collections;
 
 public enum Ressources{
-    Money, Wood, Concrete
+    Money, Wood, Concrete, Sand, Gravel, LimeStone, Water
 }

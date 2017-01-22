@@ -2,5 +2,5 @@
 using System.Collections;
 
 public enum Buildings{
-    StoreHouse, Woodcutter, House
+    StoreHouse, Woodcutter, House, Sandmine, Gravelmine, LimeStoneMine, Fountain
 }

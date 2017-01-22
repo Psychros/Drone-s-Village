@@ -245,22 +245,26 @@ public class InputManager : MonoBehaviour {
 
         bool b = false;
 
-        if (selectedNPC.MovePower > 0 && !selectedNPC.isMoving && World.instance.getStructure(Hexagon.getHexPositionInt(selectedNPC.CurPosition)) == Structures.None)
+        if (selectedNPC.MovePower > 0 && !selectedNPC.isMoving && World.instance.getStructure(Hexagon.getHexPositionInt(selectedNPC.CurPosition)) != Structures.Building)
         {
             Vector2Int curPos = Hexagon.getHexPositionInt(selectedNPC.CurPosition);
             /*
-             * Activate or deactivate the buttons and deactivate the buildmenu if all buttons are deactivated
+             * Activate or deactivate the buildingButtons and deactivate the buildmenu if all buttons are deactivated
              */
-            if (canBuildingBeBuild(Buildings.StoreHouse, "StoreHouse Button", curPos)) b = true;
-            if (canBuildingBeBuild(Buildings.Woodcutter, "Woodcutter Button", curPos)) b = true;
-            if (canBuildingBeBuild(Buildings.House     , "House Button"     , curPos)) b = true;
+            if (canBuildingBeBuild(Buildings.StoreHouse   , "StoreHouse Button"   , curPos)) b = true;
+            if (canBuildingBeBuild(Buildings.Woodcutter   , "Woodcutter Button"   , curPos)) b = true;
+            if (canBuildingBeBuild(Buildings.House        , "House Button"        , curPos)) b = true;
+            if (canBuildingBeBuild(Buildings.Sandmine     , "Sandmine Button"     , curPos)) b = true;
+            if (canBuildingBeBuild(Buildings.Gravelmine   , "Gravelmine Button"   , curPos)) b = true;
+            if (canBuildingBeBuild(Buildings.LimeStoneMine, "LimeStoneMine Button", curPos)) b = true;
+            if (canBuildingBeBuild(Buildings.Fountain     , "Fountain Button"     , curPos)) b = true;
         }
 
         buildmenu.SetActive(b);
     }
 
     //Only for this class important. Makes another method shorter
-    private bool canBuildingBeBuild(Buildings building, System.String button, Vector2Int curPos)
+    private bool canBuildingBeBuild(Buildings building, string button, Vector2Int curPos)
     {
         if (World.instance.isOneOfBioms(curPos, World.instance.buildingModels[(int)building].GetComponent<Building>().bioms))
         {

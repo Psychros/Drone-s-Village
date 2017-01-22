@@ -207,10 +207,8 @@ public class NPC : MonoBehaviour {
     {
         if (MovePower > 0)
         {
-            MovePower--;
-
             Vector2Int des = finalDestination;
-            if (World.instance.isOneOfBioms(des, b.bioms) && World.instance.inventory.hasRessources(b.costs))
+            if (World.instance.inventory.hasRessources(b.costs))
             {
                 GameObject g = World.instance.setBuilding(des.x, des.z, b);
 
@@ -220,6 +218,8 @@ public class NPC : MonoBehaviour {
 
                 //Recalculate the NPCCommandBox
                 InputManager.instance.recalculateNPCCommandBox();
+
+                MovePower--;
             }
         }
     }

@@ -1,15 +1,57 @@
 fileFormatVersion: 2
-guid: 17f66eddeb90eab46b5c47295237b8fa
-timeCreated: 1485104354
+guid: bcc68cb5e058f4f4e8ef057e524673ca
+timeCreated: 1485105087
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
   fileIDToRecycleName:
-    100000: //RootNode
-    400000: //RootNode
-    2300000: //RootNode
-    3300000: //RootNode
-    4300000: Cube
+    100000: Circle_MeshPart0
+    100002: Circle_MeshPart1
+    100004: Circle_MeshPart2
+    100006: Circle_MeshPart3
+    100008: Circle_MeshPart4
+    100010: Circle_MeshPart5
+    100012: Circle_MeshPart6
+    100014: Circle_MeshPart7
+    100016: Circle_MeshPart8
+    100018: //RootNode
+    400000: Circle_MeshPart0
+    400002: Circle_MeshPart1
+    400004: Circle_MeshPart2
+    400006: Circle_MeshPart3
+    400008: Circle_MeshPart4
+    400010: Circle_MeshPart5
+    400012: Circle_MeshPart6
+    400014: Circle_MeshPart7
+    400016: Circle_MeshPart8
+    400018: //RootNode
+    2300000: Circle_MeshPart0
+    2300002: Circle_MeshPart1
+    2300004: Circle_MeshPart2
+    2300006: Circle_MeshPart3
+    2300008: Circle_MeshPart4
+    2300010: Circle_MeshPart5
+    2300012: Circle_MeshPart6
+    2300014: Circle_MeshPart7
+    2300016: Circle_MeshPart8
+    3300000: Circle_MeshPart0
+    3300002: Circle_MeshPart1
+    3300004: Circle_MeshPart2
+    3300006: Circle_MeshPart3
+    3300008: Circle_MeshPart4
+    3300010: Circle_MeshPart5
+    3300012: Circle_MeshPart6
+    3300014: Circle_MeshPart7
+    3300016: Circle_MeshPart8
+    4300000: Circle_MeshPart0
+    4300002: Circle_MeshPart1
+    4300004: Circle_MeshPart2
+    4300006: Circle_MeshPart3
+    4300008: Circle_MeshPart4
+    4300010: Circle_MeshPart5
+    4300012: Circle_MeshPart6
+    4300014: Circle_MeshPart7
+    4300016: Circle_MeshPart8
     7400000: Default Take
     9500000: //RootNode
   materials:
@@ -55,7 +97,7 @@ ModelImporter:
     normalSmoothAngle: 60
     normalImportMode: 0
     tangentImportMode: 3
-  importAnimation: 1
+  importAnimation: 0
   copyAvatar: 0
   humanDescription:
     human: []
@@ -70,7 +112,7 @@ ModelImporter:
     rootMotionBoneName: 
     hasTranslationDoF: 0
   lastHumanDescriptionAvatarSource: {instanceID: 0}
-  animationType: 2
+  animationType: 0
   humanoidOversampling: 1
   additionalBone: 0
   userData: 

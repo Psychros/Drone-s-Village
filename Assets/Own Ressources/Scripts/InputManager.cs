@@ -258,6 +258,9 @@ public class InputManager : MonoBehaviour {
             if (canBuildingBeBuild(Buildings.Gravelmine   , "Gravelmine Button"   , curPos)) b = true;
             if (canBuildingBeBuild(Buildings.LimeStoneMine, "LimeStoneMine Button", curPos)) b = true;
             if (canBuildingBeBuild(Buildings.Fountain     , "Fountain Button"     , curPos)) b = true;
+            if (canBuildingBeBuild(Buildings.Claymine     , "Claymine Button"     , curPos)) b = true;
+            if (canBuildingBeBuild(Buildings.CementFactory, "CementFactory Button", curPos)) b = true;
+            if (canBuildingBeBuild(Buildings.ConcreteFactory, "ConcreteFactory Button", curPos)) b = true;
         }
 
         buildmenu.SetActive(b);

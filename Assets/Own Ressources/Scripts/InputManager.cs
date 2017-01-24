@@ -8,8 +8,7 @@ public class InputManager : MonoBehaviour {
     public Texture2D mouseIcon; 
 
     public KeyCode selectDestination = KeyCode.Mouse1;
-    public KeyCode switchFunction    = KeyCode.E;
-    public KeyCode buildmenuKey      = KeyCode.B;
+    public KeyCode inventoryKey      = KeyCode.E;
     public KeyCode nextRoundKey      = KeyCode.N;
     public KeyCode pausemenuKey      = KeyCode.Escape;
 
@@ -22,6 +21,7 @@ public class InputManager : MonoBehaviour {
 
     public GameObject pausemenu;
     public GameObject buildmenu;
+    public GameObject inventory;
     public GameObject npcBpx;
     public GameObject npcCommandBpx;
 
@@ -44,16 +44,12 @@ public class InputManager : MonoBehaviour {
         if (Input.GetMouseButtonDown(0) && !isSelecting)
             selectNPC();
 
-        //Switch between cut or build
-        if (Input.GetKeyDown(switchFunction))
-            cutTreeOrBuild = !cutTreeOrBuild;
-
         //Open the buildmenu
-        if (Input.GetKeyDown(buildmenuKey))
-            if (!buildmenu.active)
-                activateMenu(buildmenu);
+        if (Input.GetKeyDown(inventoryKey))
+            if (!inventory.active)
+                activateMenu(inventory);
             else
-                deactivateMenu(buildmenu);
+                deactivateMenu(inventory);
 
         //Open the pausemenu
         if (Input.GetKeyDown(pausemenuKey))
@@ -251,15 +247,15 @@ public class InputManager : MonoBehaviour {
             /*
              * Activate or deactivate the buildingButtons and deactivate the buildmenu if all buttons are deactivated
              */
-            if (canBuildingBeBuild(Buildings.StoreHouse   , "StoreHouse Button"   , curPos)) b = true;
-            if (canBuildingBeBuild(Buildings.Woodcutter   , "Woodcutter Button"   , curPos)) b = true;
-            if (canBuildingBeBuild(Buildings.House        , "House Button"        , curPos)) b = true;
-            if (canBuildingBeBuild(Buildings.Sandmine     , "Sandmine Button"     , curPos)) b = true;
-            if (canBuildingBeBuild(Buildings.Gravelmine   , "Gravelmine Button"   , curPos)) b = true;
-            if (canBuildingBeBuild(Buildings.LimeStoneMine, "LimeStoneMine Button", curPos)) b = true;
-            if (canBuildingBeBuild(Buildings.Fountain     , "Fountain Button"     , curPos)) b = true;
-            if (canBuildingBeBuild(Buildings.Claymine     , "Claymine Button"     , curPos)) b = true;
-            if (canBuildingBeBuild(Buildings.CementFactory, "CementFactory Button", curPos)) b = true;
+            if (canBuildingBeBuild(Buildings.StoreHouse     , "StoreHouse Button"     , curPos)) b = true;
+            if (canBuildingBeBuild(Buildings.Woodcutter     , "Woodcutter Button"     , curPos)) b = true;
+            if (canBuildingBeBuild(Buildings.House          , "House Button"          , curPos)) b = true;
+            if (canBuildingBeBuild(Buildings.Sandmine       , "Sandmine Button"       , curPos)) b = true;
+            if (canBuildingBeBuild(Buildings.Gravelmine     , "Gravelmine Button"     , curPos)) b = true;
+            if (canBuildingBeBuild(Buildings.LimeStoneMine  , "LimeStoneMine Button"  , curPos)) b = true;
+            if (canBuildingBeBuild(Buildings.Fountain       , "Fountain Button"       , curPos)) b = true;
+            if (canBuildingBeBuild(Buildings.Claymine       , "Claymine Button"       , curPos)) b = true;
+            if (canBuildingBeBuild(Buildings.CementFactory  , "CementFactory Button"  , curPos)) b = true;
             if (canBuildingBeBuild(Buildings.ConcreteFactory, "ConcreteFactory Button", curPos)) b = true;
         }
 

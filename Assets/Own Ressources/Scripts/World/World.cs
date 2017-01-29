@@ -17,6 +17,7 @@ public class World : MonoBehaviour
     public GameObject[] buildingModels = new GameObject[System.Enum.GetNames(typeof(Buildings)).Length - 1];
     public BiomData[] biomsData = new BiomData[System.Enum.GetNames(typeof(Bioms)).Length];
     public GameObject droneModel;
+    public RessourceText ressourceText;
 
     //Chunks
     [HideInInspector] public Chunk[,] chunks;

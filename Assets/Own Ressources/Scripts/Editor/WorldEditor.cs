@@ -63,6 +63,9 @@ public class WorldEditor : Editor {
 
         //Time
         world.timeText = (Text)EditorGUILayout.ObjectField("Time Text: ", world.timeText, typeof(Text));
+
+        //RessourcesText
+        world.ressourceText = (RessourceText)EditorGUILayout.ObjectField("Ressource Text: ", world.ressourceText, typeof(RessourceText));
     }
 
 

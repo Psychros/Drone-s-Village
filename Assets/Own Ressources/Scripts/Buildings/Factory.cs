@@ -23,6 +23,7 @@ public class Factory : Building {
         {
             i.removeRessources(productCosts);
             World.instance.GetComponent<Inventory>().addRessource(product.ressource, product.number);
+            createRessourceText(product.number);
         }
     }
 }

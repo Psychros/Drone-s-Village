@@ -4,7 +4,56 @@ timeCreated: 1485260541
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
-  fileIDToRecycleName: {}
+  fileIDToRecycleName:
+    100000: //RootNode
+    100002: Circle_MeshPart0
+    100004: Circle_MeshPart1
+    100006: Circle_MeshPart2
+    100008: Circle_MeshPart3
+    100010: Circle_MeshPart4
+    100012: Circle_MeshPart5
+    100014: Circle_MeshPart6
+    100016: Circle_MeshPart7
+    100018: Circle_MeshPart8
+    400000: //RootNode
+    400002: Circle_MeshPart0
+    400004: Circle_MeshPart1
+    400006: Circle_MeshPart2
+    400008: Circle_MeshPart3
+    400010: Circle_MeshPart4
+    400012: Circle_MeshPart5
+    400014: Circle_MeshPart6
+    400016: Circle_MeshPart7
+    400018: Circle_MeshPart8
+    2300000: Circle_MeshPart0
+    2300002: Circle_MeshPart1
+    2300004: Circle_MeshPart2
+    2300006: Circle_MeshPart3
+    2300008: Circle_MeshPart4
+    2300010: Circle_MeshPart5
+    2300012: Circle_MeshPart6
+    2300014: Circle_MeshPart7
+    2300016: Circle_MeshPart8
+    3300000: Circle_MeshPart0
+    3300002: Circle_MeshPart1
+    3300004: Circle_MeshPart2
+    3300006: Circle_MeshPart3
+    3300008: Circle_MeshPart4
+    3300010: Circle_MeshPart5
+    3300012: Circle_MeshPart6
+    3300014: Circle_MeshPart7
+    3300016: Circle_MeshPart8
+    4300000: Circle_MeshPart0
+    4300002: Circle_MeshPart1
+    4300004: Circle_MeshPart2
+    4300006: Circle_MeshPart3
+    4300008: Circle_MeshPart4
+    4300010: Circle_MeshPart5
+    4300012: Circle_MeshPart6
+    4300014: Circle_MeshPart7
+    4300016: Circle_MeshPart8
+    7400000: Default Take
+    9500000: //RootNode
   materials:
     importMaterials: 1
     materialName: 0
@@ -51,6 +100,7 @@ ModelImporter:
   importAnimation: 1
   copyAvatar: 0
   humanDescription:
+    serializedVersion: 2
     human: []
     skeleton: []
     armTwist: 0.5
@@ -61,7 +111,10 @@ ModelImporter:
     legStretch: 0.05
     feetSpacing: 0
     rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
     hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 0
   lastHumanDescriptionAvatarSource: {instanceID: 0}
   animationType: 2
   humanoidOversampling: 1

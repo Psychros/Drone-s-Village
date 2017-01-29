@@ -2,7 +2,7 @@
 using System.Collections;
 
 public class House : Building {
-    public int moneyProduction = 1;
+    public int moneyProduction = 3;
 
     void Start()
     {
@@ -17,5 +17,6 @@ public class House : Building {
     public override void nextRound()
     {
         World.instance.GetComponent<Inventory>().addRessource(Ressources.Money, moneyProduction);
+        createRessourceText(moneyProduction);
     }
 }

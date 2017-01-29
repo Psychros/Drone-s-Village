@@ -5,7 +5,7 @@ using System.Collections;
 //Lets a tree fall down.
 //!!!! This is not for a drone !!!!
 public class CutTree : MonoBehaviour {
-    public float speed = 1;
+    public float speed = 2;
 
     void Start()
     {

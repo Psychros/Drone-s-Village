@@ -17,6 +17,6 @@ public class House : Building {
     public override void nextRound()
     {
         World.instance.GetComponent<Inventory>().addRessource(Ressources.Money, moneyProduction);
-        createRessourceText(moneyProduction);
+        createRessourceText(moneyProduction, World.instance.ressourceTexts[(int)Ressources.Money]);
     }
 }

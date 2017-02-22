@@ -25,7 +25,6 @@ public class RessourceText : MonoBehaviour {
                 transform.position = Vector3.MoveTowards(transform.position, transform.position + new Vector3(0, 1, 0), Time.deltaTime * speed);
                 if (transform.position.y > heightDisappear)
                 {
-                    print(1 - ((transform.position.y - heightDisappear)) / (maxHeight - heightDisappear));
                     tM.color = new Color(tM.color.r, tM.color.g, tM.color.b, 1 - ((transform.position.y - heightDisappear)) / (maxHeight - heightDisappear));
                 }
             }

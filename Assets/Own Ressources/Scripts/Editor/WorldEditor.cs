@@ -11,6 +11,8 @@ public class WorldEditor : Editor {
     static bool showStructureModels = false;
     static bool showBuildingModels = false;
     static bool showBioms = false;
+    static bool showRessourceSprites = false;
+    static bool showRessourceColors = false;
 
     public override void OnInspectorGUI()
     {
@@ -32,6 +34,10 @@ public class WorldEditor : Editor {
 
         //BuildingModels
         getObjectsForArray("BuildingModels: ", ref showBuildingModels, ref world.buildingModels, typeof(Buildings));
+
+        //Ressources 
+        getSpritesForArray("RessourceSprites: ", ref showRessourceSprites, ref world.ressourceSprites, typeof(Ressources));
+        getObjectsForArray("RessourceTexts: ", ref showRessourceColors, ref world.ressourceTexts, typeof(Ressources));
 
         //Bioms
         showBioms = EditorGUILayout.Toggle("Bioms: ", showBioms);
@@ -63,9 +69,6 @@ public class WorldEditor : Editor {
 
         //Time
         world.timeText = (Text)EditorGUILayout.ObjectField("Time Text: ", world.timeText, typeof(Text));
-
-        //RessourcesText
-        world.ressourceText = (RessourceText)EditorGUILayout.ObjectField("Ressource Text: ", world.ressourceText, typeof(RessourceText));
     }
 
 
@@ -93,6 +96,34 @@ public class WorldEditor : Editor {
             for (int i = 0; i < array.Length; i++)
             {
                 array[i] = (GameObject)EditorGUILayout.ObjectField("     " + System.Enum.GetName(enuM, i) + ":", array[i], typeof(GameObject));
+            }
+        }
+    }
+
+    public void getSpritesForArray(string name, ref bool toggle, ref Sprite[] array, System.Type enuM)
+    {
+        toggle = EditorGUILayout.Toggle(name, toggle);
+        if (toggle)
+        {
+            //Change the size of the array
+            Sprite[] arrayNew = new Sprite[EditorGUILayout.DelayedIntField("     Size:", array.Length)];
+            if (arrayNew.Length != array.Length && arrayNew.Length > 0)
+            {
+                //Copy the values of array
+                if (arrayNew.Length > array.Length)
+                    for (int i = 0; i < array.Length; i++)
+                        arrayNew[i] = array[i];
+                else
+                    for (int i = 0; i < arrayNew.Length; i++)
+                        arrayNew[i] = array[i];
+
+                array = arrayNew;
+            }
+
+            //Shows the array
+            for (int i = 0; i < array.Length; i++)
+            {
+                array[i] = (Sprite)EditorGUILayout.ObjectField("     " + System.Enum.GetName(enuM, i) + ":", array[i], typeof(Sprite));
             }
         }
     }

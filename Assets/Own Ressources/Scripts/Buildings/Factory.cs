@@ -19,11 +19,11 @@ public class Factory : Building {
     public override void nextRound()
     {
         Inventory i = World.instance.GetComponent<Inventory>();
-        if (i.hasRessources(productCosts))
+        if (i.hasRessources(productCosts) && (i.getNumber(product.ressource) + product.number) <= i.capacity)
         {
             i.removeRessources(productCosts);
             World.instance.GetComponent<Inventory>().addRessource(product.ressource, product.number);
-            createRessourceText(product.number);
+            createRessourceText(product.number, World.instance.ressourceTexts[(int)product.ressource]);
         }
     }
 }

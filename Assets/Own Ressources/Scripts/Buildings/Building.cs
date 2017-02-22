@@ -20,11 +20,11 @@ public abstract class Building : MonoBehaviour {
         World.instance.GetComponent<Inventory>().addRessource(Ressources.Wood, 1);
     }
 
-    public void createRessourceText(int n)
+    public void createRessourceText(int n, GameObject text)
     {
         for (int i = 0; i < n; i++)
         {
-            RessourceText t = Instantiate(World.instance.ressourceText, transform);
+            RessourceText t = Instantiate(text, transform).GetComponent<RessourceText>();
             t.transform.position = transform.position - new Vector3(0, -.3f * i);
             t.startMovement();
         }

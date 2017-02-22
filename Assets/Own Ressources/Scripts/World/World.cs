@@ -15,9 +15,10 @@ public class World : MonoBehaviour
     public GameObject[] hexagonBorderModels    = new GameObject[System.Enum.GetNames(typeof(HexagonBorders)).Length];
     public GameObject[] structureModels = new GameObject[System.Enum.GetNames(typeof(Structures)).Length-1];
     public GameObject[] buildingModels = new GameObject[System.Enum.GetNames(typeof(Buildings)).Length - 1];
+    public Sprite[] ressourceSprites = new Sprite[System.Enum.GetNames(typeof(Ressources)).Length + 1];
+    public GameObject[] ressourceTexts = new GameObject[System.Enum.GetNames(typeof(Ressources)).Length + 1];
     public BiomData[] biomsData = new BiomData[System.Enum.GetNames(typeof(Bioms)).Length];
     public GameObject droneModel;
-    public RessourceText ressourceText;
 
     //Chunks
     [HideInInspector] public Chunk[,] chunks;

@@ -24,12 +24,15 @@ public class InputManager : MonoBehaviour {
     public GameObject inventory;
     public GameObject npcBpx;
     public GameObject npcCommandBpx;
+    public GameObject buildingBox;
 
-    public Text movePower;
+    public Text movePower;      //NPCBox
+    public Text buildingName;   //BuildingBox
 
     //False = cut, True = build
     [HideInInspector] public bool cutTreeOrBuild = false;
     [HideInInspector] public NPC selectedNPC = null;
+    [HideInInspector] public Building selectedBuilding = null;
     private bool isSelecting = false;
 
     void Start()
@@ -42,7 +45,10 @@ public class InputManager : MonoBehaviour {
     {
         //Select or deselect a npc
         if (Input.GetMouseButtonDown(0) && !isSelecting)
+        {
             selectNPC();
+            selectBuilding();
+        }
 
         //Open the buildmenu
         if (Input.GetKeyDown(inventoryKey))
@@ -169,9 +175,23 @@ public class InputManager : MonoBehaviour {
         }
     }
 
+    public void selectBuilding()
+    {
+        if (World.instance.isBuildingAtPosition(HexagonFrame.instance.selectedPosition))
+        {
+            print("Hallo");
+            selectedBuilding = World.instance.getBuildingAtPosition(HexagonFrame.instance.selectedPosition);
+            recalculateBuildingBox();
+        }
+        else
+        {
+            selectedBuilding = null;
+            recalculateBuildingBox();
+        }
+    } 
+
     public void activateNPCBox()
     {
-        npcBpx.SetActive(true);
         recalculateNPCCommandBox();
         recalculateNPCBox();
     }
@@ -199,6 +219,19 @@ public class InputManager : MonoBehaviour {
         else
         {
             deactivateNPCBox();
+        }
+    }
+
+    public void recalculateBuildingBox()
+    {
+        if (selectedBuilding != null)
+        {
+            buildingBox.SetActive(true);
+            buildingName.text = selectedBuilding.gameObject.ToString();
+        }
+        else
+        {
+            buildingBox.SetActive(false);
         }
     }
 

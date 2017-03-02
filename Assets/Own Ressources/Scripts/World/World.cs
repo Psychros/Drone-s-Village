@@ -177,6 +177,7 @@ public class World : MonoBehaviour
         return c.getStructureGlobalCoords(x, z);
     }
 
+
     //Gets the structure at the hexagonposition x, z
     public Structures getStructure(Vector2Int v)
     {
@@ -213,6 +214,28 @@ public class World : MonoBehaviour
             return c.isNPCAtGlobalCoords(p.x, p.z);
         else
             return false;
+    }
+
+    public bool isBuildingAtPosition(Vector3 position)
+    {
+        foreach(Building bu in buildings)
+        {
+            if (Vector3.Distance(bu.transform.position, position) < .1)
+                return true;
+        }
+
+        return false;
+    }
+
+    public Building getBuildingAtPosition(Vector3 pos)
+    {
+        foreach (Building bu in buildings)
+        {
+            if (Vector3.Distance(bu.transform.position, pos) < .1)
+                return bu;
+        }
+
+        return null;
     }
 
     public NPC getNPCAtPosition(Vector3 position)

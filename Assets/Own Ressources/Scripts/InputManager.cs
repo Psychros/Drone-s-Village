@@ -227,7 +227,9 @@ public class InputManager : MonoBehaviour {
         if (selectedBuilding != null)
         {
             buildingBox.SetActive(true);
-            buildingName.text = selectedBuilding.gameObject.ToString();
+            string s = selectedBuilding.gameObject.ToString();
+            s = s.Replace("(Clone)", "");
+            buildingName.text = s;
         }
         else
         {

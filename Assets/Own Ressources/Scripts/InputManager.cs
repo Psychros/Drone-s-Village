@@ -34,6 +34,7 @@ public class InputManager : MonoBehaviour {
     [HideInInspector] public NPC selectedNPC = null;
     [HideInInspector] public Building selectedBuilding = null;
     private bool isSelecting = false;
+    [HideInInspector]public bool isChoosingProduct = false;
 
     void Start()
     {
@@ -47,7 +48,8 @@ public class InputManager : MonoBehaviour {
         if (Input.GetMouseButtonDown(0) && !isSelecting)
         {
             selectNPC();
-            selectBuilding();
+            if(!isChoosingProduct)
+                selectBuilding();
         }
 
         //Open the buildmenu
@@ -179,7 +181,6 @@ public class InputManager : MonoBehaviour {
     {
         if (World.instance.isBuildingAtPosition(HexagonFrame.instance.selectedPosition))
         {
-            print("Hallo");
             selectedBuilding = World.instance.getBuildingAtPosition(HexagonFrame.instance.selectedPosition);
             recalculateBuildingBox();
         }
@@ -224,16 +225,18 @@ public class InputManager : MonoBehaviour {
 
     public void recalculateBuildingBox()
     {
-        if (selectedBuilding != null)
+        if (selectedBuilding != null && selectedBuilding.gameObject.tag.Equals("Factory"))
         {
             buildingBox.SetActive(true);
             string s = selectedBuilding.gameObject.ToString();
             s = s.Replace("(Clone)", "");
             buildingName.text = s;
+            isChoosingProduct = true;
         }
         else
         {
             buildingBox.SetActive(false);
+            isChoosingProduct = false;
         }
     }
 

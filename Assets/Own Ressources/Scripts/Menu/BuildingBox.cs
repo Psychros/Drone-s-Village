@@ -27,6 +27,11 @@ public class BuildingBox : MonoBehaviour {
         fac.product = new Cost(product.product, product.number);
         fac.costs = product.costs;
 
+        close();
+    }
+
+    public void close()
+    {
         InputManager.instance.selectedBuilding = null;
         InputManager.instance.recalculateBuildingBox();
     }
